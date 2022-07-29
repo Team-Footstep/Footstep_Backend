@@ -1,0 +1,7 @@
+.idea/
+.gradle/
+
+application.yml
+Secret.java
+
+.DS_Store
