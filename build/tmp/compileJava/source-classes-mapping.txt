@@ -24,14 +24,14 @@ com/example/demo/src/User/UserService.java
  com.example.demo.src.User.UserService
 com/example/demo/src/MainPage/model/GetNewFootprintsRes.java
  com.example.demo.src.MainPage.model.GetNewFootprintsRes
-com/example/demo/src/MainPage/model/GetTrendingFootprintsRes.java
- com.example.demo.src.MainPage.model.GetTrendingFootprintsRes
-com/example/demo/config/BaseResponseStatus.java
- com.example.demo.config.BaseResponseStatus
 com/example/demo/config/BaseException.java
  com.example.demo.config.BaseException
+com/example/demo/config/BaseResponseStatus.java
+ com.example.demo.config.BaseResponseStatus
 com/example/demo/src/MainPage/MainPageService.java
  com.example.demo.src.MainPage.MainPageService
+com/example/demo/src/MainPage/model/GetTrendingFootprintsRes.java
+ com.example.demo.src.MainPage.model.GetTrendingFootprintsRes
 com/example/demo/src/MainPage/MainPageDao.java
  com.example.demo.src.MainPage.MainPageDao
 com/example/demo/src/MainPage/MainPageProvider.java
