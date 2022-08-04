@@ -4,17 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetNewFootprintsRes {
+public class GetFollowingNewRes {
     private int userId;
-    private int blockId;
-    private String createdAt;
+    private int pageId;
+    private int parentBlockId;
     private String preview;
-    private List<String> content;
+    //private String content;
+    private String createdAt;
     private int stampNum;
     private int footprintNum;
     private int commentNum;

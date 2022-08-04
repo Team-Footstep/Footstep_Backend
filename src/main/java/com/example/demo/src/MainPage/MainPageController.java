@@ -2,7 +2,7 @@ package com.example.demo.src.MainPage;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.MainPage.model.GetNewFootprintsRes;
+import com.example.demo.src.MainPage.model.GetFollowingNewRes;
 import com.example.demo.src.MainPage.model.GetTrendingFootprintsRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +33,17 @@ public class MainPageController {
         try{
             List<GetTrendingFootprintsRes> getTrendingFootprintsRes = mainPageProvider.retrieveTrendingFootsteps();
             return new BaseResponse<>(getTrendingFootprintsRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    @ResponseBody
+    @GetMapping("/new/{userId}")
+    public BaseResponse<List<GetFollowingNewRes>> getNewFootsteps(@PathVariable int userId) {
+        try{
+            List<GetFollowingNewRes> getFollowingNewRes = mainPageProvider.retrieveFollowingNew(userId);
+            return new BaseResponse<>(getFollowingNewRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }

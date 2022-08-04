@@ -1,7 +1,7 @@
 package com.example.demo.src.MainPage;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.MainPage.model.GetNewFootprintsRes;
+import com.example.demo.src.MainPage.model.GetFollowingNewRes;
 import com.example.demo.src.MainPage.model.GetTrendingFootprintsRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +30,29 @@ public class MainPageProvider {
             return mainPageDao.getTrendingFootsteps();
         }
         catch (Exception exception) {
+            exception.printStackTrace();
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public List<GetFollowingNewRes> retrieveFollowingNew(int userId) throws BaseException {
+        if(checkUserExist(userId)==0){
+            throw new BaseException(USERS_EMPTY_USER_ID);
+        }
+
+        try{
+            return mainPageDao.getFollowingNew(userId);
+        }
+        catch (Exception exception) {
+            exception.printStackTrace();
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public int checkUserExist(int userId) throws BaseException{
+        try{
+            return mainPageDao.checkUserExist(userId);
+        } catch (Exception exception){
             exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }
