@@ -11,4 +11,3 @@ public class ValidationRegex {
         return matcher.find();
     }
 }
-
