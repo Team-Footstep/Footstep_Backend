@@ -27,6 +27,10 @@ public class BookmarkController {
         this.bookmarkService = bookmarkService;
     }
 
+    /*
+     * 북마크
+     * 입력 받은 유저가 북마크한 기록 내용 반환
+     * */
     @ResponseBody
     @GetMapping("/{userId}")
     public BaseResponse<List<GetBookmarksRes>> getBookmarks(@PathVariable int userId) {

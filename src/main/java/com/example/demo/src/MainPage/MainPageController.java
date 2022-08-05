@@ -27,6 +27,10 @@ public class MainPageController {
         this.mainPageService = mainPageService;
     }
 
+    /*
+    * Trending This Week
+    * 누적 stamp 횟수가 높은 순서대로 12개 반환
+    * */
     @ResponseBody
     @GetMapping("/trending")
     public BaseResponse<List<GetTrendingFootprintsRes>> getNewFootsteps() {
@@ -38,6 +42,9 @@ public class MainPageController {
         }
     }
 
+    /*
+     * 팔로우한 사람들의 최신 기록 5개
+     * */
     @ResponseBody
     @GetMapping("/new/{userId}")
     public BaseResponse<List<GetFollowingNewRes>> getNewFootsteps(@PathVariable int userId) {
