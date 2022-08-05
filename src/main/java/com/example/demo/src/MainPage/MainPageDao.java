@@ -106,7 +106,7 @@ public class MainPageDao {
                                         rk.getInt("blockId"),
                                         rk.getString("content")
                                 ), rs.getInt("pageId")),
-                        rs.getString("createdAt"),
+                        rs.getString("createdAt").substring(0,10),
                         jdbcTemplate.queryForObject(getStampNumQuery,
                                 int.class
                                 , rs.getInt("parentBlockId")),
