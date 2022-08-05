@@ -54,7 +54,7 @@ public class MainPageDao {
                 "from Follow f, Page p, Block b\n" +
                 "where f.follower = ? and f.status=1\n" +
                 "  and f.followee = p.userId and p.status=1 and p.access=1 and p.topOrNot=0\n" +
-                "  and p.stampOrPrint = 'P'\n" +
+                "  and p.stampOrPrint = 'S'\n" +
                 "  and b.childPageId = p.pageId\n" +
                 "order by p.createdAt desc\n" +
                 "limit 5;";
