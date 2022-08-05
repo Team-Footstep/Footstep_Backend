@@ -101,7 +101,7 @@ public class MainPageDao {
                         rs.getInt("pageId"),
                         rs.getInt("parentBlockId"), // parentBlockId로 stamp, print, comment 수 세기
                         rs.getString("preview"),
-                        jdbcTemplate.query(getContentsQuery,  // content
+                        jdbcTemplate.query(getContentsQuery,  // contents
                                 (rk, rowNum_k) -> new GetContentsRes(
                                         rk.getInt("blockId"),
                                         rk.getString("content")

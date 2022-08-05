@@ -9,7 +9,7 @@ spring:
 
   datasource:
     platform: mysql
-    url: jdbc:mysql://footstepdb.chewznlvjtdi.ap-northeast-2.rds.amazonaws.com/footstep_DB?serverTimezone=UTC
+    url: jdbc:mysql://footstepdb.chewznlvjtdi.ap-northeast-2.rds.amazonaws.com/footstep_DB?serverTimezone=UTC&autoReconnect=true
     username: footstep
     password: vnttmxpq2022``
     driver-class-name: com.mysql.cj.jdbc.Driver # mysql 8버전
