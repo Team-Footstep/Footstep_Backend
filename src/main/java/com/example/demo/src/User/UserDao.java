@@ -25,7 +25,7 @@ public class UserDao {
                 "from User\n" +
                 "where userId=?;";
 
-        String getFootprintNumQuery = "select count(distinct sap.blockId)\n" +
+        String getFootprintNumQuery = "select count(*)\n" +
                 "from User u,  StampAndPrint sap\n" +
                 "where u.userId = sap.followeeId\n" +
                 "    and sap.stampOrPrint = 'P'\n" +
