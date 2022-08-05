@@ -24,10 +24,16 @@ public class MainPageDao {
                 "from StampAndPrint sap, Block b\n" +
                 "where sap.blockId = b.blockId\n" +
                 "    and sap.status=1 and b.status=1\n" +
-                "    and sap.stampOrPrint = 'P'\n" +
+                "    and sap.stampOrPrint = 'S'\n" +
                 "group by blockId\n" +
                 "order by count(*) desc\n" +
                 "limit 12;";
+
+        String getStampNumQuery = "select count(*)\n" +
+                "from StampAndPrint sap\n" +
+                "where sap.status=1\n" +
+                "  and sap.stampOrPrint = 'S'\n" +
+                "  and sap.blockId=?;";
 
         String getFootprintNumQuery = "select count(*)\n" +
                 "from StampAndPrint sap\n" +
@@ -40,6 +46,9 @@ public class MainPageDao {
                         rs.getInt("userId"),
                         rs.getInt("blockId"),
                         rs.getString("content"),
+                        jdbcTemplate.queryForObject(getStampNumQuery,
+                                int.class
+                                , rs.getInt("blockId")),
                         jdbcTemplate.queryForObject(getFootprintNumQuery,
                                 int.class
                                 , rs.getInt("blockId"))
@@ -54,7 +63,7 @@ public class MainPageDao {
                 "from Follow f, Page p, Block b\n" +
                 "where f.follower = ? and f.status=1\n" +
                 "  and f.followee = p.userId and p.status=1 and p.access=1 and p.topOrNot=0\n" +
-                "  and p.stampOrPrint = 'S'\n" +
+                "  and p.stampOrPrint = 'P'\n" +
                 "  and b.childPageId = p.pageId\n" +
                 "order by p.createdAt desc\n" +
                 "limit 5;";
