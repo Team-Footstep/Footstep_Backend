@@ -70,7 +70,7 @@ public class MainPageDao {
                 "limit 5;";
 
         /* content 20 블록 */
-        String getContentsQuery = "select b.blockId, b.content, b.orderNum\n" +
+        String getContentsQuery = "select b.blockId, b.content\n" +
                 "from Block b, Page p\n" +
                 "where b.curPageId = p.pageId and p.status=1 and p.access=1\n" +
                 "    and p.pageId=? and b.status=1\n" +
