@@ -84,15 +84,11 @@ public class MainPageDao {
                 "where c.status=1\n" +
                 "  and c.blockId=?;";
 
-        // 세계관 붕괴...
-        // 최근 글은 페이지 기준.
-        // stamp랑 print는 블럭 기준. => 명확히 할 필요 있음
-
         return this.jdbcTemplate.query(getFollowingNewQuery,
                 (rs, rowNum) -> new GetFollowingNewRes(
                         rs.getInt("userId"),
                         rs.getInt("pageId"),
-                        rs.getInt("parentBlockId"), // parentBlockId 로 stamp, print, comment 수 세기
+                        rs.getInt("parentBlockId"), // parentBlockId로 stamp, print, comment 수 세기
                         rs.getString("preview"),
                         rs.getString("createdAt"),
                         jdbcTemplate.queryForObject(getStampNumQuery,
@@ -106,10 +102,6 @@ public class MainPageDao {
                                 , rs.getInt("parentBlockId"))
                 ), getFollowingNewParams);
     }
-
-    // stamp/print 는 자신을 자식 페이지로 가지는 블럭이 stamp/print 된 횟수
-    // comment 는 자신의 페이지에 있는 블럭들에 달린 코멘트 개수 (-> 자신을 자식 페이지로 가지는 블럭에 달린 코멘트 수로 바꿔야 하는가?)
-
 
     public int checkUserExist(int userId){
         String checkUserExistQuery = "select exists(select userId from User where userId = ?)";
