@@ -76,7 +76,7 @@ public class MainPageDao {
         String getCommentNumQuery = "select count(*)\n" +
                 "from Comment c\n" +
                 "where c.status=1\n" +
-                "  and c.pageId=?;";
+                "  and c.blockId=?;";
 
         // 세계관 붕괴...
         // 최근 글은 페이지 기준.
@@ -97,7 +97,7 @@ public class MainPageDao {
                                 , rs.getInt("parentBlockId")),
                         jdbcTemplate.queryForObject(getCommentNumQuery,
                                 int.class
-                                , rs.getInt("pageId"))
+                                , rs.getInt("parentBlockId"))
                 ), getFollowingNewParams);
     }
 
