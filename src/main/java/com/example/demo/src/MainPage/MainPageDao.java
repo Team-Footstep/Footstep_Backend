@@ -24,7 +24,6 @@ public class MainPageDao {
                 "from StampAndPrint sap, Block b\n" +
                 "where sap.blockId = b.blockId\n" +
                 "    and sap.status=1 and b.status=1\n" +
-                "    and sap.stampOrPrint = 'S'\n" +
                 "group by blockId\n" +
                 "order by count(*) desc\n" +
                 "limit 12;";
@@ -92,8 +91,8 @@ public class MainPageDao {
         return this.jdbcTemplate.query(getFollowingNewQuery,
                 (rs, rowNum) -> new GetFollowingNewRes(
                         rs.getInt("userId"),
-                        rs.getInt("pageId"),        // pageId로 comment 수 세기
-                        rs.getInt("parentBlockId"), // parentBlockId 로 stamp, print 수 세기
+                        rs.getInt("pageId"),
+                        rs.getInt("parentBlockId"), // parentBlockId 로 stamp, print, comment 수 세기
                         rs.getString("preview"),
                         rs.getString("createdAt"),
                         jdbcTemplate.queryForObject(getStampNumQuery,
