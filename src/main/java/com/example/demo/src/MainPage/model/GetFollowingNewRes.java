@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -12,7 +14,7 @@ public class GetFollowingNewRes {
     private int pageId;
     private int parentBlockId;
     private String preview;
-    //private String content;
+    private List<GetContentsRes> content;
     private String createdAt;
     private int stampNum;
     private int footprintNum;

@@ -1,5 +1,6 @@
 package com.example.demo.src.MainPage;
 
+import com.example.demo.src.MainPage.model.GetContentsRes;
 import com.example.demo.src.MainPage.model.GetFollowingNewRes;
 import com.example.demo.src.MainPage.model.GetTrendingFootprintsRes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,7 @@ public class MainPageDao {
         List<GetFollowingNewRes> getFollowingNewRes;
         int getFollowingNewParams = userId;
 
+        /* 최신 기록 5개 */
         String getFollowingNewQuery = "select p.userId, p.pageId, b.blockId as parentBlockId, p.preview, p.createdAt\n" +
                 "from Follow f, Page p, Block b\n" +
                 "where f.follower = ? and f.status=1\n" +
@@ -67,6 +69,15 @@ public class MainPageDao {
                 "order by p.createdAt desc\n" +
                 "limit 5;";
 
+        /* content 20 블록 */
+        String getContentsQuery = "select b.blockId, b.content, b.orderNum\n" +
+                "from Block b, Page p\n" +
+                "where b.curPageId = p.pageId and p.status=1 and p.access=1\n" +
+                "    and p.pageId=? and b.status=1\n" +
+                "order by b.orderNum\n" +
+                "limit 20;";
+
+        /* stamp, print, comment 개수 */
         String getStampNumQuery = "select count(*)\n" +
                 "from StampAndPrint sap\n" +
                 "where sap.status=1\n" +
@@ -90,6 +101,11 @@ public class MainPageDao {
                         rs.getInt("pageId"),
                         rs.getInt("parentBlockId"), // parentBlockId로 stamp, print, comment 수 세기
                         rs.getString("preview"),
+                        jdbcTemplate.query(getContentsQuery,  // content
+                                (rk, rowNum_k) -> new GetContentsRes(
+                                        rk.getInt("blockId"),
+                                        rk.getString("content")
+                                ), rs.getInt("pageId")),
                         rs.getString("createdAt"),
                         jdbcTemplate.queryForObject(getStampNumQuery,
                                 int.class
