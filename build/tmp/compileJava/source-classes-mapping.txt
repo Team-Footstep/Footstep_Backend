@@ -24,8 +24,8 @@ com/example/demo/src/Bookmark/BookmarkDao.java
  com.example.demo.src.Bookmark.BookmarkDao
 com/example/demo/src/Bookmark/BookmarkProvider.java
  com.example.demo.src.Bookmark.BookmarkProvider
-com/example/demo/src/MainPage/model/GetTrendingFootprintsRes.java
- com.example.demo.src.MainPage.model.GetTrendingFootprintsRes
+com/example/demo/config/BaseException.java
+ com.example.demo.config.BaseException
 com/example/demo/config/secret/Secret.java
  com.example.demo.config.secret.Secret
 com/example/demo/config/BaseResponse.java
@@ -38,10 +38,10 @@ com/example/demo/DemoApplication.java
  com.example.demo.DemoApplication
 com/example/demo/src/Bookmark/BookmarkService.java
  com.example.demo.src.Bookmark.BookmarkService
-com/example/demo/config/BaseException.java
- com.example.demo.config.BaseException
 com/example/demo/src/MainPage/MainPageService.java
  com.example.demo.src.MainPage.MainPageService
+com/example/demo/src/MainPage/model/GetTrendingFootprintsRes.java
+ com.example.demo.src.MainPage.model.GetTrendingFootprintsRes
 com/example/demo/src/MainPage/MainPageDao.java
  com.example.demo.src.MainPage.MainPageDao
 com/example/demo/src/MainPage/MainPageProvider.java
