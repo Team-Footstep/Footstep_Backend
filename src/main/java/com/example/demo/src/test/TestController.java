@@ -24,7 +24,7 @@ public class TestController {
     @ResponseBody
     @GetMapping("/log")
     public String getAll() {
-        System.out.println("테스트");
+        System.out.println("test");
 //        trace, debug 레벨은 Console X, 파일 로깅 X
 //        logger.trace("TRACE Level 테스트");
 //        logger.debug("DEBUG Level 테스트");
