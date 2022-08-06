@@ -3,5 +3,6 @@
 
 application.yml
 Secret.java
+footstep.pem
 
 .DS_Store
