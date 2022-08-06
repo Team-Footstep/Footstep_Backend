@@ -1,6 +1,7 @@
 package com.example.demo.src.User;
 
 import com.example.demo.src.User.model.GetProfileRes;
+import com.example.demo.src.User.model.PostUserReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -16,6 +17,27 @@ public class UserDao {
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+    public int createUser(PostUserReq postUserReq){
+        String createUserQuery = "insert into User (userName, email) VALUES (?,?)";
+        Object[] createUserParams = new Object[]{postUserReq.getUserName(), postUserReq.getEmail()};
+        this.jdbcTemplate.update(createUserQuery, createUserParams);
+
+        String lastInserIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInserIdQuery,int.class);
+    }
+    //중복되는 이메일인지 체크
+    public int checkEmail(String email){
+        String checkEmailQuery = "select exists(select email from User where email = ?)";
+        String checkEmailParams = email;
+        return this.jdbcTemplate.queryForObject(checkEmailQuery,
+                int.class,
+                checkEmailParams);
+
+    }
+    //해당되는 이메일에 토큰 업데이트 해주기
+    public int insertToken(String email, String token){
+        String insertToken = ""
     }
 
     public GetProfileRes getProfile(int userId){
