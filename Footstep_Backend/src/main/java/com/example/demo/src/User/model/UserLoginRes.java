@@ -4,16 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigInteger;
+
 @Getter
 @Setter
 @AllArgsConstructor
-public class User {
-    private int userId;
+public class UserLoginRes {
+    private BigInteger userId;
     private String email;
-    private String job;
     private String userName;
-    private String introduction;
-    private String userImgUrl;
-    private int status;
-    private String token;
 }

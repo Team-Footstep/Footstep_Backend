@@ -1,12 +1,12 @@
 package com.example.demo.src.User;
 
-import com.example.demo.src.User.model.GetProfileRes;
-import com.example.demo.src.User.model.PostUserReq;
+import com.example.demo.src.User.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.math.BigInteger;
 
 
 @Repository
@@ -22,10 +22,17 @@ public class UserDao {
         String createUserQuery = "insert into User (userName, email) VALUES (?,?)";
         Object[] createUserParams = new Object[]{postUserReq.getUserName(), postUserReq.getEmail()};
         this.jdbcTemplate.update(createUserQuery, createUserParams);
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
 
-        String lastInserIdQuery = "select last_insert_id()";
-        return this.jdbcTemplate.queryForObject(lastInserIdQuery,int.class);
     }
+    //마지막 유저 인덱스 찾기
+    public int lastInsertUser(UserLoginRes userLoginRes){
+        String lastInsertQuery = "select Max(userId) from User;";
+        Object[] lastInsertParams = new Object[]{userLoginRes.getUserId()};
+        return this.jdbcTemplate.update(lastInsertQuery, lastInsertParams);
+    }
+
     //중복되는 이메일인지 체크
     public int checkEmail(String email){
         String checkEmailQuery = "select exists(select email from User where email = ?)";
@@ -69,6 +76,30 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(checkUserExistQuery,
                 int.class,
                 checkUserExistParams);
+    }
+
+    public GetUserRes getModifyUserInfo(BigInteger userIdx){
+        BigInteger modifyUserParam = userIdx;
+        String modifyUserQuery = "select email, job, userName, userImgUrl, introduction from User where userId=?";
+
+        return this.jdbcTemplate.queryForObject(modifyUserQuery,
+                (rs, rowNum) -> new GetUserRes(
+                        rs.getString("email"),
+                        rs.getString("job"),
+                        rs.getString("userName"),
+                        rs.getString("userImgUrl"),
+                        rs.getString("introduction")),
+                        modifyUserParam);
+    }
+
+    public int modifyUserInfo(PatchUserReq patchUserReq, BigInteger userId) {
+        System.out.println(patchUserReq.toString());
+        String modifyUserQuery = "update User set job=?, userName=?, userImgUrl=?, introduction=? where userId=?";
+        Object[] modifyUserParams = new Object[]{patchUserReq.getJob(), patchUserReq.getUserName(),
+                patchUserReq.getUserImgUrl(), patchUserReq.getIntroduction(), userId
+        };
+
+        return this.jdbcTemplate.update(modifyUserQuery, modifyUserParams);
     }
 }
 

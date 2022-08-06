@@ -1,14 +1,12 @@
 package com.example.demo.src.User;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.User.model.GetEmailCertReq;
-import com.example.demo.src.User.model.GetEmailCertRes;
-import com.example.demo.src.User.model.PostUserReq;
-import com.example.demo.src.User.model.PostUserRes;
+import com.example.demo.src.User.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.math.BigInteger;
 import java.util.UUID;
 
 import static com.example.demo.config.BaseResponseStatus.*;
@@ -66,4 +64,35 @@ public class UserService {
         }
 
     }
+    public GetUserRes getModifyUserInfo(BigInteger userIdx) {
+        return userDao.getModifyUserInfo(userIdx);
+
+    }
+
+
+    public boolean lastId(UserLoginRes userLoginRes, BigInteger userId) {
+        BigInteger max = userDao.lastInsertUser(userLoginRes);
+        //max가 userId보다 크면 맞음
+        if(max.compareTo(userId)==1){
+            return true;
+        }
+
+
+        else return false;
+    }
+
+    public void modifyUserInfo(PatchUserReq patchUserReq, BigInteger userId) throws BaseException {
+        try {
+            int result = userDao.modifyUserInfo(patchUserReq, userId);
+            System.out.println("modifyMemberInfo result: " + result);
+
+            if (result == 0) {
+                throw new BaseException(MODIFY_FAIL_USERNAME);
+            }
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+
 }

@@ -2,14 +2,13 @@ package com.example.demo.src.User;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.config.BaseResponseStatus;
 import com.example.demo.src.User.model.*;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -92,6 +91,59 @@ public class UserController {
         return new BaseResponse<>(getEmailCertRes);
 
     }
+    /**
+     * 유저정보 변경 페이지 (로그인 후, 회원정보 얻어오기)API
+     * [GET} /modify
+     */
+    @ResponseBody
+    @GetMapping("/modify")
+    public BaseResponse<GetUserRes> getModifyUserInfo(UserLoginRes userLoginRes) {
+
+        if (userLoginRes == null) {
+            return new BaseResponse<>(NOT_LOGIN);
+        }
+        try {
+            BigInteger userIdx = userLoginRes.getUserId();
+            GetUserRes getUserRes = userService.getModifyUserInfo(userIdx);
+            return new BaseResponse<>(getUserRes);
+
+        } catch (Exception exception) {
+            return new BaseResponse<>(EMPTY_IDX);
+        }
+    }
+    /**
+     * 유저정보변경 API
+     * [PATCH] /modifyUser
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("/modify/:userId") // (PATCH) 127.0.0.1:8080/users/modify/:userId
+    public BaseResponse<String> modifyUserInfo(UserLoginRes userLoginRes, @PathVariable("userId") BigInteger userId, @RequestBody PatchUserReq patchUserReq) throws BaseException {
+        //userId 가 없을때
+        if(userId == null) {
+            return new BaseResponse<>(EMPTY_IDX);
+        }
+        //유효하지 않은 userId 일때
+        if(userService.lastId(userLoginRes, userId) ) {
+            return new BaseResponse<>(EMPTY_IDX);
+        }
+        //로그인한 상태가 아닐때
+        if (userLoginRes == null) {
+            return new BaseResponse<>(NOT_LOGIN);
+        }
+
+        BigInteger userIdx = userLoginRes.getUserId();
+
+        if (!userIdx.equals(userId)) {
+            return new BaseResponse<>(INVALID_USER_JWT);
+        }
+
+        userService.modifyUserInfo(patchUserReq, userId);
+        String result = patchUserReq.getUserName() + " 정보 수정 완료";
+        return new BaseResponse<>(result);
+    }
+
+
 
     /**
      * 유저 프로필 정보 조회 API
