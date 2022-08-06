@@ -55,7 +55,8 @@ public class UserService {
 
     public GetEmailCertRes signupConfirm(GetEmailCertReq getEmailCertReq) {
         //1. 토큰 체크
-        if (emailCertDao.tokenCheck(getEmailCertReq)) {
+        if (emailCertDao.tokenCheck(getEmailCertReq)==1) {
+
             GetEmailCertRes getEmailCertRes = emailCertDao.signupConfirm(getEmailCertReq.getEmail());
             System.out.println("토큰 체크 성공");
             return getEmailCertRes;

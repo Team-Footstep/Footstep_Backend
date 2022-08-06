@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.example.demo.config.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.isRegexEmail;
 
@@ -21,7 +24,7 @@ public class UserController {
     @Autowired
     private final UserService userService;
     private final EmailSenderService emailSenderService;
-
+    Map<String, String> map = new HashMap<String, String>();
     public UserController(UserProvider userProvider, UserService userService, EmailSenderService emailSenderService){
         this.userProvider = userProvider;
         this.userService = userService;
@@ -53,10 +56,15 @@ public class UserController {
             PostUserRes postUserRes = userService.createUser(postUserReq);
             String getToken = userService.getToken(postUserRes.getEmail());
             System.out.println("토큰은 " + getToken);
+            postUserRes.setToken(getToken);
             //이메일 보내주기
             System.out.println("이메일 보내겠습니다.~");
-            emailSenderService.sendMail(getToken, postUserRes.getEmail());
+            emailSenderService.sendSignupMail(getToken, postUserRes.getEmail());
+            //map에 저장해주기
 
+            map.put("email", postUserRes.getEmail());
+            map.put("token", getToken);
+            System.out.println(map);
             return new BaseResponse<>(postUserRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
@@ -76,7 +84,8 @@ public class UserController {
     @GetMapping("/signup/confirm") // (POST) 127.0.0.1:8080/users/signup/confirm
     public BaseResponse <GetEmailCertRes> signupConfirm(@RequestBody GetEmailCertReq getEmailCertReq){
         System.out.println("클릭한 이메일은 : " + getEmailCertReq.getEmail());
-
+        String ctoken = (String) map.get("token");
+        getEmailCertReq.setToken(ctoken);
         GetEmailCertRes getEmailCertRes =
                 userService.signupConfirm(getEmailCertReq);
 

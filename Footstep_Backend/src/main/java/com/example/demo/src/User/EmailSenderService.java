@@ -19,7 +19,7 @@ public class EmailSenderService {
     private final JavaMailSender javaMailSender;
     private final EmailCertDao emailCertDao;
 
-    public void sendMail(String token, String email) throws MessagingException {
+    public void sendSignupMail(String token, String email) throws MessagingException {
         System.out.println("이메일 보내는데까지 왔어여");
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
