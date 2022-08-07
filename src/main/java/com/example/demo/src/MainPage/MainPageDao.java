@@ -19,7 +19,8 @@ public class MainPageDao {
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
-    // Trending this week - 블럭의 내용을 미리보기
+    // Trending this week - stamp가 가장 많이 눌린 "block"
+    // - 블럭의 내용을 미리보기
     public List<GetTrendingFootprintsRes> getTrendingFootsteps(){
         String getTrendingFootprintsQuery = "select b.userId, sap.blockId, b.content, count(*) as footprintNum\n" +
                 "from StampAndPrint sap, Block b\n" +
@@ -56,6 +57,8 @@ public class MainPageDao {
     }
 
     public List<GetFollowingNewRes> getFollowingNew(int userId){
+        // user가 팔로우한 사람들의 기록(footprint(P) 기준) 중 최신 5개 기록
+
         List<GetFollowingNewRes> getFollowingNewRes;
         int getFollowingNewParams = userId;
 
