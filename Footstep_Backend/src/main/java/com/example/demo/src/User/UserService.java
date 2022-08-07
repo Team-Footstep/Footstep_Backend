@@ -51,16 +51,16 @@ public class UserService {
         return token;
     }
 
-    public GetEmailCertRes signupConfirm(GetEmailCertReq getEmailCertReq) {
+    public GetTokenRes signupConfirm(GetTokenReq getTokenReq) {
         //1. 토큰 체크
-        if (emailCertDao.tokenCheck(getEmailCertReq)==1) {
+        if (emailCertDao.tokenCheck(getTokenReq)==1) {
 
-            GetEmailCertRes getEmailCertRes = emailCertDao.signupConfirm(getEmailCertReq.getEmail());
+            GetTokenRes getTokenRes = emailCertDao.signupConfirm(getTokenReq.getEmail());
             System.out.println("토큰 체크 성공");
-            return getEmailCertRes;
+            return getTokenRes;
         } else {
-            GetEmailCertRes getEmailCertRes = new GetEmailCertRes(0);
-            return getEmailCertRes;
+            GetTokenRes getTokenRes = new GetTokenRes(0);
+            return getTokenRes;
         }
 
     }
@@ -70,16 +70,6 @@ public class UserService {
     }
 
 
-    public boolean lastId(UserLoginRes userLoginRes, BigInteger userId) {
-        BigInteger max = userDao.lastInsertUser(userLoginRes);
-        //max가 userId보다 크면 맞음
-        if(max.compareTo(userId)==1){
-            return true;
-        }
-
-
-        else return false;
-    }
 
     public void modifyUserInfo(PatchUserReq patchUserReq, BigInteger userId) throws BaseException {
         try {
@@ -95,4 +85,8 @@ public class UserService {
     }
 
 
+    public void setToken(String email) {
+        //회원가입 성공시에 토큰 null 로 바꿔주기
+        userDao.setToken(email);
+    }
 }

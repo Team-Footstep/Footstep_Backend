@@ -26,12 +26,6 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
 
     }
-    //마지막 유저 인덱스 찾기
-    public int lastInsertUser(UserLoginRes userLoginRes){
-        String lastInsertQuery = "select Max(userId) from User;";
-        Object[] lastInsertParams = new Object[]{userLoginRes.getUserId()};
-        return this.jdbcTemplate.update(lastInsertQuery, lastInsertParams);
-    }
 
     //중복되는 이메일인지 체크
     public int checkEmail(String email){
@@ -100,6 +94,13 @@ public class UserDao {
         };
 
         return this.jdbcTemplate.update(modifyUserQuery, modifyUserParams);
+    }
+
+    public void setToken(String email) {
+        String setTokenQuery = "update User set token = null where email = ?;";
+        Object[] setTokenParams = new Object[]{email};
+        this.jdbcTemplate.update(setTokenQuery, setTokenParams);
+
     }
 }
 

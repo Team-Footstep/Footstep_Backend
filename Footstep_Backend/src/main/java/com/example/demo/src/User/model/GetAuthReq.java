@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetEmailCertReq {
-    private String token;
+public class GetAuthReq {
+    private String Auth;
     private String email;
 }

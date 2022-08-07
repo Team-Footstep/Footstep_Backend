@@ -81,64 +81,57 @@ public class UserController {
     // Body
     @ResponseBody
     @GetMapping("/signup/confirm") // (POST) 127.0.0.1:8080/users/signup/confirm
-    public BaseResponse <GetEmailCertRes> signupConfirm(@RequestBody GetEmailCertReq getEmailCertReq){
-        System.out.println("클릭한 이메일은 : " + getEmailCertReq.getEmail());
+    public BaseResponse <GetTokenRes> signupConfirm(@RequestBody GetTokenReq getTokenReq){
+        System.out.println("클릭한 이메일은 : " + getTokenReq.getEmail());
         String ctoken = (String) map.get("token");
-        getEmailCertReq.setToken(ctoken);
-        GetEmailCertRes getEmailCertRes =
-                userService.signupConfirm(getEmailCertReq);
+        getTokenReq.setToken(ctoken);
+        GetTokenRes getTokenRes =
+                userService.signupConfirm(getTokenReq);
+        System.out.println("회원가입이 완료되었습니다.");
 
-        return new BaseResponse<>(getEmailCertRes);
+        //회원 가입 완료 후 -> 토큰 값 null로 바꿔주기
+        userService.setToken(getTokenReq.getEmail());
+        return new BaseResponse<>(getTokenRes);
 
     }
     /**
-     * 유저정보 변경 페이지 (로그인 후, 회원정보 얻어오기)API
-     * [GET} /modify
+     * 로그인 API
+     * [GET] /users/login
+     *
+     * @return BaseResponse<PostUserRes>
      */
+
+    /**
+     * 유저정보변경 이메일 인증번호 API
+     * [GET] /users/modify/confirm
+     *
+     * @return BaseResponse<PostUserRes>
+
+    */
     @ResponseBody
-    @GetMapping("/modify")
-    public BaseResponse<GetUserRes> getModifyUserInfo(UserLoginRes userLoginRes) {
+    @GetMapping("/users/modify/confirm") // (GET) 127.0.0.1:8080/users/modify/confirm
+    public String authConfirm(@RequestBody GetAuthReq getAuthReq) throws MessagingException {
+        System.out.println("수정을 원하는 이메일은 : " + getAuthReq.getEmail());
+        System.out.println("이메일 인증 요청이 들어옴!");
+        return emailSenderService.sendAuthEmail(getAuthReq.getEmail());
 
-        if (userLoginRes == null) {
-            return new BaseResponse<>(NOT_LOGIN);
-        }
-        try {
-            BigInteger userIdx = userLoginRes.getUserId();
-            GetUserRes getUserRes = userService.getModifyUserInfo(userIdx);
-            return new BaseResponse<>(getUserRes);
-
-        } catch (Exception exception) {
-            return new BaseResponse<>(EMPTY_IDX);
-        }
     }
+
     /**
      * 유저정보변경 API
      * [PATCH] /modifyUser
      * @return BaseResponse<String>
      */
     @ResponseBody
-    @PatchMapping("/modify/:userId") // (PATCH) 127.0.0.1:8080/users/modify/:userId
-    public BaseResponse<String> modifyUserInfo(UserLoginRes userLoginRes, @PathVariable("userId") BigInteger userId, @RequestBody PatchUserReq patchUserReq) throws BaseException {
+    @PatchMapping("/modify/{userId}") // (PATCH) 127.0.0.1:8080/users/modify/{userId}
+    public BaseResponse<String> modifyUserInfo(@PathVariable("userId") BigInteger userId, @RequestBody PatchUserReq patchUserReq) throws BaseException, MessagingException {
         //userId 가 없을때
         if(userId == null) {
             return new BaseResponse<>(EMPTY_IDX);
         }
-        //유효하지 않은 userId 일때
-        if(userService.lastId(userLoginRes, userId) ) {
-            return new BaseResponse<>(EMPTY_IDX);
-        }
-        //로그인한 상태가 아닐때
-        if (userLoginRes == null) {
-            return new BaseResponse<>(NOT_LOGIN);
-        }
-
-        BigInteger userIdx = userLoginRes.getUserId();
-
-        if (!userIdx.equals(userId)) {
-            return new BaseResponse<>(INVALID_USER_JWT);
-        }
-
+        System.out.println("정보수정하는데까지 옴");
         userService.modifyUserInfo(patchUserReq, userId);
+        emailSenderService.sendAuthEmail(patchUserReq.getEmail());
         String result = patchUserReq.getUserName() + " 정보 수정 완료";
         return new BaseResponse<>(result);
     }
@@ -147,7 +140,7 @@ public class UserController {
 
     /**
      * 유저 프로필 정보 조회 API
-     * [POST] /users/profile/{userId}
+     * [GET] /users/profile/{userId}
      * 유저아이디, 프로필 사진 url, 이름, 직업, 자기소개, 총 footprint 받은 횟수
      * */
     @ResponseBody
@@ -155,6 +148,7 @@ public class UserController {
     public BaseResponse<GetProfileRes> getProfile(@PathVariable int userId) {
         try{
             GetProfileRes getProfileRes = userProvider.retrieveProfile(userId);
+
             return new BaseResponse<>(getProfileRes);
         } catch(BaseException exception){
             exception.printStackTrace();

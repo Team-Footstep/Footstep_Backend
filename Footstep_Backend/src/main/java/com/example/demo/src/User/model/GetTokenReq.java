@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetEmailCertRes {
-    private int status;
+public class GetTokenReq {
+    private String token;
+    private String email;
 }
