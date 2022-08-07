@@ -35,7 +35,7 @@ public class MainPageProvider {
         }
     }
 
-    public List<GetFollowingNewRes> sretrieveFollowingNew(int userId) throws BaseException {
+    public List<GetFollowingNewRes> retrieveFollowingNew(int userId) throws BaseException {
         if(checkUserExist(userId)==0){
             throw new BaseException(USERS_EMPTY_USER_ID);
         }
