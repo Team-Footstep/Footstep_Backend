@@ -16,16 +16,16 @@ com/example/demo/src/MainPage/model/GetContentsRes.java
  com.example.demo.src.MainPage.model.GetContentsRes
 com/example/demo/config/BaseResponseStatus.java
  com.example.demo.config.BaseResponseStatus
-com/example/demo/src/Bookmark/BookmarkService.java
- com.example.demo.src.Bookmark.BookmarkService
+com/example/demo/src/MainPage/MainPageProvider.java
+ com.example.demo.src.MainPage.MainPageProvider
 com/example/demo/src/Bookmark/model/GetBookmarksRes.java
  com.example.demo.src.Bookmark.model.GetBookmarksRes
 com/example/demo/src/test/TestController.java
  com.example.demo.src.test.TestController
-com/example/demo/src/Bookmark/BookmarkDao.java
- com.example.demo.src.Bookmark.BookmarkDao
-com/example/demo/src/Bookmark/BookmarkProvider.java
- com.example.demo.src.Bookmark.BookmarkProvider
+com/example/demo/src/MainPage/model/GetFollowingNewRes.java
+ com.example.demo.src.MainPage.model.GetFollowingNewRes
+com/example/demo/src/MainPage/MainPageController.java
+ com.example.demo.src.MainPage.MainPageController
 com/example/demo/src/MainPage/model/GetTrendingFootprintsRes.java
  com.example.demo.src.MainPage.model.GetTrendingFootprintsRes
 com/example/demo/config/secret/Secret.java
@@ -42,11 +42,11 @@ com/example/demo/src/User/UserController.java
  com.example.demo.src.User.UserController
 com/example/demo/src/MainPage/MainPageDao.java
  com.example.demo.src.MainPage.MainPageDao
-com/example/demo/src/MainPage/model/GetFollowingNewRes.java
- com.example.demo.src.MainPage.model.GetFollowingNewRes
+com/example/demo/src/Bookmark/BookmarkProvider.java
+ com.example.demo.src.Bookmark.BookmarkProvider
+com/example/demo/src/Bookmark/BookmarkService.java
+ com.example.demo.src.Bookmark.BookmarkService
+com/example/demo/src/Bookmark/BookmarkDao.java
+ com.example.demo.src.Bookmark.BookmarkDao
 com/example/demo/src/Bookmark/BookmarkController.java
  com.example.demo.src.Bookmark.BookmarkController
-com/example/demo/src/MainPage/MainPageProvider.java
- com.example.demo.src.MainPage.MainPageProvider
-com/example/demo/src/MainPage/MainPageController.java
- com.example.demo.src.MainPage.MainPageController
