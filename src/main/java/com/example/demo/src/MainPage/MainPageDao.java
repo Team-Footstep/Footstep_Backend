@@ -60,12 +60,11 @@ public class MainPageDao {
         int getFollowingNewParams = userId;
 
         /* 최신 기록 5개 */
-        String getFollowingNewQuery = "select p.userId, p.pageId, b.blockId as parentBlockId, p.preview, p.createdAt\n" +
-                "from Follow f, Page p, Block b\n" +
+        String getFollowingNewQuery = "select p.userId, p.pageId, p.parentBlockId, p.preview, p.createdAt\n" +
+                "from Follow f, Page p\n" +
                 "where f.follower = ? and f.status=1\n" +
                 "  and f.followee = p.userId and p.status=1 and p.access=1 and p.topOrNot=0\n" +
                 "  and p.stampOrPrint = 'P'\n" +
-                "  and b.childPageId = p.pageId\n" +
                 "order by p.createdAt desc\n" +
                 "limit 5;";
 
