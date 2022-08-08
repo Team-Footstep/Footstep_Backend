@@ -14,7 +14,7 @@ public class GetFollowingNewRes {
     private int pageId;
     private int parentBlockId;
     private String preview;
-    private List<GetContentsRes> content;
+    private List<GetContentsRes> contents;
     private String createdAt;
     private int stampNum;
     private int footprintNum;

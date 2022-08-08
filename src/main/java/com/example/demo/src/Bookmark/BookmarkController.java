@@ -3,7 +3,6 @@ package com.example.demo.src.Bookmark;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.Bookmark.model.GetBookmarksRes;
-import com.example.demo.src.MainPage.model.GetTrendingFootprintsRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,11 @@ public class BookmarkController {
         this.bookmarkService = bookmarkService;
     }
 
+    /*
+     * GET
+     * 사용자의 북마크 리스트 반환
+     * 입력 받은 유저가 북마크한 기록 내용 반환
+     * */
     @ResponseBody
     @GetMapping("/{userId}")
     public BaseResponse<List<GetBookmarksRes>> getBookmarks(@PathVariable int userId) {

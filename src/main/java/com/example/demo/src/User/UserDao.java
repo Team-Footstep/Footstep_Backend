@@ -25,12 +25,14 @@ public class UserDao {
                 "from User\n" +
                 "where userId=?;";
 
-        String getFootprintNumQuery = "select count(*)\n" +
-                "from User u,  StampAndPrint sap\n" +
-                "where u.userId = sap.followeeId\n" +
-                "    and sap.stampOrPrint = 'P'\n" +
-                "    and sap.status = 1\n" +
-                "    and u.userId=?;";
+
+        // [수정 완료] 미공개 글 - curPageId의 access 가 0이면 미포함
+        String getFootprintNumQuery = "select count(distinct stampOrPrintId)\n" +
+                "from User u,  StampAndPrint sap, Block b, Page p\n" +
+                "where u.userId = sap.followeeId and sap.blockId = b.curPageId and p.pageId = b.curPageId\n" +
+                "  and sap.stampOrPrint = 'P' and p.access=1\n" +
+                "  and sap.status = 1\n" +
+                "  and u.userId=?;";
 
         return this.jdbcTemplate.queryForObject(getProfileQuery,
                 (rs, rowNum) -> new GetProfileRes(

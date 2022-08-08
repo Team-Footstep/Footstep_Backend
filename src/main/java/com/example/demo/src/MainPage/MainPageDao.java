@@ -19,7 +19,8 @@ public class MainPageDao {
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
-    // Trending this week - 블럭의 내용을 미리보기
+    // Trending this week - stamp가 가장 많이 눌린 "block"
+    // - 블럭의 내용을 미리보기
     public List<GetTrendingFootprintsRes> getTrendingFootsteps(){
         String getTrendingFootprintsQuery = "select b.userId, sap.blockId, b.content, count(*) as footprintNum\n" +
                 "from StampAndPrint sap, Block b\n" +
@@ -56,16 +57,17 @@ public class MainPageDao {
     }
 
     public List<GetFollowingNewRes> getFollowingNew(int userId){
+        // user가 팔로우한 사람들의 기록(footprint(P) 기준) 중 최신 5개 기록
+
         List<GetFollowingNewRes> getFollowingNewRes;
         int getFollowingNewParams = userId;
 
         /* 최신 기록 5개 */
-        String getFollowingNewQuery = "select p.userId, p.pageId, b.blockId as parentBlockId, p.preview, p.createdAt\n" +
-                "from Follow f, Page p, Block b\n" +
+        String getFollowingNewQuery = "select p.userId, p.pageId, p.parentBlockId, p.preview, p.createdAt\n" +
+                "from Follow f, Page p\n" +
                 "where f.follower = ? and f.status=1\n" +
                 "  and f.followee = p.userId and p.status=1 and p.access=1 and p.topOrNot=0\n" +
                 "  and p.stampOrPrint = 'P'\n" +
-                "  and b.childPageId = p.pageId\n" +
                 "order by p.createdAt desc\n" +
                 "limit 5;";
 
@@ -101,12 +103,12 @@ public class MainPageDao {
                         rs.getInt("pageId"),
                         rs.getInt("parentBlockId"), // parentBlockId로 stamp, print, comment 수 세기
                         rs.getString("preview"),
-                        jdbcTemplate.query(getContentsQuery,  // content
+                        jdbcTemplate.query(getContentsQuery,  // contents
                                 (rk, rowNum_k) -> new GetContentsRes(
                                         rk.getInt("blockId"),
                                         rk.getString("content")
                                 ), rs.getInt("pageId")),
-                        rs.getString("createdAt"),
+                        rs.getString("createdAt").substring(0,10),
                         jdbcTemplate.queryForObject(getStampNumQuery,
                                 int.class
                                 , rs.getInt("parentBlockId")),
