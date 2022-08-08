@@ -27,7 +27,8 @@ public class BookmarkController {
     }
 
     /*
-     * 북마크
+     * GET
+     * 사용자의 북마크 리스트 반환
      * 입력 받은 유저가 북마크한 기록 내용 반환
      * */
     @ResponseBody
