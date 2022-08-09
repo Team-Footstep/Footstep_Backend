@@ -5,6 +5,7 @@ import com.example.demo.config.BaseResponse;
 import com.example.demo.src.User.model.*;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -136,15 +137,33 @@ public class UserController {
         getTokenReq.setToken(ctoken);
         GetTokenRes getTokenRes = userService.loginConfirm(getTokenReq);
         System.out.println(getTokenRes);
+
         //인증이 완료되었으므로, 세션 생성하기
         HttpSession session = request.getSession();
-        session.setAttribute("email", email);
+        session.setAttribute(SessionConst.LOGIN_MEMBER, email);
+
         System.out.println("로그인이 완료되었습니다.");
 
         //로그인 완료 후 -> 토큰 값 null로 바꿔주기
         userService.setToken(getTokenReq.getEmail());
         //TODO : 페이지 전환
-        return session.getAttribute("email") + " 로그인 완료되었습니다.";
+        return "로그인 완료";
+    }
+
+    /**
+     * 로그 아웃 API
+     * [POST] /users/logout
+     *
+     */
+    @PostMapping("/logout") // (POST) 127.0.0.1:8080/users/login
+    public String logout(HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false);
+        if(session!=null) {
+            session.invalidate();
+        }
+
+        return "로그아웃 완료 되었습니다.";
     }
 
     /**

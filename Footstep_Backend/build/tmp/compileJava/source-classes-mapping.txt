@@ -22,10 +22,10 @@ com/example/demo/config/BaseResponseStatus.java
  com.example.demo.config.BaseResponseStatus
 com/example/demo/src/User/model/PatchUserReq.java
  com.example.demo.src.User.model.PatchUserReq
-com/example/demo/src/User/EmailSenderService.java
- com.example.demo.src.User.EmailSenderService
 com/example/demo/src/WebSecurityConfig.java
  com.example.demo.src.WebSecurityConfig
+com/example/demo/src/User/model/PostUserReq.java
+ com.example.demo.src.User.model.PostUserReq
 com/example/demo/src/User/model/GetTokenRes.java
  com.example.demo.src.User.model.GetTokenRes
 com/example/demo/src/Bookmark/model/GetBookmarksRes.java
@@ -52,8 +52,8 @@ com/example/demo/src/User/model/PatchUserRes.java
  com.example.demo.src.User.model.PatchUserRes
 com/example/demo/src/MainPage/MainPageController.java
  com.example.demo.src.MainPage.MainPageController
-com/example/demo/src/User/UserService.java
- com.example.demo.src.User.UserService
+com/example/demo/src/Bookmark/BookmarkController.java
+ com.example.demo.src.Bookmark.BookmarkController
 com/example/demo/src/MainPage/MainPageService.java
  com.example.demo.src.MainPage.MainPageService
 com/example/demo/src/Bookmark/BookmarkService.java
@@ -74,9 +74,11 @@ com/example/demo/src/User/model/GetLoginReq.java
  com.example.demo.src.User.model.GetLoginReq
 com/example/demo/src/MainPage/model/GetFollowingNewRes.java
  com.example.demo.src.MainPage.model.GetFollowingNewRes
-com/example/demo/src/Bookmark/BookmarkController.java
- com.example.demo.src.Bookmark.BookmarkController
-com/example/demo/src/User/model/PostUserReq.java
- com.example.demo.src.User.model.PostUserReq
+com/example/demo/src/User/UserService.java
+ com.example.demo.src.User.UserService
+com/example/demo/src/User/EmailSenderService.java
+ com.example.demo.src.User.EmailSenderService
+com/example/demo/src/User/SessionConst.java
+ com.example.demo.src.User.SessionConst
 com/example/demo/src/User/UserController.java
  com.example.demo.src.User.UserController

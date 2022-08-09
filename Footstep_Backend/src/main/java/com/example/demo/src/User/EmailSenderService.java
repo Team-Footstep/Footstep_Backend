@@ -65,7 +65,7 @@ public class EmailSenderService {
         mimeMessageHelper.setSubject("[Footstep] 로그인 메일");
 
         StringBuilder body = new StringBuilder();
-        body.append("회원가입을 하시려면 다음 링크를 클릭해주세요. \n");
+        body.append("로그인 하시려면 다음 링크를 클릭해주세요. \n");
         body.append("http://localhost:8080/users/signup/confirm?email=" + getLoginReq.getEmail() +
                 "&token=" + getLoginReq.getToken());
         mimeMessageHelper.setText(body.toString()) ;
