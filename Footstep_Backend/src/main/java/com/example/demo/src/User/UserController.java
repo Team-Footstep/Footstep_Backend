@@ -3,10 +3,14 @@ package com.example.demo.src.User;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.User.model.*;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import java.math.BigInteger;
 import java.util.HashMap;
@@ -24,6 +28,8 @@ public class UserController {
     private final UserService userService;
     private final EmailSenderService emailSenderService;
     Map<String, String> map = new HashMap<String, String>();
+    Map<String, String> loginmap = new HashMap<String, String>();
+
     Map<String, Integer> emap = new HashMap<String, Integer>();
 
     public UserController(UserProvider userProvider, UserService userService, EmailSenderService emailSenderService){
@@ -94,6 +100,51 @@ public class UserController {
         userService.setToken(getTokenReq.getEmail());
         return new BaseResponse<>(getTokenRes);
 
+    }
+    /**
+     * 로그인 API
+     * [POST] /users/login
+     *
+     */
+    @ResponseBody
+    @PostMapping("/login") // (POST) 127.0.0.1:8080/users/login
+    public String login(@RequestBody GetLoginReq getLoginReq) throws BaseException, MessagingException {
+
+        userProvider.checkEmail(getLoginReq.getEmail());
+        System.out.println("이메일 체크 완료");
+        //토큰값 생성해서 메일 보내주기
+        String ctoken = userService.getToken(getLoginReq.getEmail());
+        getLoginReq.setToken(ctoken);
+        System.out.println("로그인 토큰은 " + ctoken);
+        emailSenderService.loginMail(getLoginReq);
+        //map에 저장해주기
+        loginmap.put("email", getLoginReq.getEmail());
+        loginmap.put("token", getLoginReq.getToken());
+        return "이메일 입력 완료 "+ getLoginReq.getEmail();
+    }
+    /**
+     * 로그인 검증 API
+     * [GET] /users/confirmlogin
+     *
+     */
+    @ResponseBody
+    @GetMapping("/confirmlogin") // (POST) 127.0.0.1:8080/users/login
+    public String confirmlogin(HttpServletRequest request, @RequestBody GetTokenReq getTokenReq) throws BaseException, MessagingException {
+        System.out.println("클릭한 이메일은 : " + getTokenReq.getEmail());
+        String ctoken = (String) loginmap.get("token");
+        String email = getTokenReq.getEmail();
+        getTokenReq.setToken(ctoken);
+        GetTokenRes getTokenRes = userService.loginConfirm(getTokenReq);
+        System.out.println(getTokenRes);
+        //인증이 완료되었으므로, 세션 생성하기
+        HttpSession session = request.getSession();
+        session.setAttribute("email", email);
+        System.out.println("로그인이 완료되었습니다.");
+
+        //로그인 완료 후 -> 토큰 값 null로 바꿔주기
+        userService.setToken(getTokenReq.getEmail());
+        //TODO : 페이지 전환
+        return session.getAttribute("email") + " 로그인 완료되었습니다.";
     }
 
     /**

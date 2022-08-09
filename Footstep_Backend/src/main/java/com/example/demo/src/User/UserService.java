@@ -119,4 +119,16 @@ public class UserService {
         userDao.setAuth(email);
     }
 
+
+    public GetTokenRes loginConfirm(GetTokenReq getTokenReq) {
+        //1. 토큰 체크
+        if (emailCertDao.tokenCheck(getTokenReq) == 1) {
+            GetTokenRes getTokenRes = emailCertDao.loginConfirm(getTokenReq.getEmail());
+            System.out.println("토큰 체크 성공");
+            return getTokenRes;
+        } else {
+            GetTokenRes getTokenRes = new GetTokenRes(0);
+            return getTokenRes;
+        }
+    }
 }

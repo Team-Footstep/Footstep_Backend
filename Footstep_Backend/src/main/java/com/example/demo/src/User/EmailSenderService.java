@@ -1,5 +1,6 @@
 package com.example.demo.src.User;
 
+import com.example.demo.src.User.model.GetLoginReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -13,6 +14,8 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class EmailSenderService {
     private final JavaMailSender javaMailSender;
+    private UserService userService;
+
     //회원가입 및 로그인 이메일 링크 보내주기
     public void sendSignupMail(String token, String email) throws MessagingException {
         System.out.println("이메일 보내는데까지 왔어여");
@@ -52,5 +55,22 @@ public class EmailSenderService {
         //Todo : 이메일이랑 유저 이름이 일치하지 않는데 로그인됨 (문제)
 
         return email;
+    }
+    public void loginMail(GetLoginReq getLoginReq) throws MessagingException {
+
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+        mimeMessageHelper.setFrom("footstep2022@naver.com");
+        mimeMessageHelper.setTo(getLoginReq.getEmail());
+        mimeMessageHelper.setSubject("[Footstep] 로그인 메일");
+
+        StringBuilder body = new StringBuilder();
+        body.append("회원가입을 하시려면 다음 링크를 클릭해주세요. \n");
+        body.append("http://localhost:8080/users/signup/confirm?email=" + getLoginReq.getEmail() +
+                "&token=" + getLoginReq.getToken());
+        mimeMessageHelper.setText(body.toString()) ;
+        javaMailSender.send(mimeMessage);
+        System.out.println("이메일 보내는거 완료");
+
     }
 }

@@ -91,4 +91,14 @@ public class EmailCertDao {
     }
 
 
+    public GetTokenRes loginConfirm(String email) {
+        System.out.println("로그인 완료된 이메일은" + email);
+        String loginConfirmQuery = "UPDATE User SET expired = 0, status = 1 WHERE email=?";
+        Object[] loginConfirmParams = new Object[]{
+                email};
+
+
+        return new GetTokenRes(this.jdbcTemplate.update(loginConfirmQuery, loginConfirmParams));
+
+    }
 }
