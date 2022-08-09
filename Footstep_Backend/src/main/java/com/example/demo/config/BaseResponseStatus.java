@@ -32,7 +32,9 @@ public enum BaseResponseStatus {
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
     POST_USERS_EMPTY_USERNAME(false, 2018, "이름을 입력해주세요. "),
     GET_USERS_EXPIRED_TOKEN(false,2019 ,"토큰이 만료되었습니다." ),
-
+    MODIFY_FAIL_EMAIL(false, 2020, "이메일 변경에 실패하였습니다."),
+    PATCH_SAME_EMAIL(false, 2021, "변경하려는 이메일이 기존 이메일과 같습니다."),
+    GET_PATCH_EMAIL(false, 2022, "이메일 검증이 실패하였습니다."),
 
     /**
      * 3000 : Response 오류

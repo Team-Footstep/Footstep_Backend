@@ -72,28 +72,21 @@ public class UserDao {
                 checkUserExistParams);
     }
 
-    public GetUserRes getModifyUserInfo(BigInteger userIdx){
-        BigInteger modifyUserParam = userIdx;
-        String modifyUserQuery = "select email, job, userName, userImgUrl, introduction from User where userId=?";
-
-        return this.jdbcTemplate.queryForObject(modifyUserQuery,
-                (rs, rowNum) -> new GetUserRes(
-                        rs.getString("email"),
-                        rs.getString("job"),
-                        rs.getString("userName"),
-                        rs.getString("userImgUrl"),
-                        rs.getString("introduction")),
-                        modifyUserParam);
-    }
-
-    public int modifyUserInfo(PatchUserReq patchUserReq, BigInteger userId) {
+    //유저 정보 변경
+    public int modifyUserInfo(BigInteger userId, PatchUserReq patchUserReq) {
         System.out.println(patchUserReq.toString());
         String modifyUserQuery = "update User set job=?, userName=?, userImgUrl=?, introduction=? where userId=?";
         Object[] modifyUserParams = new Object[]{patchUserReq.getJob(), patchUserReq.getUserName(),
                 patchUserReq.getUserImgUrl(), patchUserReq.getIntroduction(), userId
         };
-
         return this.jdbcTemplate.update(modifyUserQuery, modifyUserParams);
+
+    }
+    //유저 이메일 정보 변경
+    public int modifyEmail(String email, int userId) {
+        String modifyEmailQuery = "update User set email = ? where userId=?";
+        Object[] modifyEmailParams = new Object[]{email, userId};
+        return this.jdbcTemplate.update(modifyEmailQuery, modifyEmailParams);
     }
 
     public void setToken(String email) {
@@ -101,6 +94,12 @@ public class UserDao {
         Object[] setTokenParams = new Object[]{email};
         this.jdbcTemplate.update(setTokenQuery, setTokenParams);
 
+    }
+
+    public void setAuth(String email) {
+        String setAuthQuery = "update User set auth = 0 where email = ?";
+        Object[] setAuthParams = new Object[]{email};
+        this.jdbcTemplate.update(setAuthQuery, setAuthParams);
     }
 }
 

@@ -3,7 +3,6 @@ package com.example.demo.src.Bookmark;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.Bookmark.model.GetBookmarksRes;
-import com.example.demo.src.MainPage.model.GetTrendingFootprintsRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

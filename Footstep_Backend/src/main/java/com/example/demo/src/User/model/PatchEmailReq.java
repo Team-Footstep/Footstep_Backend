@@ -6,12 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PatchUserRes {
+public class PatchEmailReq {
+    private int auth;
+    private int userId;
     private String email;
-    private String job;
-    private String userName;
-    private String introduction;
-    private String userImgUrl;
-
-
 }

@@ -1,4 +1,5 @@
 package com.example.demo.src.User.model;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -6,12 +7,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PatchUserRes {
+public class PatchEmailRes {
+    private int userId;
     private String email;
-    private String job;
-    private String userName;
-    private String introduction;
-    private String userImgUrl;
-
 
 }

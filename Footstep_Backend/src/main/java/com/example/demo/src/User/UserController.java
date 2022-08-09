@@ -24,6 +24,8 @@ public class UserController {
     private final UserService userService;
     private final EmailSenderService emailSenderService;
     Map<String, String> map = new HashMap<String, String>();
+    Map<String, Integer> emap = new HashMap<String, Integer>();
+
     public UserController(UserProvider userProvider, UserService userService, EmailSenderService emailSenderService){
         this.userProvider = userProvider;
         this.userService = userService;
@@ -40,11 +42,11 @@ public class UserController {
     @PostMapping("/signup") // (POST) 127.0.0.1:8080/users/signup
     public BaseResponse<PostUserRes> createUser(@RequestBody PostUserReq postUserReq) {
         //이메일이 입력되지 않았을때
-        if(postUserReq.getEmail() == null){
+        if(postUserReq.getEmail() == "" ){
             return new BaseResponse<>(POST_USERS_EMPTY_EMAIL);
         }
         //이름이 입력되지 않았을떄
-        if(postUserReq.getUserName() == null){
+        if(postUserReq.getUserName() == ""){
             return new BaseResponse<>(POST_USERS_EMPTY_USERNAME);
         }
         // 이메일 정규표현이 맞지 않을때
@@ -60,7 +62,6 @@ public class UserController {
             System.out.println("이메일 보내겠습니다.~");
             emailSenderService.sendSignupMail(getToken, postUserRes.getEmail());
             //map에 저장해주기
-
             map.put("email", postUserRes.getEmail());
             map.put("token", getToken);
             System.out.println(map);
@@ -73,7 +74,7 @@ public class UserController {
 
     }
     /**
-     * 회원가입 이메일 API
+     * 회원가입 이메일 검증API
      * [GET] /users/signup/confirm
      *
      * @return BaseResponse<PostUserRes>
@@ -102,41 +103,78 @@ public class UserController {
      */
 
     /**
-     * 유저정보변경 이메일 인증번호 API
-     * [GET] /users/modify/confirm
-     *
-     * @return BaseResponse<PostUserRes>
-
-    */
-    @ResponseBody
-    @GetMapping("/users/modify/confirm") // (GET) 127.0.0.1:8080/users/modify/confirm
-    public String authConfirm(@RequestBody GetAuthReq getAuthReq) throws MessagingException {
-        System.out.println("수정을 원하는 이메일은 : " + getAuthReq.getEmail());
-        System.out.println("이메일 인증 요청이 들어옴!");
-        return emailSenderService.sendAuthEmail(getAuthReq.getEmail());
-
-    }
-
-    /**
-     * 유저정보변경 API
-     * [PATCH] /modifyUser
+     * 유저정보변경 (이메일 제외) API
+     * [PATCH] /modify/{userId}
      * @return BaseResponse<String>
      */
     @ResponseBody
     @PatchMapping("/modify/{userId}") // (PATCH) 127.0.0.1:8080/users/modify/{userId}
-    public BaseResponse<String> modifyUserInfo(@PathVariable("userId") BigInteger userId, @RequestBody PatchUserReq patchUserReq) throws BaseException, MessagingException {
+    public BaseResponse<PatchUserRes> modifyUserInfo(@PathVariable("userId") BigInteger userId, @RequestBody PatchUserReq patchUserReq) throws BaseException, MessagingException {
         //userId 가 없을때
         if(userId == null) {
             return new BaseResponse<>(EMPTY_IDX);
         }
-        System.out.println("정보수정하는데까지 옴");
-        userService.modifyUserInfo(patchUserReq, userId);
-        emailSenderService.sendAuthEmail(patchUserReq.getEmail());
+        System.out.println("--정보수정--");
+        PatchUserRes patchUserRes = userService.modifyUserInfo(userId, patchUserReq);
+        //emailSenderService.sendAuthEmail(patchUserReq.getEmail());
         String result = patchUserReq.getUserName() + " 정보 수정 완료";
-        return new BaseResponse<>(result);
+        return new BaseResponse<>(patchUserRes);
+    }
+    /**
+     * 이메일 변경 API
+     * [PATCH] /modifyEmail/{userId}
+     * @return BaseResponse<String>
+     */
+    @ResponseBody
+    @PatchMapping("/modifyEmail/{userId}") // (PATCH) 127.0.0.1:8080/users/modifyEmail/{userId}
+    public BaseResponse<PatchEmailRes> modifyEmail(@PathVariable("userId") int userId,  @RequestBody PatchEmailReq patchEmailReq) throws BaseException, MessagingException {
+        //userId 가 없을때
+        if(userId == 0) {
+            return new BaseResponse<>(EMPTY_IDX);
+        }
+        //이메일 정규식인지 확인
+        if(!isRegexEmail(patchEmailReq.getEmail())){
+            return new BaseResponse<>(POST_USERS_INVALID_EMAIL);
+        }
+        //이미 DB에 존재하는 이메일일때
+        if(userProvider.checkEmail(patchEmailReq.getEmail())==1){
+            return new BaseResponse<>(POST_USERS_EXISTS_EMAIL);
+        }
+        PatchEmailRes patchEmailRes = userService.modifyEmail(patchEmailReq.getEmail(), userId);
+        int getAuth = userService.getAuth(patchEmailReq.getEmail());
+        System.out.println("인증번호 값은 " + getAuth);
+        patchEmailReq.setAuth(getAuth);
+        //map에 저장해주기
+        emap.put("userId", userId);
+        emap.put("auth", getAuth);
+        System.out.println(map);
+
+        //이메일 보내주기
+        System.out.println("이메일 보내겠습니다.~");
+        emailSenderService.sendAuthEmail(getAuth, patchEmailReq.getEmail());
+
+        return new BaseResponse<>(patchEmailRes);
     }
 
+    /**
+     * API
+     * [GET] /users/modifyEmail/confirm/userId
+     * 이메일 수정 후 일치 여부 확인 API
+     * @return BaseResponse<PostUserRes>
 
+     */
+    @ResponseBody
+    @GetMapping("/modifyEmail/confirm/{userId}") // (POST) 127.0.0.1:8080/users/modify/confirm/userId
+    public BaseResponse <GetAuthRes> modifyConfirm(@PathVariable int userId, @RequestBody GetAuthReq getAuthReq) throws BaseException {
+        getAuthReq.setUserId(userId);
+        int auth = emap.get("auth");
+        getAuthReq.setAuth(auth);
+        System.out.println("auth는 " + getAuthReq.getAuth());
+        GetAuthRes getAuthRes = userService.modifyConfirm(userId, getAuthReq);
+
+        return new BaseResponse<>(getAuthRes);
+
+    }
 
     /**
      * 유저 프로필 정보 조회 API
