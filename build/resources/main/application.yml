@@ -4,8 +4,15 @@ server:
 spring:
   application:
     name: demo
+  mvc:
+    servlet:
+      load-on-startup: 1
+
   jpa:
     open-in-view: false
+
+
+
 
   datasource:
     platform: mysql
@@ -13,3 +20,4 @@ spring:
     username: footstep
     password: vnttmxpq2022``
     driver-class-name: com.mysql.cj.jdbc.Driver # mysql 8버전
+    # driver-class-name: com.mysql.jdbc.Driver # mysql 5버전
