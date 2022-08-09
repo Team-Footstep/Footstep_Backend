@@ -26,8 +26,8 @@ com/example/demo/src/User/EmailSenderService.java
  com.example.demo.src.User.EmailSenderService
 com/example/demo/src/WebSecurityConfig.java
  com.example.demo.src.WebSecurityConfig
-com/example/demo/src/User/UserController.java
- com.example.demo.src.User.UserController
+com/example/demo/src/User/model/GetTokenRes.java
+ com.example.demo.src.User.model.GetTokenRes
 com/example/demo/src/Bookmark/model/GetBookmarksRes.java
  com.example.demo.src.Bookmark.model.GetBookmarksRes
 com/example/demo/src/User/EmailCertDao.java
@@ -78,5 +78,5 @@ com/example/demo/src/Bookmark/BookmarkController.java
  com.example.demo.src.Bookmark.BookmarkController
 com/example/demo/src/User/model/PostUserReq.java
  com.example.demo.src.User.model.PostUserReq
-com/example/demo/src/User/model/GetTokenRes.java
- com.example.demo.src.User.model.GetTokenRes
+com/example/demo/src/User/UserController.java
+ com.example.demo.src.User.UserController

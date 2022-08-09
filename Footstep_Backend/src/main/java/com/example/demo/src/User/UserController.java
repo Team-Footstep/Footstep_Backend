@@ -95,12 +95,6 @@ public class UserController {
         return new BaseResponse<>(getTokenRes);
 
     }
-    /**
-     * 로그인 API
-     * [GET] /users/login
-     *
-     * @return BaseResponse<PostUserRes>
-     */
 
     /**
      * 유저정보변경 (이메일 제외) API
@@ -159,7 +153,7 @@ public class UserController {
     /**
      * API
      * [GET] /users/modifyEmail/confirm/userId
-     * 이메일 수정 후 일치 여부 확인 API
+     * 이메일 수정 후 이메일 인증 api
      * @return BaseResponse<PostUserRes>
 
      */
