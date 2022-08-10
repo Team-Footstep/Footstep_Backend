@@ -3,7 +3,7 @@ package com.example.demo.src.Follow;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.Follow.model.DeleteFollowRes;
-import com.example.demo.src.Follow.model.PostFollowReq;
+import com.example.demo.src.Follow.model.FollowReq;
 import com.example.demo.src.Follow.model.PostFollowRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,18 +25,30 @@ public class FollowService {
     }
 
     //언팔에서 팔로우
-    public PostFollowRes createFollow(PostFollowReq postFollowReq) throws BaseException {
+    public PostFollowRes createFollow(FollowReq createFollowReq) throws BaseException {
         try {
-            return followDao.createFollow(postFollowReq);
+            return followDao.createFollow(createFollowReq);
         }catch(Exception exception){
             exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
-    public DeleteFollowRes deleteFollow(PostFollowReq postFollowReq) throws BaseException {
+    public DeleteFollowRes deleteFollow(FollowReq deletedFollowReq) throws BaseException {
         try {
-            return followDao.deleteFollow(postFollowReq);
+            return followDao.deleteFollow(deletedFollowReq);
+        }catch(Exception exception){
+            exception.printStackTrace();
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+    public boolean checkExist(FollowReq followReq){
+        return followDao.checkExist(followReq);
+    }
+
+    public PostFollowRes modifyFollow(FollowReq modifyFollowReq) throws BaseException{
+        try{
+            return followDao.modifyFollow(modifyFollowReq);
         }catch(Exception exception){
             exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);

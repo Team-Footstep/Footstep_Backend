@@ -7,8 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostFollowReq {
-    //팔로우를 했을 때
-    private int userId; // 본인 Id
-    private int followedId; // 팔로우 당한 유저 Id;
+public class FollowReq {
+    private int userId; // 유저의 Id
+    private int followedId; // 팔로우된 사람의 Id
 }

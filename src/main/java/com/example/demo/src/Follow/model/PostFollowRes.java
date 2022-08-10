@@ -11,8 +11,8 @@ import java.sql.Timestamp;
 @Getter
 @AllArgsConstructor
 public class PostFollowRes {
-    private Timestamp createdAt;
-    private int status;
-    private int followee;
-    private int follower;
+    private Timestamp updatedAt; // 생성,업데이트 시각
+    private int status; // 상태
+    private int follower; // 팔로우 한 사람
+    private int followee; // 팔로우 당한 사람
 }

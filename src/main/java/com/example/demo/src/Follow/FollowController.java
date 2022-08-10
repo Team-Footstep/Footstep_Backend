@@ -25,7 +25,7 @@ public class FollowController {
         this.followService = followService;
     }
 
-    // 팔로잉 데이터 조회 -> 갯수 세기
+    // [Get] 팔로잉 데이터 조회 -> 갯수 세기
     @ResponseBody
     @GetMapping("/get")
     public BaseResponse<GetFollowInfoRes> getFollowInfo(@RequestParam int userId){
@@ -36,11 +36,13 @@ public class FollowController {
            return new BaseResponse<>(exception.getStatus());
         }
     }
+
+    // [Patch] 언팔 -> 팔로우 상태만 변경
     @ResponseBody
     @PatchMapping("/unfollow")
-    public BaseResponse<DeleteFollowRes> deleteFollow(@RequestParam PostFollowReq postFollowReq){
+    public BaseResponse<DeleteFollowRes> deleteFollow(@RequestParam FollowReq deleteFollowReq){
         try{
-            DeleteFollowRes deleteFollowRes = followService.deleteFollow(postFollowReq);
+            DeleteFollowRes deleteFollowRes = followService.deleteFollow(deleteFollowReq);
             return new BaseResponse<>(deleteFollowRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
@@ -48,13 +50,18 @@ public class FollowController {
 
     }
 
-    //  언팔 하는 경우 -> status를 바꿔주기
+    //  팔로우하는 경우 -> status를 바꿔주기
     @ResponseBody
     @PostMapping("/follow")
-    public BaseResponse<PostFollowRes> createFollow(@RequestParam PostFollowReq postFollowReq) throws BaseException{
+    public BaseResponse<PostFollowRes> updateFollow(@RequestParam FollowReq updateFollowReq) throws BaseException{
         try {
-            PostFollowRes postFollowRes = followService.createFollow(postFollowReq);
-            return new BaseResponse<>(postFollowRes);
+            if(followService.checkExist(updateFollowReq)){ // 존재하면 수정
+               PostFollowRes postFollowRes = followService.modifyFollow(updateFollowReq);
+                return new BaseResponse<>(postFollowRes);
+            }else{ // 없었으면 생성
+                PostFollowRes createFollowRes = followService.createFollow(updateFollowReq);
+                return new BaseResponse<>(createFollowRes);
+            }
         }catch (Exception exception){
             exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);

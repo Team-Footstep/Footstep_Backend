@@ -1,10 +1,7 @@
 package com.example.demo.src.Follow;
 
 
-import com.example.demo.src.Follow.model.DeleteFollowRes;
-import com.example.demo.src.Follow.model.GetFollowInfoRes;
-import com.example.demo.src.Follow.model.PostFollowReq;
-import com.example.demo.src.Follow.model.PostFollowRes;
+import com.example.demo.src.Follow.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -35,14 +32,14 @@ public class FollowDao {
         return new GetFollowInfoRes(followeeNum,followerNum);
     }
 
-    public PostFollowRes createFollow(PostFollowReq postFollowReq){
+    public PostFollowRes createFollow(FollowReq createFollowReq){
         String createFollowInfoQuery = "insert into Follow (followee, follower) values (?,?);";
         String getFollowInfoQuery ="select follower,followee,status,createdAt\n" +
                 "from Follow\n" +
                 "where follower =? and followee =?";
 
-        Object[] createFollowParams = new Object[]{postFollowReq.getUserId(),postFollowReq.getFollowedId()};
-        Object[] getFollowParams = new Object[]{postFollowReq.getClass(),postFollowReq.getFollowedId()};
+        Object[] createFollowParams = new Object[]{createFollowReq.getUserId(),createFollowReq.getFollowedId()};
+        Object[] getFollowParams = new Object[]{createFollowReq.getClass(),createFollowReq.getFollowedId()};
         this.jdbcTemplate.update(createFollowInfoQuery,createFollowParams);
 
         return this.jdbcTemplate.queryForObject(getFollowInfoQuery,
@@ -54,13 +51,36 @@ public class FollowDao {
                 )
                 ,getFollowParams);
     }
-    public DeleteFollowRes deleteFollow(PostFollowReq postFollowReq){
+    public DeleteFollowRes deleteFollow(FollowReq deletedFollowReq){
         String deleteFollowInfoQuery = "insert into Follow (followee, follower) values (?,?);";
-        Object[] createFollowParams = new Object[]{postFollowReq.getUserId(),postFollowReq.getFollowedId()};
+        Object[] createFollowParams = new Object[]{deletedFollowReq.getUserId(),deletedFollowReq.getFollowedId()};
 
         this.jdbcTemplate.update(deleteFollowInfoQuery,createFollowParams);
 
-        return new DeleteFollowRes(postFollowReq.getUserId(),postFollowReq.getFollowedId(),"삭제되었습니다.");
+        return new DeleteFollowRes(deletedFollowReq.getUserId(),deletedFollowReq.getFollowedId(),"삭제되었습니다.");
     }
 
+    public PostFollowRes modifyFollow(FollowReq modifyFollowReq){
+        String modifyFollowQuery = "";
+        String modifyFollowResQuery = "";
+        Object[] modifyFollowParam = new Object[]{modifyFollowReq.getUserId(),modifyFollowReq.getFollowedId()};
+        this.jdbcTemplate.update(modifyFollowQuery,modifyFollowParam);
+        return this.jdbcTemplate.queryForObject(modifyFollowResQuery,
+                (rs,num)-> new PostFollowRes(
+                        rs.getTimestamp("updatedAt"),
+                        rs.getInt("status"),
+                        rs.getInt("follower"),
+                        rs.getInt("followee")
+                )
+                ,modifyFollowParam);
+    }
+
+    public boolean checkExist(FollowReq followReq){
+        String checkExistQuery  ="select exists(\n" +
+                "    select *\n" +
+                "    from Follow\n" +
+                "    where followee = ? and follower = ?\n" +
+                "           ) as isChk";
+        return this.jdbcTemplate.queryForObject(checkExistQuery,boolean.class);
+    }
 }
