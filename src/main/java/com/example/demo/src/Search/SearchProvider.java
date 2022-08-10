@@ -1,9 +1,9 @@
-package com.example.demo.src.search;
+package com.example.demo.src.Search;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.search.model.GetSearchRes;
-import com.example.demo.src.search.model.GetPostsInfoRes;
-import com.example.demo.src.search.model.GetUserInfoRes;
+import com.example.demo.src.Search.model.GetSearchRes;
+import com.example.demo.src.Search.model.GetPostsInfoRes;
+import com.example.demo.src.Search.model.GetUserInfoRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

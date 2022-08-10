@@ -1,4 +1,4 @@
-package com.example.demo.src.search;
+package com.example.demo.src.Search;
 
 //import com.example.demo.src.user.UserDao;
 import com.example.demo.utils.JwtService;

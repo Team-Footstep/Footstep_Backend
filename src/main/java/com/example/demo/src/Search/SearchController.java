@@ -1,15 +1,12 @@
-package com.example.demo.src.search;
+package com.example.demo.src.Search;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.config.BaseResponseStatus;
-import com.example.demo.src.search.model.GetSearchRes;
+import com.example.demo.src.Search.model.GetSearchRes;
 import com.example.demo.utils.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-
-
 
 
 @RestController

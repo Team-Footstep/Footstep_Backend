@@ -1,4 +1,4 @@
-package com.example.demo.src.search.model;
+package com.example.demo.src.Search.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

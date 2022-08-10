@@ -1,9 +1,8 @@
-package com.example.demo.src.search;
+package com.example.demo.src.Search;
 
-import com.example.demo.src.search.model.GetContentsRes;
-import com.example.demo.src.search.model.GetSearchRes;
-import com.example.demo.src.search.model.GetUserInfoRes;
-import com.example.demo.src.search.model.GetPostsInfoRes;
+import com.example.demo.src.Search.model.GetContentsRes;
+import com.example.demo.src.Search.model.GetUserInfoRes;
+import com.example.demo.src.Search.model.GetPostsInfoRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
