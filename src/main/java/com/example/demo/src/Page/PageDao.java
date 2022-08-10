@@ -1,20 +1,13 @@
-package com.example.demo.src.Block;
+package com.example.demo.src.Page;
 
 
-import com.example.demo.src.Block.model.PostPageReq;
-import com.example.demo.src.Block.model.PostPageRes;
+import com.example.demo.src.Page.model.PostPageReq;
+import com.example.demo.src.Page.model.PostPageRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 
 @Repository
 public class PageDao {

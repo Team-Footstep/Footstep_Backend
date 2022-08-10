@@ -1,16 +1,12 @@
-package com.example.demo.src.Block;
+package com.example.demo.src.Page;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.config.BaseResponse;
-import com.example.demo.src.Block.model.PostPageReq;
-import com.example.demo.src.Block.model.PostPageRes;
-import com.example.demo.src.MainPage.model.GetTrendingFootprintsRes;
+import com.example.demo.src.Page.model.PostPageReq;
+import com.example.demo.src.Page.model.PostPageRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
 
