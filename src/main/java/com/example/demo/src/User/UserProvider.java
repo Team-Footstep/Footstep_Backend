@@ -22,6 +22,9 @@ public class UserProvider {
         this.userDao = userDao;
     }
 
+    /*
+     * 유저 프로필 정보 조회
+     * */
     public GetProfileRes retrieveProfile(int userId) throws BaseException {
         if(checkUserExist(userId)==0){
             throw new BaseException(USERS_EMPTY_USER_ID);
@@ -36,6 +39,9 @@ public class UserProvider {
         }
     }
 
+    /*
+     * 사용자가 존재하는지 체크
+     * */
     public int checkUserExist(int userId) throws BaseException{
         try{
             return userDao.checkUserExist(userId);

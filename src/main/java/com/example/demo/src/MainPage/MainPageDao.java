@@ -130,6 +130,9 @@ public class MainPageDao {
                 ), getFollowingNewParams);
     }
 
+    /*
+     * 사용자가 존재하는지 체크
+     * */
     public int checkUserExist(int userId){
         String checkUserExistQuery = "select exists(select userId from User where userId = ?)";
         int checkUserExistParams = userId;

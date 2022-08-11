@@ -18,6 +18,9 @@ public class UserDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    /*
+     * 유저 프로필 정보 조회
+     * */
     public GetProfileRes getProfile(int userId){
         int getProfileParams = userId;
 
@@ -51,6 +54,9 @@ public class UserDao {
                 ), getProfileParams);
     }
 
+    /*
+     * 사용자가 존재하는지 체크
+     * */
     public int checkUserExist(int userId){
         String checkUserExistQuery = "select exists(select userId from User where userId = ?)";
         int checkUserExistParams = userId;

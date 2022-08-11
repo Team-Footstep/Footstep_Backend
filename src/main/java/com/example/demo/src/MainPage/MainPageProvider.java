@@ -25,6 +25,9 @@ public class MainPageProvider {
         this.mainPageDao = mainPageDao;
     }
 
+    /*
+     * Trending This Week - 누적 stamp 횟수가 높은 순서대로 12개
+     * */
     public List<GetTrendingFootprintsRes> retrieveTrendingFootsteps() throws BaseException {
         try{
             return mainPageDao.getTrendingFootsteps();
@@ -35,6 +38,9 @@ public class MainPageProvider {
         }
     }
 
+    /*
+     * 팔로우한 사람들의 최신 기록 5개
+     * */
     public List<GetFollowingNewRes> retrieveFollowingNew(int userId) throws BaseException {
         if(checkUserExist(userId)==0){
             throw new BaseException(USERS_EMPTY_USER_ID);
@@ -49,6 +55,9 @@ public class MainPageProvider {
         }
     }
 
+    /*
+     * 사용자가 존재하는지 체크
+     * */
     public int checkUserExist(int userId) throws BaseException{
         try{
             return mainPageDao.checkUserExist(userId);
