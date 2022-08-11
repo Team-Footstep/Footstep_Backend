@@ -9,6 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetProfileRes {
     private int userId;
+    private int topPageId;
     private String userImgUrl;
     private String userName;
     private String job;

@@ -21,9 +21,11 @@ public class UserDao {
     public GetProfileRes getProfile(int userId){
         int getProfileParams = userId;
 
-        String getProfileQuery = "select userId, userImgUrl, userName, job, introduction\n" +
-                "from User\n" +
-                "where userId=?;";
+        String getProfileQuery = "select u.userId, p.pageId as topPageId, u.userImgUrl, u.userName, u.job, u.introduction\n" +
+                "from User u, Page p\n" +
+                "where u.userId = p.userId and u.status=1 and p.status=1 and p.access=1\n" +
+                "  and p.topOrNot = 1\n" +
+                "  and u.userId=?;";
 
 
         // [수정 완료] 미공개 글 - curPageId의 access 가 0이면 미포함
@@ -37,6 +39,7 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(getProfileQuery,
                 (rs, rowNum) -> new GetProfileRes(
                         rs.getInt("userId"),
+                        rs.getInt("topPageId"),
                         rs.getString("userImgUrl"),
                         rs.getString("userName"),
                         rs.getString("job"),
