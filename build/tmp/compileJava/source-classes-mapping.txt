@@ -40,6 +40,8 @@ com/example/demo/src/MainPage/MainPageProvider.java
  com.example.demo.src.MainPage.MainPageProvider
 com/example/demo/src/MainPage/model/GetTrendingFootprintsRes.java
  com.example.demo.src.MainPage.model.GetTrendingFootprintsRes
+com/example/demo/src/Bookmark/BookmarkController.java
+ com.example.demo.src.Bookmark.BookmarkController
 com/example/demo/src/User/UserService.java
  com.example.demo.src.User.UserService
 com/example/demo/src/User/UserProvider.java
@@ -50,5 +52,3 @@ com/example/demo/src/User/UserDao.java
  com.example.demo.src.User.UserDao
 com/example/demo/src/User/UserController.java
  com.example.demo.src.User.UserController
-com/example/demo/src/Bookmark/BookmarkController.java
- com.example.demo.src.Bookmark.BookmarkController

@@ -21,9 +21,9 @@ public class UserDao {
     public GetProfileRes getProfile(int userId){
         int getProfileParams = userId;
 
-        String getProfileQuery = "select u.userId, p.pageId as topPageId, u.userImgUrl, u.userName, u.job, u.introduction\n" +
+        String getProfileQuery = "select u.userId, p.pageId as topPageId, p.access, u.userImgUrl, u.userName, u.job, u.introduction\n" +
                 "from User u, Page p\n" +
-                "where u.userId = p.userId and u.status=1 and p.status=1 and p.access=1\n" +
+                "where u.userId = p.userId and u.status=1 and p.status=1\n" +
                 "  and p.topOrNot = 1\n" +
                 "  and u.userId=?;";
 
@@ -40,6 +40,7 @@ public class UserDao {
                 (rs, rowNum) -> new GetProfileRes(
                         rs.getInt("userId"),
                         rs.getInt("topPageId"),
+                        rs.getInt("access"),
                         rs.getString("userImgUrl"),
                         rs.getString("userName"),
                         rs.getString("job"),
