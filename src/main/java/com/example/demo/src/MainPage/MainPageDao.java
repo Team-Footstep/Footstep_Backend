@@ -19,10 +19,15 @@ public class MainPageDao {
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
-    // Trending this week - stamp가 가장 많이 눌린 "block"
-    // - 블럭의 내용을 미리보기
+
+
+    /*
+     * Trending This Week
+     * 누적 stamp 횟수가 높은 순서대로 12개 반환 - stamp가 가장 많이 눌린 "block"
+     * - 블럭의 내용을 미리보기
+     * */
     public List<GetTrendingFootprintsRes> getTrendingFootsteps(){
-        String getTrendingFootprintsQuery = "select b.userId, sap.blockId, b.content, count(*) as footprintNum\n" +
+        String getTrendingFootprintsQuery = "select b.userId, sap.blockId, b.curPageId, b.content, count(*) as footprintNum\n" +
                 "from StampAndPrint sap, Block b\n" +
                 "where sap.blockId = b.blockId\n" +
                 "    and sap.status=1 and b.status=1\n" +
@@ -46,6 +51,7 @@ public class MainPageDao {
                 (rs, rowNum) -> new GetTrendingFootprintsRes(
                         rs.getInt("userId"),
                         rs.getInt("blockId"),
+                        rs.getInt("curPageId"),
                         rs.getString("content"),
                         jdbcTemplate.queryForObject(getStampNumQuery,
                                 int.class
@@ -56,9 +62,12 @@ public class MainPageDao {
                 ));
     }
 
-    public List<GetFollowingNewRes> getFollowingNew(int userId){
-        // user가 팔로우한 사람들의 기록(footprint(P) 기준) 중 최신 5개 기록
 
+    /*
+     * 팔로우한 사람들의 최신 기록 5개
+     * user가 팔로우한 사람들의 기록(footprint(P) 기준) 중 최신 5개 기록
+     * */
+    public List<GetFollowingNewRes> getFollowingNew(int userId){
         List<GetFollowingNewRes> getFollowingNewRes;
         int getFollowingNewParams = userId;
 

@@ -10,6 +10,7 @@ import lombok.Setter;
 public class GetTrendingFootprintsRes {
     private int userId;
     private int blockId;
+    private int curPageId;
     private String content;
     private int stampNum;
     private int footprintNum;// 해당 블럭의 전체 Footprint 횟수
