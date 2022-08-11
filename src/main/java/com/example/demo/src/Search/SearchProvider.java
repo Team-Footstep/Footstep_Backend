@@ -31,9 +31,23 @@ public class SearchProvider {
         // TODO: 형식적 VALIDATION 처리
 
         try{
-            List<GetPostsInfoRes> postInfoList = searchDao.getPostInfo(word);
+            String userInfoMessage,postInfoMessage;
+
             List<GetUserInfoRes> userInfoList =  searchDao.getUserInfoByWord(word);
-            return new GetSearchRes(userInfoList,postInfoList);
+            if(userInfoList.isEmpty()){
+                userInfoMessage = "검색된 유저 결과가 없습니다.";
+            }else{
+                userInfoMessage ="검색 유저 결과를 확인하세요";
+            }
+
+            List<GetPostsInfoRes> postInfoList = searchDao.getPostInfo(word);
+            if(postInfoList.isEmpty()){
+                postInfoMessage ="검색된 글 결과가 없습니다.";
+            }else{
+                postInfoMessage ="검색된 글 결과를 확인하세요";
+            }
+
+            return new GetSearchRes(userInfoMessage,userInfoList,postInfoMessage,postInfoList);
         }
         catch (Exception exception) {
             exception.printStackTrace();

@@ -26,7 +26,8 @@ public class SearchDao {
      * @author 문현우
      */
     public List<GetUserInfoRes> getUserInfoByWord(String word){
-        String getUserInfoByWordQuery="SELECT User.userId,userName,introduction,job,userImgUrl,Page.pageId,Page.topOrNot\n" +
+        String getUserInfoByWordQuery="SELECT User.userId,User.userName,User.introduction,User.job,User.userImgUrl," +
+                "Page.pageId\n" +
                 "FROM User,Page\n" +
                 "WHERE userName LIKE concat('%',?,'%') AND User.status =1 and Page.userId = User.userId\n" +
                 "AND Page.topOrNot = 1";
@@ -72,10 +73,9 @@ public class SearchDao {
         String getCommentNumByBLockIdQuery = "SELECT COUNT(*)\n" +
                 "FROM Comment COM\n" +
                 "WHERE COM.status=1 AND COM.blockId = ?";
-        //proceed selectUserInfoByIdQuery2 는 필요없는 쿼리
+
         List<GetPostsInfoRes> postInfoList = this.jdbcTemplate.query(getPostInfoByWordQuery,
                 (rs,rowNum)-> new GetPostsInfoRes(
-
                         //검색한 글의 -> 유저 정보
                         this.jdbcTemplate.queryForObject(getUserInfoByIdQuery,
                                 (rs1,rowNum3) -> new GetUserInfoRes(

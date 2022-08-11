@@ -23,24 +23,29 @@ public class PageDao {
     public PostPageRes createPage(PostPageReq postPageReq) {
         String createPageQuery = "insert into Page (parentPageId,parentBlockId,userId,topOrNot,access,stampOrPrint,preview)\n" +
                 "values (?,?,?,?,?,?,?)";
-        String getPageResQuery = "select userId,pageId,createdAt,status\n" +
+        String getPageResByPageIdQuery = "select userId,pageId,createdAt,status\n" +
                 "from Page\n" +
                 "where pageId = ?";
-        String getLastInsertIdQuery = "select last_insert_id()";
+        String getPageIdQuery ="select pageId\n" +
+                "from Page\n" +
+                "where parentBlockId = ?";
 
         Object[] createPageParams = new Object[]{postPageReq.getParentPageId(), postPageReq.getParentBlockId(), postPageReq.getUserId()
                 , postPageReq.isTopOrNot(), postPageReq.getAccess(), postPageReq.getStampOrPrint(), postPageReq.getPreview()
         };
         // 페이지 생성 구문
         this.jdbcTemplate.update(createPageQuery, createPageParams);
-        int lastPageId = this.jdbcTemplate.queryForObject(getLastInsertIdQuery,int.class);
-        return this.jdbcTemplate.queryForObject(getPageResQuery,
+
+
+        int PageId = this.jdbcTemplate.queryForObject(getPageIdQuery,int.class,postPageReq.getParentBlockId());
+
+        return this.jdbcTemplate.queryForObject(getPageResByPageIdQuery,
                 (rs,num) -> new PostPageRes(
                         rs.getInt("userId"),
                         rs.getInt("pageId"),
                         rs.getTimestamp("createdAt"),
                         rs.getInt("status"))
-                ,lastPageId);
+                ,PageId);
     }
 
 }

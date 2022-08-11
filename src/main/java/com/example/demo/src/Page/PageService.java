@@ -26,9 +26,7 @@ public class PageService {
 
     public PostPageRes createPage(PostPageReq postPageReq) throws BaseException{
         try{
-           PostPageRes postPageRes =  pageDao.createPage(postPageReq);
-           return new PostPageRes(postPageRes.getUserId(),postPageRes.getPageId(),
-                   postPageRes.getCreatedAt(),postPageRes.getStatus());
+            return pageDao.createPage(postPageReq);
         }
         catch (Exception exception){
             exception.printStackTrace();
