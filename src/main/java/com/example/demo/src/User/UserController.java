@@ -20,6 +20,7 @@ public class UserController {
     }
 
     /*
+     * [GET]
      * 유저 프로필 정보 조회
      * 유저아이디, 프로필 사진 url, 이름, 직업, 자기소개, 총 footprint 받은 횟수
      * */
