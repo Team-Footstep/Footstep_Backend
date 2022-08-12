@@ -1,21 +1,13 @@
 package com.example.demo.src.Page;
 
-<<<<<<< HEAD
-import com.example.demo.src.Page.model.GetPageRes;
-=======
 
 import com.example.demo.src.Page.model.PostPageReq;
 import com.example.demo.src.Page.model.PostPageRes;
->>>>>>> nnlnuu
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-<<<<<<< HEAD
-import java.util.List;
-=======
->>>>>>> nnlnuu
 
 @Repository
 public class PageDao {
@@ -27,8 +19,6 @@ public class PageDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-<<<<<<< HEAD
-=======
     //page 생성
     public PostPageRes createPage(PostPageReq postPageReq) {
         String createPageQuery = "insert into Page (parentPageId,parentBlockId,userId,topOrNot,access,stampOrPrint,preview)\n" +
@@ -57,20 +47,9 @@ public class PageDao {
                         rs.getInt("status"))
                 ,PageId);
     }
->>>>>>> nnlnuu
+
 
 }
 
 
-<<<<<<< HEAD
-=======
 
-
-
-
-
-
-
-
-
->>>>>>> nnlnuu

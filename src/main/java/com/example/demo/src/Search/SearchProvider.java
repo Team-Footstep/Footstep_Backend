@@ -1,7 +1,6 @@
 package com.example.demo.src.Search;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.Search.model.GetSearchReq;
 import com.example.demo.src.Search.model.GetSearchRes;
 import com.example.demo.src.Search.model.GetPostsInfoRes;
 import com.example.demo.src.Search.model.GetUserInfoRes;
@@ -28,19 +27,19 @@ public class SearchProvider {
         this.jwtService = jwtService;
     }
 
-    public GetSearchRes retrieveSearchInfo(GetSearchReq getSearchReq) throws BaseException {
+    public GetSearchRes retrieveSearchInfo(String word,int page) throws BaseException {
         // TODO: 형식적 VALIDATION 처리
         try{
             String userInfoMessage,postInfoMessage;
 
-            List<GetUserInfoRes> userInfoList =  searchDao.getUserInfoByWord(getSearchReq);
+            List<GetUserInfoRes> userInfoList =  searchDao.getUserInfoByWord(word,page);
             if(userInfoList.isEmpty()){
                 userInfoMessage = "검색된 유저 결과가 없습니다.";
             }else{
                 userInfoMessage ="검색 유저 결과를 확인하세요";
             }
 
-            List<GetPostsInfoRes> postInfoList = searchDao.getPostInfo(getSearchReq);
+            List<GetPostsInfoRes> postInfoList = searchDao.getPostInfo(word,page);
             if(postInfoList.isEmpty()){
                 postInfoMessage ="검색된 글 결과가 없습니다.";
             }else{

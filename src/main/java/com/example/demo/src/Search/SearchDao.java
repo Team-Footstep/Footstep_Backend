@@ -19,18 +19,18 @@ public class SearchDao {
 
     /**
      * @apiNote [GET] /search/word
-     * @param getSearchReq: 검색어
+     * @param word: 검색어,page: 페이지 번호
      * @return 유저 정보
      * @author 문현우
      */
-    public List<GetUserInfoRes> getUserInfoByWord(GetSearchReq getSearchReq){
+    public List<GetUserInfoRes> getUserInfoByWord(String word,int page){
         //검색어로 유저 이름 조회하기 -> 클릭했을 경우 원하는 페이지로 바로 넘어갈 수 있도록 PageId 까지 함께 넘김
         String getUserInfoByWordQuery="SELECT User.userId,User.userName,User.introduction,User.job,User.userImgUrl," +
                 "Page.pageId\n" +
                 "FROM User,Page\n" +
                 "WHERE userName LIKE concat('%',?,'%') AND User.status =1 and Page.userId = User.userId\n" +
                 "AND Page.topOrNot = 1\n" +
-                "LIMIT "+ (20*(getSearchReq.getPage()-1)) + "," + 20;
+                "LIMIT "+ (20*(page-1)) + "," + 20;
         List<GetUserInfoRes> userInfoList = this.jdbcTemplate.query(getUserInfoByWordQuery,
                 (rs,rowNum) -> new GetUserInfoRes(
                         rs.getInt("userId"),
@@ -39,18 +39,18 @@ public class SearchDao {
                         rs.getString("job"),
                         rs.getString("userImgUrl"),
                         rs.getInt("pageId")
-                ),getSearchReq.getWord());
+                ),word);
         return userInfoList;
     }
 
-    public List<GetPostsInfoRes> getPostInfo(GetSearchReq getSearchReq) {
+    public List<GetPostsInfoRes> getPostInfo(String word,int page) {
 
         //검색어로 글 정보 조회하는 쿼리
         String getPostInfoByWordQuery="SELECT User.userId,Page.preview,Page.updatedAt,Page.parentBlockId,Page.pageId\n" +
                 "FROM User,Page\n" +
                 "WHERE preview LIKE concat('%',?,'%') and Page.userId = User.userId\n" +
                 "and User.status =1 and Page.access = 1\n" +
-                "LIMIT "+ (20*(getSearchReq.getPage()-1)) + "," + 20;
+                "LIMIT "+ (20*(page-1)) + "," + 20;
 
         // 유저 Id로 유저 정보 조회하는 쿼리
         String getUserInfoByIdQuery ="SELECT User.userId,userName,introduction,job,userImgUrl,Page.pageId\n" +
@@ -113,7 +113,7 @@ public class SearchDao {
                         this.jdbcTemplate.queryForObject(getFootPrintNumByBLockIdQuery,
                                 int.class, rs.getInt("parentBlockId"))
                 )
-                ,getSearchReq.getWord());
+                ,word);
         return postInfoList;
     }
 
