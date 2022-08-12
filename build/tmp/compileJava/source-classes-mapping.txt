@@ -1,5 +1,5 @@
-com/example/demo/src/Search/model/GetUserInfoRes.java
- com.example.demo.src.Search.model.GetUserInfoRes
+com/example/demo/DemoApplication.java
+ com.example.demo.DemoApplication
 com/example/demo/src/Follow/FollowDao.java
  com.example.demo.src.Follow.FollowDao
 com/example/demo/config/Constant.java
@@ -30,8 +30,8 @@ com/example/demo/src/Follow/FollowService.java
  com.example.demo.src.Follow.FollowService
 com/example/demo/config/secret/Secret.java
  com.example.demo.config.secret.Secret
-com/example/demo/src/Search/model/GetContentsRes.java
- com.example.demo.src.Search.model.GetContentsRes
+com/example/demo/src/Bookmark/BookmarkDao.java
+ com.example.demo.src.Bookmark.BookmarkDao
 com/example/demo/config/BaseResponse.java
  com.example.demo.config.BaseResponse
 com/example/demo/src/MainPage/MainPageController.java
@@ -50,14 +50,14 @@ com/example/demo/src/Bookmark/BookmarkController.java
  com.example.demo.src.Bookmark.BookmarkController
 com/example/demo/utils/SHA256.java
  com.example.demo.utils.SHA256
-com/example/demo/src/Search/model/GetPostsInfoRes.java
- com.example.demo.src.Search.model.GetPostsInfoRes
+com/example/demo/src/Bookmark/BookmarkService.java
+ com.example.demo.src.Bookmark.BookmarkService
 com/example/demo/src/User/UserDao.java
  com.example.demo.src.User.UserDao
 com/example/demo/src/MainPage/MainPageDao.java
  com.example.demo.src.MainPage.MainPageDao
-com/example/demo/src/Search/model/GetSearchRes.java
- com.example.demo.src.Search.model.GetSearchRes
+com/example/demo/src/webSecurity/WebSecurityConfig.java
+ com.example.demo.src.webSecurity.WebSecurityConfig
 com/example/demo/utils/JwtService.java
  com.example.demo.utils.JwtService
 com/example/demo/src/MainPage/model/GetContentsRes.java
@@ -66,8 +66,8 @@ com/example/demo/src/Follow/model/FollowReq.java
  com.example.demo.src.Follow.model.FollowReq
 com/example/demo/src/test/TestController.java
  com.example.demo.src.test.TestController
-com/example/demo/src/Follow/FollowController.java
- com.example.demo.src.Follow.FollowController
+com/example/demo/src/User/UserService.java
+ com.example.demo.src.User.UserService
 com/example/demo/src/MainPage/MainPageProvider.java
  com.example.demo.src.MainPage.MainPageProvider
 com/example/demo/src/Page/PageController.java
@@ -80,16 +80,18 @@ com/example/demo/src/Page/model/PostPageRes.java
  com.example.demo.src.Page.model.PostPageRes
 com/example/demo/src/MainPage/model/GetTrendingFootprintsRes.java
  com.example.demo.src.MainPage.model.GetTrendingFootprintsRes
-com/example/demo/src/webSecurity/WebSecurityConfig.java
- com.example.demo.src.webSecurity.WebSecurityConfig
-com/example/demo/DemoApplication.java
- com.example.demo.DemoApplication
-com/example/demo/src/User/UserService.java
- com.example.demo.src.User.UserService
-com/example/demo/src/Bookmark/BookmarkService.java
- com.example.demo.src.Bookmark.BookmarkService
-com/example/demo/src/Bookmark/BookmarkDao.java
- com.example.demo.src.Bookmark.BookmarkDao
+com/example/demo/src/Search/model/GetUserInfoRes.java
+ com.example.demo.src.Search.model.GetUserInfoRes
+com/example/demo/src/Follow/FollowController.java
+ com.example.demo.src.Follow.FollowController
+com/example/demo/src/Search/model/GetPostsInfoRes.java
+ com.example.demo.src.Search.model.GetPostsInfoRes
+com/example/demo/src/Search/model/GetSearchReq.java
+ com.example.demo.src.Search.model.GetSearchReq
+com/example/demo/src/Search/model/GetSearchRes.java
+ com.example.demo.src.Search.model.GetSearchRes
+com/example/demo/src/Search/model/GetContentsRes.java
+ com.example.demo.src.Search.model.GetContentsRes
 com/example/demo/src/Search/SearchDao.java
  com.example.demo.src.Search.SearchDao
 com/example/demo/src/Search/SearchProvider.java

@@ -10,6 +10,6 @@ import lombok.Getter;
 public class GetContentsRes {
     private int blockId; // 블록 아이디
     private String content; // 블록 별 컨텐츠
-
+    private int orderNum; // block 순서
 
 }

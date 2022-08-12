@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/Pages")
+@RequestMapping("/pages")
 public class PageController {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -29,7 +29,7 @@ public class PageController {
         this.pageService = pageService;
     }
 
-    @PostMapping("")
+    @PostMapping("create")
     public BaseResponse<PostPageRes> createPage(@RequestBody PostPageReq postPageReq)  {
         //todo validation 처리하기
         try{
