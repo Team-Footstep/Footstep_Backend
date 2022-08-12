@@ -48,14 +48,14 @@ public class UserDao {
                 "where status=1\n" +
                 "  and userId=?;";
 
-        String getStampTopPageQuery = "select if(pageId is null, null, pageId) as topStampPageId, if(pageId is null, null, access) as topStampPageAccess\n" +
+        String getStampTopPageQuery = "select pageId as topStampPageId, access as topStampPageAccess\n" +
                 "from Page\n" +
                 "where status=1\n" +
                 "  and stampOrPrint = 'S'\n" +
                 "  and topOrNot = 1\n" +
                 "  and userId=?;";
 
-        String getPrintTopPageQuery = "select if(pageId is null, null, pageId) as topPrintPageId, if(pageId is null, null, access) as topPrintPageAccess\n" +
+        String getPrintTopPageQuery = "select pageId as topPrintPageId, access as topPrintPageAccess\n" +
                 "from Page\n" +
                 "where status=1\n" +
                 "  and stampOrPrint = 'P'\n" +
