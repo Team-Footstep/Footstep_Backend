@@ -4,6 +4,8 @@ import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.MainPage.model.GetFollowingNewRes;
 import com.example.demo.src.Page.model.GetPageRes;
+import com.example.demo.src.Page.model.PostPageReq;
+import com.example.demo.src.Page.model.PostPageRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,4 +40,15 @@ public class PageController {
      * 페이지 북마크 설정/해제
      * */
 
+
+    @PostMapping("create")
+    public BaseResponse<PostPageRes> createPage(@RequestBody PostPageReq postPageReq)  {
+        //todo validation 처리하기
+        try{
+            PostPageRes postPageRes = pageService.createPage(postPageReq);
+            return new BaseResponse<>(postPageRes);
+        }catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 }
