@@ -25,6 +25,9 @@ public class BookmarkProvider {
         this.bookmarkDao = bookmarkDao;
     }
 
+    /*
+     * 사용자의 북마크한 리스트 반환
+     * */
     public List<GetBookmarksRes> retrieveBookmarks(int userId) throws BaseException {
         if(checkUserExist(userId)==0){
             throw new BaseException(USERS_EMPTY_USER_ID);
@@ -39,6 +42,9 @@ public class BookmarkProvider {
         }
     }
 
+    /*
+     * 사용자가 존재하는지 체크
+     * */
     public int checkUserExist(int userId) throws BaseException{
         try{
             return bookmarkDao.checkUserExist(userId);

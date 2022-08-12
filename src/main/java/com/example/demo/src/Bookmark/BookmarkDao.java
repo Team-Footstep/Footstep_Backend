@@ -18,6 +18,9 @@ public class BookmarkDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    /*
+     * 사용자의 북마크한 리스트 반환
+     * */
     public List<GetBookmarksRes> getBookmarks(int userId){
         int getBookmarksParams = userId;
 
@@ -38,6 +41,9 @@ public class BookmarkDao {
                 ), getBookmarksParams);
     }
 
+    /*
+     * 사용자가 존재하는지 체크
+     * */
     public int checkUserExist(int userId){
         String checkUserExistQuery = "select exists(select userId from User where userId = ?)";
         int checkUserExistParams = userId;

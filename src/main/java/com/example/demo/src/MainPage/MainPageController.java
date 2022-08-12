@@ -28,6 +28,7 @@ public class MainPageController {
     }
 
     /*
+    * [GET]
     * Trending This Week
     * 누적 stamp 횟수가 높은 순서대로 12개 반환
     * */
@@ -43,6 +44,7 @@ public class MainPageController {
     }
 
     /*
+     * [GET]
      * 팔로우한 사람들의 최신 기록 5개
      * */
     @ResponseBody
