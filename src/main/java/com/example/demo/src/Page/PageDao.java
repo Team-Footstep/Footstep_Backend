@@ -1,8 +1,7 @@
 package com.example.demo.src.Page;
 
-import com.example.demo.config.BaseResponse;
-import com.example.demo.src.MainPage.model.GetTrendingFootprintsRes;
 import com.example.demo.src.Page.model.PatchAccessReq;
+import com.example.demo.src.Page.model.PatchBookmarkReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -30,6 +29,18 @@ public class PageDao {
                 "where pageId=?;";
 
         this.jdbcTemplate.update(updateAccessQuery, updateAccessPageIdParams);
+    }
+
+    public void updateBookmark(PatchBookmarkReq patchBookmarkReq){
+        int updateBookmarkPageIdParams = patchBookmarkReq.getPageId();
+        int updateBookmark = patchBookmarkReq.getBookmark();
+
+
+        String updateBookmarkQuery = "update Page\n" +
+                "set bookmark=" + Integer.toString(updateBookmark) + "\n" +
+                "where pageId=?;";
+
+        this.jdbcTemplate.update(updateBookmarkQuery, updateBookmarkPageIdParams);
     }
 }
 

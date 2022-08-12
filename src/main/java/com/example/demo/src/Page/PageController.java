@@ -3,6 +3,7 @@ package com.example.demo.src.Page;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.Page.model.PatchAccessReq;
+import com.example.demo.src.Page.model.PatchBookmarkReq;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +46,16 @@ public class PageController {
      * [PATCH]
      * 페이지 북마크 설정/해제
      * */
+    @ResponseBody
+    @PatchMapping("/bookmark")
+    public BaseResponse<Boolean> getNewFootsteps(@RequestBody PatchBookmarkReq patchBookmarkReq) {
+        try{
+            pageService.updateBookmark(patchBookmarkReq);
+            return new BaseResponse<>(true);
+        } catch(BaseException exception){
+            exception.printStackTrace();
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
 }
