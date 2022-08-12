@@ -1,11 +1,12 @@
 package com.example.demo.src.User;
 
-import com.example.demo.src.User.model.GetProfileRes;
+import com.example.demo.src.User.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.math.BigInteger;
 
 
 @Repository
@@ -16,6 +17,24 @@ public class UserDao {
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
+    }
+    public int createUser(PostUserReq postUserReq){
+        String createUserQuery = "insert into User (userName, email) VALUES (?,?)";
+        Object[] createUserParams = new Object[]{postUserReq.getUserName(), postUserReq.getEmail()};
+        this.jdbcTemplate.update(createUserQuery, createUserParams);
+        String lastInsertIdQuery = "select last_insert_id()";
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery,int.class);
+
+    }
+
+    //중복되는 이메일인지 체크
+    public int checkEmail(String email){
+        String checkEmailQuery = "select exists(select email from User where email = ?)";
+        String checkEmailParams = email;
+        return this.jdbcTemplate.queryForObject(checkEmailQuery,
+                int.class,
+                checkEmailParams);
+
     }
 
     public GetProfileRes getProfile(int userId){
@@ -53,6 +72,36 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject(checkUserExistQuery,
                 int.class,
                 checkUserExistParams);
+    }
+
+    //유저 정보 변경
+    public int modifyUserInfo(BigInteger userId, PatchUserReq patchUserReq) {
+        System.out.println(patchUserReq.toString());
+        String modifyUserQuery = "update User set job=?, userName=?, userImgUrl=?, introduction=? where userId=?";
+        Object[] modifyUserParams = new Object[]{patchUserReq.getJob(), patchUserReq.getUserName(),
+                patchUserReq.getUserImgUrl(), patchUserReq.getIntroduction(), userId
+        };
+        return this.jdbcTemplate.update(modifyUserQuery, modifyUserParams);
+
+    }
+    //유저 이메일 정보 변경
+    public int modifyEmail(String email, int userId) {
+        String modifyEmailQuery = "update User set email = ? where userId=?";
+        Object[] modifyEmailParams = new Object[]{email, userId};
+        return this.jdbcTemplate.update(modifyEmailQuery, modifyEmailParams);
+    }
+
+    public void setToken(String email) {
+        String setTokenQuery = "update User set token = null where email = ?;";
+        Object[] setTokenParams = new Object[]{email};
+        this.jdbcTemplate.update(setTokenQuery, setTokenParams);
+
+    }
+
+    public void setAuth(String email) {
+        String setAuthQuery = "update User set auth = 0 where email = ?";
+        Object[] setAuthParams = new Object[]{email};
+        this.jdbcTemplate.update(setAuthQuery, setAuthParams);
     }
 }
 

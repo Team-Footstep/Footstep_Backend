@@ -21,16 +21,20 @@ public enum BaseResponseStatus {
     EMPTY_JWT(false, 2001, "JWT를 입력해주세요."),
     INVALID_JWT(false, 2002, "유효하지 않은 JWT입니다."),
     INVALID_USER_JWT(false,2003,"권한이 없는 유저의 접근입니다."),
-
+    NOT_LOGIN(false, 2004, "로그인되지 않았습니다."),
+    EMPTY_IDX(false, 2005, "userId를 찾을수 없습니다."),
     // users
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요."),
 
-    // [POST] /users
+    // [POST] /users/signup
     POST_USERS_EMPTY_EMAIL(false, 2015, "이메일을 입력해주세요."),
     POST_USERS_INVALID_EMAIL(false, 2016, "이메일 형식을 확인해주세요."),
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
-
-
+    POST_USERS_EMPTY_USERNAME(false, 2018, "이름을 입력해주세요. "),
+    GET_USERS_EXPIRED_TOKEN(false,2019 ,"토큰이 만료되었습니다." ),
+    MODIFY_FAIL_EMAIL(false, 2020, "이메일 변경에 실패하였습니다."),
+    PATCH_SAME_EMAIL(false, 2021, "변경하려는 이메일이 기존 이메일과 같습니다."),
+    GET_PATCH_EMAIL(false, 2022, "이메일 검증이 실패하였습니다."),
 
     /**
      * 3000 : Response 오류
@@ -39,8 +43,7 @@ public enum BaseResponseStatus {
     RESPONSE_ERROR(false, 3000, "값을 불러오는데 실패하였습니다."),
 
     // [POST] /users
-    DUPLICATED_EMAIL(false, 3013, "중복된 이메일입니다."),
-    FAILED_TO_LOGIN(false,3014,"없는 아이디거나 비밀번호가 틀렸습니다."),
+    FAILED_TO_LOGIN(false,3014,"없는 이메일입니다."),
 
 
 

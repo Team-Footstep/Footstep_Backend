@@ -54,6 +54,17 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
 
 
+    //mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    //compile "com.sun.mail:javax.mail"
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    //implementation 'org.springframework.security:spring-security-test'
+    //compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5', version: '3.0.4.RELEASE'
+    //valid
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+
 
 
 
