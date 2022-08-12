@@ -133,14 +133,15 @@ public class UserController {
     public String confirmlogin(HttpServletRequest request, @RequestBody GetTokenReq getTokenReq) throws BaseException, MessagingException {
         System.out.println("클릭한 이메일은 : " + getTokenReq.getEmail());
         String ctoken = (String) loginmap.get("token");
-        String email = getTokenReq.getEmail();
+        int userId = userProvider.checkUserId(getTokenReq.getEmail());
+        System.out.println("해당 이메일의 userId 값은 " + userId);
         getTokenReq.setToken(ctoken);
         GetTokenRes getTokenRes = userService.loginConfirm(getTokenReq);
         System.out.println(getTokenRes);
 
         //인증이 완료되었으므로, 세션 생성하기
         HttpSession session = request.getSession();
-        session.setAttribute(SessionConst.LOGIN_MEMBER, email);
+        session.setAttribute(SessionConst.LOGIN_MEMBER, userId);
 
         System.out.println("로그인이 완료되었습니다.");
 

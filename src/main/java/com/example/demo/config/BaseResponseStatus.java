@@ -35,6 +35,8 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_EMAIL(false, 2020, "이메일 변경에 실패하였습니다."),
     PATCH_SAME_EMAIL(false, 2021, "변경하려는 이메일이 기존 이메일과 같습니다."),
     GET_PATCH_EMAIL(false, 2022, "이메일 검증이 실패하였습니다."),
+    NOT_EXIST_EMAIL(false, 2023, "해당하는 이메일이 없습니다."),
+
 
     /**
      * 3000 : Response 오류

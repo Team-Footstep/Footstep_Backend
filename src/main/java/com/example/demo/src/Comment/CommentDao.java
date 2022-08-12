@@ -22,7 +22,7 @@ public class CommentDao {
     }
 
     public PostCommentRes createComment(int pageId,int blockId, PostCommentReq commentReq) {
-        String createCommentQuery = "UPDATE Comment set content = ?, status = 1 WHERE userId = ? and pageId = ? and blockId = ?";
+        String createCommentQuery = "INSERT INTO Comment (content, status, userId, pageId, blockId) values (?, 1, ?, ?, ?);";
         Object[] createCommentParams = new Object[]{commentReq.getContent(),commentReq.getUserId(), pageId, blockId};
         this.jdbcTemplate.update(createCommentQuery, createCommentParams);
 
