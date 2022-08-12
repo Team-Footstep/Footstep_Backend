@@ -56,18 +56,12 @@ public class FollowController {
     //  팔로우하는 경우 -> 없었으면 생성(create) 있었으면 (status 변경)
     @ResponseBody
     @PostMapping("/follow")
-    public BaseResponse<PostFollowRes> updateFollow(@RequestBody FollowReq updateFollowReq) throws BaseException{
+    public BaseResponse<PostFollowRes> createFollow(@RequestBody FollowReq updateFollowReq) throws BaseException{
         try {
-            if(followService.checkExist(updateFollowReq)){ // 존재하면 수정
-                System.out.println("존재합니다.");
-                PostFollowRes updateFollowRes = followService.modifyFollow(updateFollowReq);
-                return new BaseResponse<>(updateFollowRes);
-            }else{ // 없었으면 생성
-                System.out.println("존재하지 않습니다.");
                 PostFollowRes createFollowRes = followService.createFollow(updateFollowReq);
                 return new BaseResponse<>(createFollowRes);
-            }
-        }catch (Exception exception){
+        }
+        catch(Exception exception){
             exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }

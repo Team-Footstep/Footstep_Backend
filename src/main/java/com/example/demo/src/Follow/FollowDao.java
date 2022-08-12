@@ -37,7 +37,6 @@ public class FollowDao {
         String getFollowInfoQuery ="select follower,followee,status,createdAt\n" +
                 "from Follow\n" +
                 "where follower =? and followee =?";
-
         Object[] createFollowParams = new Object[]{createFollowReq.getUserId(),createFollowReq.getFollowedId()};
         Object[] getFollowParams = new Object[]{createFollowReq.getUserId(),createFollowReq.getFollowedId()};
         this.jdbcTemplate.update(createFollowInfoQuery,createFollowParams);
@@ -52,8 +51,8 @@ public class FollowDao {
                 ,getFollowParams);
     }
     public DeleteFollowRes deleteFollow(FollowReq deletedFollowReq){ // 팔로우 상태 수정해주기
-        String deleteFollowInfoQuery = "update Follow set status = 0\n" +
-                "where Follow.follower = ? and Follow.followee = ?;";
+        String deleteFollowInfoQuery = "delete from Follow\n" +
+                "where follower = ? and followee = ?";
         Object[] deleteFollowParams = new Object[]{deletedFollowReq.getUserId(),deletedFollowReq.getFollowedId()};
 
         this.jdbcTemplate.update(deleteFollowInfoQuery,deleteFollowParams);
@@ -61,31 +60,31 @@ public class FollowDao {
         return new DeleteFollowRes(deletedFollowReq.getUserId(),deletedFollowReq.getFollowedId(),"언팔 되었습니다.");
     }
 
-    public PostFollowRes modifyFollow(FollowReq modifyFollowReq){
-        String modifyFollowQuery = "update Follow set status = 1\n" +
-                " where Follow.followee = ? and Follow.follower = ?;";
-        String modifyFollowResQuery = "select updatedAt,status,follower,followee\n" +
-                "from Follow\n" +
-                "where follower = ? and followee = ? ";
-        Object[] modifyFollowParam = new Object[]{modifyFollowReq.getUserId(),modifyFollowReq.getFollowedId()};
-        this.jdbcTemplate.update(modifyFollowQuery,modifyFollowParam);
-        return this.jdbcTemplate.queryForObject(modifyFollowResQuery,
-                (rs,num)-> new PostFollowRes(
-                        rs.getTimestamp("updatedAt"),
-                        rs.getInt("status"),
-                        rs.getInt("follower"),
-                        rs.getInt("followee")
-                )
-                ,modifyFollowParam);
-    }
+//    public PostFollowRes modifyFollow(FollowReq modifyFollowReq){
+//        String modifyFollowQuery = "update Follow set status = 1\n" +
+//                " where Follow.followee = ? and Follow.follower = ?;";
+//        String modifyFollowResQuery = "select updatedAt,status,follower,followee\n" +
+//                "from Follow\n" +
+//                "where follower = ? and followee = ? ";
+//        Object[] modifyFollowParam = new Object[]{modifyFollowReq.getUserId(),modifyFollowReq.getFollowedId()};
+//        this.jdbcTemplate.update(modifyFollowQuery,modifyFollowParam);
+//        return this.jdbcTemplate.queryForObject(modifyFollowResQuery,
+//                (rs,num)-> new PostFollowRes(
+//                        rs.getTimestamp("updatedAt"),
+//                        rs.getInt("status"),
+//                        rs.getInt("follower"),
+//                        rs.getInt("followee")
+//                )
+//                ,modifyFollowParam);
+//    }
 
-    public boolean checkExist(FollowReq followReq){
-        Object[] followReqParams = new Object[]{followReq.getUserId(),followReq.getFollowedId()};
-        String checkExistQuery  ="select exists(\n" +
-                "    select *\n" +
-                "    from Follow\n" +
-                "    where follower = ? and followee = ?\n" +
-                "           ) as isChk";
-        return this.jdbcTemplate.queryForObject(checkExistQuery,boolean.class,followReqParams);
-    }
+//    public boolean checkExist(FollowReq followReq){
+//        Object[] followReqParams = new Object[]{followReq.getUserId(),followReq.getFollowedId()};
+//        String checkExistQuery  ="select exists(\n" +
+//                "    select *\n" +
+//                "    from Follow\n" +
+//                "    where follower = ? and followee = ?\n" +
+//                "           ) as isChk";
+//        return this.jdbcTemplate.queryForObject(checkExistQuery,boolean.class,followReqParams);
+//    }
 }

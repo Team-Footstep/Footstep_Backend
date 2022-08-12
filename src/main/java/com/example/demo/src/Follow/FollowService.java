@@ -42,16 +42,16 @@ public class FollowService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-    public boolean checkExist(FollowReq followReq){
-        return followDao.checkExist(followReq);
-    }
+//    public boolean checkExist(FollowReq followReq){
+//        return followDao.checkExist(followReq);
+//    }
 
-    public PostFollowRes modifyFollow(FollowReq modifyFollowReq) throws BaseException{
-        try{
-            return followDao.modifyFollow(modifyFollowReq);
-        }catch(Exception exception){
-            exception.printStackTrace();
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
+//    public PostFollowRes modifyFollow(FollowReq modifyFollowReq) throws BaseException{
+//        try{
+//            return followDao.modifyFollow(modifyFollowReq);
+//        }catch(Exception exception){
+//            exception.printStackTrace();
+//            throw new BaseException(DATABASE_ERROR);
+//        }
+//    }
 }
