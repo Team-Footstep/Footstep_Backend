@@ -6,6 +6,16 @@ spring:
     name: demo
   jpa:
     open-in-view: false
+  mail:
+    host: smtp.naver.com
+    port: 465
+    protocol: smtps
+    default-encoding: UTF-8
+    username: footstep2022@naver.com
+    password: vnttmxpq2022``
+    smtp:
+      start-tls-enable: true
+      auth: true
 
   datasource:
     platform: mysql
@@ -13,3 +23,4 @@ spring:
     username: footstep
     password: vnttmxpq2022``
     driver-class-name: com.mysql.cj.jdbc.Driver # mysql 8버전
+    # driver-class-name: com.mysql.jdbc.Driver # mysql 5버전
