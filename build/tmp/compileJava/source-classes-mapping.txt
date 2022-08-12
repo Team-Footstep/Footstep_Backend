@@ -4,6 +4,8 @@ com/example/demo/config/Constant.java
  com.example.demo.config.Constant
 com/example/demo/src/User/UserProvider.java
  com.example.demo.src.User.UserProvider
+com/example/demo/src/Comment/model/PostCommentReq.java
+ com.example.demo.src.Comment.model.PostCommentReq
 com/example/demo/src/User/model/GetProfileRes.java
  com.example.demo.src.User.model.GetProfileRes
 com/example/demo/src/User/UserDao.java
@@ -14,6 +16,12 @@ com/example/demo/utils/ValidationRegex.java
  com.example.demo.utils.ValidationRegex
 com/example/demo/src/User/model/User.java
  com.example.demo.src.User.model.User
+com/example/demo/src/Comment/CommentService.java
+ com.example.demo.src.Comment.CommentService
+com/example/demo/src/Comment/CommentProvider.java
+ com.example.demo.src.Comment.CommentProvider
+com/example/demo/src/Comment/CommentDao.java
+ com.example.demo.src.Comment.CommentDao
 com/example/demo/src/User/model/GetAuthRes.java
  com.example.demo.src.User.model.GetAuthRes
 com/example/demo/src/MainPage/model/GetContentsRes.java
@@ -22,12 +30,14 @@ com/example/demo/config/BaseResponseStatus.java
  com.example.demo.config.BaseResponseStatus
 com/example/demo/src/User/model/PatchUserReq.java
  com.example.demo.src.User.model.PatchUserReq
+com/example/demo/src/User/EmailSenderService.java
+ com.example.demo.src.User.EmailSenderService
 com/example/demo/src/WebSecurityConfig.java
  com.example.demo.src.WebSecurityConfig
-com/example/demo/src/User/model/PostUserReq.java
- com.example.demo.src.User.model.PostUserReq
-com/example/demo/src/User/model/GetTokenRes.java
- com.example.demo.src.User.model.GetTokenRes
+com/example/demo/src/User/UserController.java
+ com.example.demo.src.User.UserController
+com/example/demo/src/User/SessionConst.java
+ com.example.demo.src.User.SessionConst
 com/example/demo/src/Bookmark/model/GetBookmarksRes.java
  com.example.demo.src.Bookmark.model.GetBookmarksRes
 com/example/demo/src/User/EmailCertDao.java
@@ -38,6 +48,8 @@ com/example/demo/src/MainPage/MainPageProvider.java
  com.example.demo.src.MainPage.MainPageProvider
 com/example/demo/src/Bookmark/BookmarkProvider.java
  com.example.demo.src.Bookmark.BookmarkProvider
+com/example/demo/src/Comment/CommentController.java
+ com.example.demo.src.Comment.CommentController
 com/example/demo/src/MainPage/model/GetTrendingFootprintsRes.java
  com.example.demo.src.MainPage.model.GetTrendingFootprintsRes
 com/example/demo/src/User/model/GetTokenReq.java
@@ -48,12 +60,14 @@ com/example/demo/src/User/model/PatchEmailRes.java
  com.example.demo.src.User.model.PatchEmailRes
 com/example/demo/config/BaseResponse.java
  com.example.demo.config.BaseResponse
+com/example/demo/src/Comment/model/PostCommentRes.java
+ com.example.demo.src.Comment.model.PostCommentRes
 com/example/demo/src/User/model/PatchUserRes.java
  com.example.demo.src.User.model.PatchUserRes
 com/example/demo/src/MainPage/MainPageController.java
  com.example.demo.src.MainPage.MainPageController
-com/example/demo/src/Bookmark/BookmarkController.java
- com.example.demo.src.Bookmark.BookmarkController
+com/example/demo/src/User/UserService.java
+ com.example.demo.src.User.UserService
 com/example/demo/src/MainPage/MainPageService.java
  com.example.demo.src.MainPage.MainPageService
 com/example/demo/src/Bookmark/BookmarkService.java
@@ -74,11 +88,9 @@ com/example/demo/src/User/model/GetLoginReq.java
  com.example.demo.src.User.model.GetLoginReq
 com/example/demo/src/MainPage/model/GetFollowingNewRes.java
  com.example.demo.src.MainPage.model.GetFollowingNewRes
-com/example/demo/src/User/UserService.java
- com.example.demo.src.User.UserService
-com/example/demo/src/User/EmailSenderService.java
- com.example.demo.src.User.EmailSenderService
-com/example/demo/src/User/SessionConst.java
- com.example.demo.src.User.SessionConst
-com/example/demo/src/User/UserController.java
- com.example.demo.src.User.UserController
+com/example/demo/src/Bookmark/BookmarkController.java
+ com.example.demo.src.Bookmark.BookmarkController
+com/example/demo/src/User/model/PostUserReq.java
+ com.example.demo.src.User.model.PostUserReq
+com/example/demo/src/User/model/GetTokenRes.java
+ com.example.demo.src.User.model.GetTokenRes

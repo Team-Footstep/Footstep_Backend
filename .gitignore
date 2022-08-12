@@ -5,4 +5,8 @@ application.yml
 Secret.java
 footstep.pem
 
+# temporary
+Comment/
+Comment/*
+
 .DS_Store
