@@ -2,8 +2,8 @@ package com.example.demo.src.Comment;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.Comment.model.PostCommentReq;
-import com.example.demo.src.Comment.model.PostCommentRes;
+import com.example.demo.src.Bookmark.model.GetBookmarksRes;
+import com.example.demo.src.Comment.model.*;
 import com.example.demo.src.User.UserProvider;
 import com.example.demo.src.User.UserService;
 import com.example.demo.src.User.model.PostUserReq;
@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+
+import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.isRegexEmail;
@@ -30,15 +32,79 @@ public class CommentController {
     /**
      * 댓글작성 API
      * [POST] /comment/{pageId}/{blockId}
-     * @return BaseResponse<PostUserRes>
+     * @return BaseResponse<PostCommentRes>
      */
     // Body
     @ResponseBody
-    @PostMapping("/{pageId}/{blockId}") // (POST) 127.0.0.1:8080/comment/userId //userId : 댓글 작성자
-    public BaseResponse<PostCommentRes> createCommment(@PathVariable int pageId, @PathVariable int blockId, @RequestBody PostCommentReq postCommentReq) {
+    @PostMapping("/{pageId}/{blockId}") // (POST) 127.0.0.1:8080/comment/{pageId}/{blockId}
+    public BaseResponse<PostCommentRes> createCommment(@PathVariable int pageId, @PathVariable int blockId, @RequestBody PostCommentReq postCommentReq) throws BaseException {
+        //댓글 내용이 비어있을떄 처리해주기 -> 왜 안되지.. ㅜㅜ
+        if (postCommentReq.getContent() == null) {
+            return new BaseResponse<>(NOT_EXIST_COMMENT);
+        }
+
         PostCommentRes postCommentRes = commentService.createComment(pageId, blockId, postCommentReq);
         return new BaseResponse<>(postCommentRes);
 
     }
+    /**
+     * 댓글수정 API
+     * [PATCH] /comment/{pageId}/{blockId}
+     * @return BaseResponse<PatchCommentRes>
+     */
+    // Body
+    @ResponseBody
+    @PatchMapping("/{pageId}/{blockId}") // (POST) 127.0.0.1:8080/comment/{pageId}/{blockId}
+    public BaseResponse<PatchCommentRes> modifyComment(@PathVariable int pageId, @PathVariable int blockId, @RequestBody PatchCommentReq patchCommentReq) throws BaseException {
+        //수정할 댓글 commentId가 존재하는지
+        if(commentService.checkCommentExist(patchCommentReq.getCommentId())==0){
+            System.out.println("수정할 댓글 아이디가 존재하지 않음");
+            return new BaseResponse<>(NOT_EXIST_COMMENTID);
+        }
+        PatchCommentRes patchCommentRes = commentService.modifyComment(pageId, blockId, patchCommentReq);
+        return new BaseResponse<>(patchCommentRes);
 
+    }
+    /**
+     * 댓글삭제 API
+     * [PATCH] /delete/{commentId}
+     * @return BaseResponse<PostUserRes>
+     */
+    // Body
+    @ResponseBody
+    @PatchMapping("/delete/{commentId}") // (POST) 127.0.0.1:8080/comment/delete/{pageId}/{blockId}/{commentId}
+    public BaseResponse<DeleteCommentRes> modifyCommment(@RequestBody DeleteCommentReq deleteCommentReq, @PathVariable int commentId) throws BaseException {
+        if(commentService.checkCommentExist(commentId) == 0){
+            return new BaseResponse<>(NOT_EXIST_COMMENTID);
+        }
+        if(commentService.checkCommentStatus(commentId)==0){
+            return new BaseResponse<>(NOT_EXIST_COMMENTID);
+        }
+        DeleteCommentRes deleteCommentRes = commentService.deleteComment(deleteCommentReq, commentId);
+        //result = 1 : 성공 , 0: 실
+        return new BaseResponse<>(deleteCommentRes);
+
+    }
+    /**
+     * 댓글가져오기 API
+     * [GEt] /{pageId}/{blockId}
+     */
+    // Body
+    @ResponseBody
+    @GetMapping("/{pageId}/{blockId}") // (POST) 127.0.0.1:8080/comment/delete/{pageId}/{blockId}/{commentId}
+    public BaseResponse<List<GetCommentRes>> getComment(@PathVariable int pageId, @PathVariable int blockId) throws BaseException {
+        //해당 PageId/blockId에 댓글이 존재하는지
+        if(commentService.checkCommentInPageBlock(pageId, blockId) == 0){
+            return new BaseResponse<>(NOT_EXIST_PAGGID_BLOCKID);
+        }
+        //댓글이 존재한다면
+
+        try{
+            List<GetCommentRes> getCommentRes = commentProvider.getComment(pageId, blockId);
+            return new BaseResponse<>(getCommentRes);
+        } catch(BaseException exception){
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
+    }
 }

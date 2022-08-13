@@ -85,9 +85,9 @@ public class EmailCertDao {
         System.out.println("변경된 이메일은 " + email);
         String modifyConfirmQuery = "UPDATE User SET email = ? WHERE userId = ? AND auth = ?";
         Object[] modifyConfirmParams = new Object[]{email, userId, auth};
+        this.jdbcTemplate.update(modifyConfirmQuery, modifyConfirmParams);
 
-
-        return new GetAuthRes(this.jdbcTemplate.update(modifyConfirmQuery, modifyConfirmParams));
+        return new GetAuthRes(userId, auth);
     }
 
 

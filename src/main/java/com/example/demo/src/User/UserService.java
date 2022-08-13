@@ -86,7 +86,7 @@ public class UserService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return new PatchUserRes(patchUserReq.getEmail(), patchUserReq.getJob(), patchUserReq.getUserName(), patchUserReq.getIntroduction(), patchUserReq.getUserImgUrl());
+        return new PatchUserRes( patchUserReq.getJob(), patchUserReq.getUserName(), patchUserReq.getIntroduction(), patchUserReq.getUserImgUrl());
 
     }
 
