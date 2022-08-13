@@ -58,8 +58,8 @@ public class UserProvider {
     }
 
     public int checkUserId(String email) {
-        userDao.checkUserID(email);
-        return 1;
+        int res = userDao.checkUserID(email);
+        return res;
     }
 
 }

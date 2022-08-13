@@ -231,11 +231,14 @@ public class UserController {
     @ResponseBody
     @GetMapping("/modifyEmail/confirm/{userId}") // (POST) 127.0.0.1:8080/users/modify/confirm/userId
     public BaseResponse <GetAuthRes> modifyConfirm(@PathVariable int userId, @RequestBody GetAuthReq getAuthReq) throws BaseException {
-        getAuthReq.setUserId(userId);
+
         int auth = emap.get("auth");
         getAuthReq.setAuth(auth);
         System.out.println("auth는 " + getAuthReq.getAuth());
+        //입력된 auth값과 db의 auth값이 같으면 업데이트
         GetAuthRes getAuthRes = userService.modifyConfirm(userId, getAuthReq);
+
+
 
         return new BaseResponse<>(getAuthRes);
 

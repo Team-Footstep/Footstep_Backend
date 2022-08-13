@@ -9,6 +9,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetAuthRes {
     private int userId;
-    private int auth;
 
 }

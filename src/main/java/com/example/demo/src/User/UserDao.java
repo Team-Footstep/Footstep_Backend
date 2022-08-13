@@ -104,8 +104,8 @@ public class UserDao {
 
     public int checkUserID(String email) {
         String checkUserQuery = "select userId from User where email = ?";
-        Object[] checkUserParams = new Object[]{email};
-        return this.jdbcTemplate.update(checkUserQuery, checkUserParams);
+        String checkUserParams = email;
+        return this.jdbcTemplate.queryForObject( checkUserQuery, int.class, checkUserParams);
     }
 }
 

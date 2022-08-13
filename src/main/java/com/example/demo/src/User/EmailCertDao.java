@@ -65,17 +65,15 @@ public class EmailCertDao {
         return this.jdbcTemplate.update(insertAuthQuery, insertAuthParams);
 
     }
-    public Integer authCheck(int userId, GetAuthReq getAuthReq) {
+    public int authCheck(int userId, GetAuthReq getAuthReq) {
         System.out.println(getAuthReq.getAuth()+
                 getAuthReq.getEmail());
-        String authCheckQuery = "SELECT EXISTS(SELECT * FROM User WHERE auth=? AND email=? AND userId = ? AND expiredAt>now())";
+        String authCheckQuery = "SELECT EXISTS(SELECT * FROM User WHERE auth=? AND userId = ? AND expiredAt>now())";
         Object[] authCheckParams =  new Object[]{
                 getAuthReq.getAuth(),
-                getAuthReq.getEmail(),
                 userId
         };
-        System.out.println(this.jdbcTemplate.queryForObject(authCheckQuery, Integer.class, authCheckParams));
-        return this.jdbcTemplate.queryForObject(authCheckQuery, Integer.class, authCheckParams);
+        return this.jdbcTemplate.queryForObject(authCheckQuery, int.class, authCheckParams);
 
 
     }
@@ -87,7 +85,7 @@ public class EmailCertDao {
         Object[] modifyConfirmParams = new Object[]{email, userId, auth};
         this.jdbcTemplate.update(modifyConfirmQuery, modifyConfirmParams);
 
-        return new GetAuthRes(userId, auth);
+        return new GetAuthRes(userId);
     }
 
 
