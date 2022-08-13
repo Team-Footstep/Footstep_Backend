@@ -88,4 +88,9 @@ public class CommentDao {
         Object[] checkCommentInPageBlockParams = new Object[]{pageId, blockId};
         return this.jdbcTemplate.queryForObject(checkCommentInPageBlockQuery, int.class, checkCommentInPageBlockParams);
     }
+    public int commentContentExists(int pageId, int blockId) {
+        String commentContentQuery = "select exists(select content = null from Comment where pageId = ? and blockId = ?)";
+        Object[] commentContentParams = new Object[]{pageId, blockId};
+        return this.jdbcTemplate.queryForObject(commentContentQuery, int.class, commentContentParams);
+    }
 }

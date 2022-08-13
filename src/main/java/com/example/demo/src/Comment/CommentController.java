@@ -87,7 +87,7 @@ public class CommentController {
     }
     /**
      * 댓글가져오기 API
-     * [GEt] /{pageId}/{blockId}
+     * [GET] /{pageId}/{blockId}
      */
     // Body
     @ResponseBody
@@ -97,8 +97,10 @@ public class CommentController {
         if(commentService.checkCommentInPageBlock(pageId, blockId) == 0){
             return new BaseResponse<>(NOT_EXIST_PAGGID_BLOCKID);
         }
-        //댓글이 존재한다면
-
+        //댓글 내용이 null 이라면
+        if(commentService.commentContent(pageId, blockId)==1){
+            return new BaseResponse<>(NOT_EXIST_GET_COMMENT);
+        }
         try{
             List<GetCommentRes> getCommentRes = commentProvider.getComment(pageId, blockId);
             return new BaseResponse<>(getCommentRes);

@@ -55,4 +55,9 @@ public class CommentService {
         int checkCommentInPageBlock = commentDao.checkCommentInPageBlock(pageId, blockId);
         return checkCommentInPageBlock;
     }
+    //해당 페이지-블록에 댓글이 비어있는지
+    public int commentContent(int pageId, int blockId) {
+        int commentContent = commentDao.commentContentExists(pageId, blockId);
+        return commentContent;
+    }
 }

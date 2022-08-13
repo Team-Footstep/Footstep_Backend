@@ -10,6 +10,6 @@ import lombok.Setter;
 public class DeleteCommentRes {
     private int pageId;
     private int blockId;
-    private String comment;
+    private String content;
     private int status;
 }

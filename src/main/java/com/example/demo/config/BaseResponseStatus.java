@@ -70,7 +70,9 @@ public enum BaseResponseStatus {
     NOT_EXIST_COMMENTID(false, 9000, "해당하는 댓글이 없습니다."),
     NOT_EXIST_COMMENT(false, 9001, "댓글을 입력해주세요."),
     SAME_COMMENT(false, 9002, "댓글 내용이 수정되지 않았습니다."),
-    NOT_EXIST_PAGGID_BLOCKID(false, 9003, "페이지 아이디 또는 블록 아이디가 일치하지 않습니다.");
+    NOT_EXIST_PAGGID_BLOCKID(false, 9003, "페이지 아이디 또는 블록 아이디가 일치하지 않습니다."),
+    NOT_EXIST_GET_COMMENT(false, 9004, "조회할 댓글이 없습니다.");
+
     private final boolean isSuccess;
     private final int code;
     private final String message;
