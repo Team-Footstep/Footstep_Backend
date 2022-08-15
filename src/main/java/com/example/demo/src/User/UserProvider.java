@@ -1,14 +1,15 @@
 package com.example.demo.src.User;
 
 import com.example.demo.config.BaseException;
+import com.example.demo.config.BaseResponse;
 import com.example.demo.src.User.model.GetProfileRes;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
-import static com.example.demo.config.BaseResponseStatus.USERS_EMPTY_USER_ID;
+import static com.example.demo.config.BaseResponseStatus.*;
 
 @Service
 public class UserProvider {
@@ -60,6 +61,11 @@ public class UserProvider {
             exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+    public int checkUserId(String email) {
+        int res = userDao.checkUserID(email);
+        return res;
     }
 
 }

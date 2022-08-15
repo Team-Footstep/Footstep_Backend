@@ -4,6 +4,8 @@ Secret.java
 footstep.pem
 
 .DS_Store
+.idea/
+
 ß# Created by .ignore support plugin (hsz.mobi)
 ### Gradle template
 .gradle

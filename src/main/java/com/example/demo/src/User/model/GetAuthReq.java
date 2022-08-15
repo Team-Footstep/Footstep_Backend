@@ -9,6 +9,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class GetAuthReq {
     private int auth;
-    private int userId;
     private String email;
 }
