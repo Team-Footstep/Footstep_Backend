@@ -21,11 +21,11 @@ public class FollowDao {
         // followee 개수
         String getFolloweeNumByUserId = "select count(*)\n" +
                 "from Follow\n" +
-                "where follower = ?";
+                "where followee = ?";
         // follower 개수
         String getFollowerNumByUserId = "select count(*)\n" +
                 "from Follow\n" +
-                "where followee = ?";
+                "where follower = ?";
 
         int followeeNum = this.jdbcTemplate.queryForObject(getFolloweeNumByUserId,int.class,userId);
         int followerNum = this.jdbcTemplate.queryForObject(getFollowerNumByUserId,int.class,userId);
@@ -33,7 +33,7 @@ public class FollowDao {
     }
 
     public PostFollowRes createFollow(FollowReq createFollowReq){
-        String createFollowInfoQuery = "insert into Follow (follower, followee) values (?,?);";
+        String createFollowInfoQuery = "insert into Follow (follower, followee) values (?,?)";
         String getFollowInfoQuery ="select follower,followee,status,createdAt\n" +
                 "from Follow\n" +
                 "where follower =? and followee =?";
@@ -45,8 +45,8 @@ public class FollowDao {
                 (rs,num)-> new PostFollowRes(
                         rs.getTimestamp("createdAt"),
                         rs.getInt("status"),
-                        rs.getInt("followee"),
-                        rs.getInt("follower")
+                        rs.getInt("follower"),
+                        rs.getInt("followee")
                 )
                 ,getFollowParams);
     }
@@ -57,7 +57,7 @@ public class FollowDao {
 
         this.jdbcTemplate.update(deleteFollowInfoQuery,deleteFollowParams);
 
-        return new DeleteFollowRes(deletedFollowReq.getUserId(),deletedFollowReq.getFollowedId(),"언팔 되었습니다.");
+        return new DeleteFollowRes(deletedFollowReq.getUserId(),deletedFollowReq.getFollowedId());
     }
 
 //    public PostFollowRes modifyFollow(FollowReq modifyFollowReq){

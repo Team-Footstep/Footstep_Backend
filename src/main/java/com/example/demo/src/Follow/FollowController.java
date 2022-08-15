@@ -42,7 +42,7 @@ public class FollowController {
 
     // [Patch] 언팔 -> 팔로우 상태만 변경
     @ResponseBody
-    @PatchMapping("/unfollow")
+    @DeleteMapping("/unfollow")
     public BaseResponse<DeleteFollowRes> deleteFollow(@RequestBody FollowReq deleteFollowReq)throws BaseException{
         try{
             DeleteFollowRes deleteFollowRes = followService.deleteFollow(deleteFollowReq);

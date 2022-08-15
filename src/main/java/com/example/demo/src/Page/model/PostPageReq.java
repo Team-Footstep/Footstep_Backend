@@ -16,6 +16,6 @@ public class PostPageReq {
     private int userId; // 유저 아이디
     private boolean topOrNot; // top 인지 아닌지
     private int access;
-    private char stampOrPrint; // stamp 인지 아닌지
+    private String stampOrPrint; // stamp 인지 아닌지
     private String preview; // 제목으로 저장할 텍스트
 }
