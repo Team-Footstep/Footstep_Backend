@@ -21,14 +21,14 @@ public class PageDao {
 
     //page 생성
     public PostPageRes createPage(PostPageReq postPageReq) {
-        String createPageQuery = "insert into Page (parentPageId,parentBlockId,userId,topOrNot,access,stampOrPrint,preview)\n" +
-                "values (?,?,?,?,?,?,?)";
+        String createPageQuery = "insert into Page (parentPageId,parentBlockId,userId,topOrNot,access,stampOrPrint,preview,depth)\n" +
+                "values (?,?,?,?,?,?,?,?)";
         String getPageResByPageIdQuery = "select userId,pageId,createdAt,status " +
                 "from Page " +
                 "where pageId = ?";
         String getPageIdQuery ="select pageId from Page where parentBlockId = ?";
         Object[] createPageParams = new Object[]{postPageReq.getParentPageId(), postPageReq.getParentBlockId()
-                , postPageReq.isTopOrNot(), postPageReq.getAccess(), postPageReq.getStampOrPrint(), postPageReq.getPreview()
+                , postPageReq.isTopOrNot(), postPageReq.getAccess(), postPageReq.getStampOrPrint(), postPageReq.getPreview(),postPageReq.getDepth()
         };
         // 페이지 생성 구문
         this.jdbcTemplate.update(createPageQuery, createPageParams);
@@ -41,35 +41,6 @@ public class PageDao {
                         rs.getTimestamp("createdAt"),
                         rs.getInt("status"))
                 ,PageId);
-    }
-    public GetPageRes retrievePage(int pageId){
-        String getPageByIdQuery = "select *\n" +
-                "from Page\n" +
-                "where pageId = ?";
-
-        String getContentsQuery="select childPageId,content,orderNum,status\n" +
-                "from Block\n" +
-                "where curPageId = ?\n" +
-                "order by orderNum";
-        List<GetContentsRes> contents = this.jdbcTemplate.query(getContentsQuery,
-                (rs,rowNum)->new GetContentsRes(
-                        rs.getInt("childPageId"),
-                        rs.getString("content"),
-                        rs.getInt("orderNum"),
-                        rs.getInt("status")
-                ),pageId
-        );
-
-        return this.jdbcTemplate.queryForObject(getPageByIdQuery,
-                (rs,num)-> new GetPageRes(
-                        rs.getInt("pageId"),
-                        rs.getString("preview"),
-                        rs.getInt("status"),
-                        rs.getInt("stampOrPrint"),
-                        rs.getInt("bookmark"),
-                        rs.getInt("access"),
-                        contents
-                ),pageId);
     }
 
     public PatchPageRes updatePage(PatchPageReq patchPageReq) {
@@ -93,14 +64,6 @@ public class PageDao {
             // 총 i 번 업데이트
             this.jdbcTemplate.update(updateBlockQuery, updateBlockParams);
         }
-//        for (int i = 0; i < contents.size(); i++) {
-//            Object[] updateBlockParams = {
-//                    contents.get(i).getChildPageId(), contents.get(i).getContent(),
-//                    contents.get(i).getOrderNum(), contents.get(i).getStatus()
-//            };
-//            // 총 i 번 업데이트
-//            this.jdbcTemplate.update(updateBlockQuery, updateBlockParams);
-//        }
         this.jdbcTemplate.update(updatePageQuery, updatePageParams);
 
         //todo : 인자 추가

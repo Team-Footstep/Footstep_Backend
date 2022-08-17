@@ -1,7 +1,6 @@
 package com.example.demo.src.Page;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.Page.model.GetPageRes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +22,5 @@ public class PageProvider {
         this.pageDao = pageDao;
     }
 
-    public GetPageRes getPage(int pageId)throws BaseException{
-        try{
-            return  pageDao.retrievePage(pageId);
-        }catch(Exception exception){
-            exception.printStackTrace();
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
 }
 

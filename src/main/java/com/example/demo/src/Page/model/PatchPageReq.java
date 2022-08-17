@@ -16,5 +16,6 @@ public class PatchPageReq {
     private int bookmark;
     private int access;
     private List<GetContentsRes> contentList;
+    private int depth;
 
 }

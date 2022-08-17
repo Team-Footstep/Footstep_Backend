@@ -17,4 +17,5 @@ public class PostPageReq {
     private int access;
     private String stampOrPrint; // stamp 인지 아닌지
     private String preview; // 제목으로 저장할 텍스트
+    private int depth; // 깊이
 }

@@ -31,12 +31,13 @@ public class PageController {
     * */
 
 
+
+
+
     /*
-     * [PATCH]
-     * 페이지 북마크 설정/해제
+     * [Post]
+     * 하위 페이지 생성
      * */
-
-
     @PostMapping("create")
     public BaseResponse<PostPageRes> createPage(@RequestBody PostPageReq postPageReq)  {
         //todo validation 처리하기
@@ -48,6 +49,10 @@ public class PageController {
         }
     }
 
+    /*
+     * [Patch]
+     * 페이지 저장
+     * */
     @PatchMapping("save")
     public BaseResponse<PatchPageRes> updatePage(@RequestBody PatchPageReq patchPageReq){
         try{
@@ -56,15 +61,5 @@ public class PageController {
         }catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
-    }
-    @GetMapping("")
-    public BaseResponse<GetPageRes> retrievePage(@RequestParam int pageId){
-        try{
-            GetPageRes getPageRes = pageProvider.getPage(pageId);
-            return new BaseResponse<>(getPageRes);
-        }catch (BaseException exception){
-            return new BaseResponse<>(exception.getStatus());
-        }
-
     }
 }
