@@ -9,7 +9,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PatchUserReq {
     private int userId;
-    private String email;
     private String job;
     private String userName;
     private String introduction;
