@@ -7,7 +7,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PatchUserRes {
-    private String email;
     private String job;
     private String userName;
     private String introduction;

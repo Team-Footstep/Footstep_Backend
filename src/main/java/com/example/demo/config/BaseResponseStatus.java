@@ -36,6 +36,8 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_EMAIL(false, 2020, "이메일 변경에 실패하였습니다."),
     PATCH_SAME_EMAIL(false, 2021, "변경하려는 이메일이 기존 이메일과 같습니다."),
     GET_PATCH_EMAIL(false, 2022, "이메일 검증이 실패하였습니다."),
+    NOT_EXIST_EMAIL(false, 2023, "해당하는 이메일이 없습니다."),
+
 
     //[GET] /search
     GET_SEARCH_EMPTY_WORD(false,2023,"검색어를 입력해주세요"),
@@ -62,12 +64,19 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_USERNAME(false,4014,"유저네임 수정 실패"),
 
     PASSWORD_ENCRYPTION_ERROR(false, 4011, "비밀번호 암호화에 실패하였습니다."),
-    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다.");
+    PASSWORD_DECRYPTION_ERROR(false, 4012, "비밀번호 복호화에 실패하였습니다."),
 
 
     // 5000 : 필요시 만들어서 쓰세요
     // 6000 : 필요시 만들어서 쓰세요
-
+    /**
+     * 9000 : Comment 오류
+     */
+    NOT_EXIST_COMMENTID(false, 9000, "해당하는 댓글이 없습니다."),
+    NOT_EXIST_COMMENT(false, 9001, "댓글을 입력해주세요."),
+    SAME_COMMENT(false, 9002, "댓글 내용이 수정되지 않았습니다."),
+    NOT_EXIST_PAGGID_BLOCKID(false, 9003, "페이지 아이디 또는 블록 아이디가 일치하지 않습니다."),
+    NOT_EXIST_GET_COMMENT(false, 9004, "조회할 댓글이 없습니다.");
 
     private final boolean isSuccess;
     private final int code;
