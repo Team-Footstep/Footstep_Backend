@@ -3,15 +3,14 @@ package com.example.demo.src.Page;
 import com.example.demo.config.BaseException;
 import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
 
-import com.example.demo.src.Page.model.PatchPageReq;
-import com.example.demo.src.Page.model.PatchPageRes;
-import com.example.demo.src.Page.model.PostPageReq;
-import com.example.demo.src.Page.model.PostPageRes;
+import com.example.demo.src.Page.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
 
 // Service Create, Update, Delete 의 로직 처리
 @Service
@@ -26,23 +25,45 @@ public class PageService {
         this.pageDao = pageDao;
     }
 
-    public PostPageRes createPage(PostPageReq postPageReq) throws BaseException{
-        try{
+    public PostPageRes createPage(PostPageReq postPageReq) throws BaseException {
+        try {
             return pageDao.createPage(postPageReq);
-        }
-        catch (Exception exception){
-            exception.printStackTrace();
-            throw new BaseException(DATABASE_ERROR);
-        }
-    }
-    public PatchPageRes updatePage(PatchPageReq patchPageReq) throws  BaseException{
-        try{
-            return pageDao.updatePage(patchPageReq);
-        }
-        catch (Exception exception){
+        } catch (Exception exception) {
             exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
+    /*
+     * 페이지 공개/미공개 설정
+     * */
+    public void updateAccess(PatchAccessReq patchAccessReq) throws BaseException {
+        try {
+            pageDao.updateAccess(patchAccessReq);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    public PatchPageRes updatePage(PatchPageReq patchPageReq) throws BaseException {
+        try {
+            return pageDao.updatePage(patchPageReq);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    /*
+     * 페이지 북마크 설정/해제
+     * */
+    public void updateBookmark(PatchBookmarkReq patchBookmarkReq) throws BaseException {
+        try {
+            pageDao.updateBookmark(patchBookmarkReq);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

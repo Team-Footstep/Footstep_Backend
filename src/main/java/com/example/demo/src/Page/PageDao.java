@@ -42,35 +42,6 @@ public class PageDao {
                         rs.getInt("status"))
                 ,PageId);
     }
-    public GetPageRes retrievePage(int pageId){
-        String getPageByIdQuery = "select *\n" +
-                "from Page\n" +
-                "where pageId = ?";
-
-        String getContentsQuery="select childPageId,content,orderNum,status\n" +
-                "from Block\n" +
-                "where curPageId = ?\n" +
-                "order by orderNum";
-        List<GetContentsRes> contents = this.jdbcTemplate.query(getContentsQuery,
-                (rs,rowNum)->new GetContentsRes(
-                        rs.getInt("childPageId"),
-                        rs.getString("content"),
-                        rs.getInt("orderNum"),
-                        rs.getInt("status")
-                ),pageId
-        );
-
-        return this.jdbcTemplate.queryForObject(getPageByIdQuery,
-                (rs,num)-> new GetPageRes(
-                        rs.getInt("pageId"),
-                        rs.getString("preview"),
-                        rs.getInt("status"),
-                        rs.getInt("stampOrPrint"),
-                        rs.getInt("bookmark"),
-                        rs.getInt("access"),
-                        contents
-                ),pageId);
-    }
 
     public PatchPageRes updatePage(PatchPageReq patchPageReq) {
         String updatePageQuery = "update Page set preview =?,status =? ,stampOrPrint = ?, bookmark =?,\n" +
@@ -112,6 +83,30 @@ public class PageDao {
                 ),patchPageReq.getPageId()
         );
         return patchPageRes;
+    }
+
+    public void updateAccess(PatchAccessReq patchAccessReq){
+        int updateAccessPageIdParams = patchAccessReq.getPageId();
+        int updateAccess = patchAccessReq.getAccess();
+
+
+        String updateAccessQuery = "update Page\n" +
+                "set access=" + Integer.toString(updateAccess) + "\n" +
+                "where pageId=?;";
+
+        this.jdbcTemplate.update(updateAccessQuery, updateAccessPageIdParams);
+    }
+
+    public void updateBookmark(PatchBookmarkReq patchBookmarkReq){
+        int updateBookmarkPageIdParams = patchBookmarkReq.getPageId();
+        int updateBookmark = patchBookmarkReq.getBookmark();
+
+
+        String updateBookmarkQuery = "update Page\n" +
+                "set bookmark=" + Integer.toString(updateBookmark) + "\n" +
+                "where pageId=?;";
+
+        this.jdbcTemplate.update(updateBookmarkQuery, updateBookmarkPageIdParams);
     }
 }
 

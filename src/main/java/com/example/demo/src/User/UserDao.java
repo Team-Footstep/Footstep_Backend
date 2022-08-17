@@ -43,11 +43,24 @@ public class UserDao {
     public GetProfileRes getProfile(int userId){
         int getProfileParams = userId;
 
-        String getProfileQuery = "select u.userId, p.pageId as topPageId, p.access, u.userImgUrl, u.userName, u.job, u.introduction\n" +
-                "from User u, Page p\n" +
-                "where u.userId = p.userId and u.status=1 and p.status=1\n" +
-                "  and p.topOrNot = 1\n" +
-                "  and u.userId=?;";
+        String getProfileQuery = "select userId, userImgUrl, userName, job, introduction\n" +
+                "from User\n" +
+                "where status=1\n" +
+                "  and userId=?;";
+
+        String getStampTopPageQuery = "select pageId as topStampPageId, access as topStampPageAccess\n" +
+                "from Page\n" +
+                "where status=1\n" +
+                "  and stampOrPrint = 'S'\n" +
+                "  and topOrNot = 1\n" +
+                "  and userId=?;";
+
+        String getPrintTopPageQuery = "select pageId as topPrintPageId, access as topPrintPageAccess\n" +
+                "from Page\n" +
+                "where status=1\n" +
+                "  and stampOrPrint = 'P'\n" +
+                "  and topOrNot = 1\n" +
+                "  and userId=?;";
 
 
         // [수정 완료] 미공개 글 - curPageId의 access 가 0이면 미포함
@@ -60,9 +73,16 @@ public class UserDao {
 
         return this.jdbcTemplate.queryForObject(getProfileQuery,
                 (rs, rowNum) -> new GetProfileRes(
-                        rs.getInt("userId"),
-                        rs.getInt("topPageId"),
-                        rs.getInt("access"),
+                        rs.getInt("userId"),jdbcTemplate.queryForObject(getStampTopPageQuery,
+                        (rk, rowNum_k) -> new GetStampTopPageRes(
+                                rk.getInt("topStampPageId"),
+                                rk.getInt("topStampPageAccess")
+                        ), getProfileParams),
+                        jdbcTemplate.queryForObject(getPrintTopPageQuery,
+                                (rk, rowNum_k) -> new GetPrintTopPageRes(
+                                        rk.getInt("topPrintPageId"),
+                                        rk.getInt("topPrintPageAccess")
+                                ), getProfileParams),
                         rs.getString("userImgUrl"),
                         rs.getString("userName"),
                         rs.getString("job"),

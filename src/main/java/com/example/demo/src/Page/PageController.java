@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
 @RequestMapping("/pages") // controller 에 있는 모든 api 의 uri 앞에 기본적으로 들어감
 public class PageController {
@@ -29,12 +28,34 @@ public class PageController {
     * [PATCH]
     * 페이지 공개/미공개 설정
     * */
+    @ResponseBody
+    @PatchMapping("/access")
+    public BaseResponse<Boolean> getNewFootsteps(@RequestBody PatchAccessReq patchAccessReq) {
+        try{
+            pageService.updateAccess(patchAccessReq);
+            return new BaseResponse<>(true);
+        } catch(BaseException exception){
+            exception.printStackTrace();
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
 
     /*
      * [PATCH]
      * 페이지 북마크 설정/해제
      * */
+    @ResponseBody
+    @PatchMapping("/bookmark")
+    public BaseResponse<Boolean> getNewFootsteps(@RequestBody PatchBookmarkReq patchBookmarkReq) {
+        try{
+            pageService.updateBookmark(patchBookmarkReq);
+            return new BaseResponse<>(true);
+        } catch(BaseException exception){
+            exception.printStackTrace();
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
 
     @PostMapping("create")
@@ -56,15 +77,5 @@ public class PageController {
         }catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
-    }
-    @GetMapping("")
-    public BaseResponse<GetPageRes> retrievePage(@RequestParam int pageId){
-        try{
-            GetPageRes getPageRes = pageProvider.getPage(pageId);
-            return new BaseResponse<>(getPageRes);
-        }catch (BaseException exception){
-            return new BaseResponse<>(exception.getStatus());
-        }
-
     }
 }
