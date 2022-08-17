@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import static java.sql.JDBCType.NULL;
+
 
 @RestController
 @RequestMapping("/pages") // controller 에 있는 모든 api 의 uri 앞에 기본적으로 들어감
@@ -18,29 +20,19 @@ public class PageController {
     private final PageProvider pageProvider;
     private final PageService pageService;
 
-
     @Autowired
     public PageController(PageProvider pageProvider, PageService pageService){
         this.pageProvider = pageProvider;
         this.pageService = pageService;
     }
 
-    /*
-    * [PATCH]
-    * 페이지 공개/미공개 설정
-    * */
-
-
-
-
-
-    /*
+    /**
      * [Post]
      * 하위 페이지 생성
      * */
     @PostMapping("create")
     public BaseResponse<PostPageRes> createPage(@RequestBody PostPageReq postPageReq)  {
-        //todo validation 처리하기
+
         try{
             PostPageRes postPageRes = pageService.createPage(postPageReq);
             return new BaseResponse<>(postPageRes);
@@ -49,9 +41,10 @@ public class PageController {
         }
     }
 
-    /*
+    /**
      * [Patch]
      * 페이지 저장
+     * @author nnlnuu
      * */
     @PatchMapping("save")
     public BaseResponse<PatchPageRes> updatePage(@RequestBody PatchPageReq patchPageReq){

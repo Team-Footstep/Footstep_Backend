@@ -13,9 +13,9 @@ public class PostPageReq {
     //저장하라고 넘어올 정보들 정리하기
     private int parentPageId; // 부모 페이지 아이디
     private int parentBlockId; // 부모 블럭 아이디
+    private int userId;
     private boolean topOrNot; // top 인지 아닌지
-    private int access;
+    private int access; //접근 권한
     private String stampOrPrint; // stamp 인지 아닌지
     private String preview; // 제목으로 저장할 텍스트
-    private int depth; // 깊이
 }

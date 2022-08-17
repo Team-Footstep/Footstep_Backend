@@ -28,7 +28,10 @@ public class FollowController {
         this.jwtService = jwtService;
     }
 
-    // [Get] 팔로잉 데이터 조회 -> 갯수 세기
+    /**
+    *[Get] 팔로잉 데이터 조회 -> 갯수 세기
+    * @author nnlnuu
+     * */
     @ResponseBody
     @GetMapping("/get/{userId}")
     public BaseResponse<GetFollowInfoRes> getFollowInfo(@PathVariable int userId){
@@ -40,7 +43,10 @@ public class FollowController {
         }
     }
 
-    // [Patch] 언팔 -> 팔로우 상태만 변경
+    /**
+     * [Delete] 언팔 -> 팔로우 상태 삭제
+     * @author nnlnuu
+     */
     @ResponseBody
     @DeleteMapping("/unfollow")
     public BaseResponse<DeleteFollowRes> deleteFollow(@RequestBody FollowReq deleteFollowReq)throws BaseException{
@@ -53,7 +59,11 @@ public class FollowController {
 
     }
 
-    //  팔로우하는 경우 -> 없었으면 생성(create) 있었으면 (status 변경)
+    /**
+     *[Post]
+     * 팔로우하는 경우 -> 없었으면 생성(create) 있었으면 (status 변경)
+     * @author nnlnuu
+     */
     @ResponseBody
     @PostMapping("/follow")
     public BaseResponse<PostFollowRes> createFollow(@RequestBody FollowReq updateFollowReq) throws BaseException{

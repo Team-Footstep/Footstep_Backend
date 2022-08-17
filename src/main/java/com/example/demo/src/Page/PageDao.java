@@ -23,13 +23,23 @@ public class PageDao {
     public PostPageRes createPage(PostPageReq postPageReq) {
         String createPageQuery = "insert into Page (parentPageId,parentBlockId,userId,topOrNot,access,stampOrPrint,preview,depth)\n" +
                 "values (?,?,?,?,?,?,?,?)";
-        String getPageResByPageIdQuery = "select userId,pageId,createdAt,status " +
+
+        String getParentPageDepthQuery = "select depth\n" +
+                "from Page\n" +
+                "where pageId = ?";
+        // 깊이 따로 조회
+        int depth = this.jdbcTemplate.queryForObject(getParentPageDepthQuery,int.class,postPageReq.getParentPageId());
+        String getPageResByPageIdQuery = "select userId,pageId,createdAt,status\n" +
                 "from Page " +
                 "where pageId = ?";
+
         String getPageIdQuery ="select pageId from Page where parentBlockId = ?";
-        Object[] createPageParams = new Object[]{postPageReq.getParentPageId(), postPageReq.getParentBlockId()
-                , postPageReq.isTopOrNot(), postPageReq.getAccess(), postPageReq.getStampOrPrint(), postPageReq.getPreview(),postPageReq.getDepth()
+
+        Object[] createPageParams = new Object[]{postPageReq.getParentPageId(), postPageReq.getParentBlockId(),postPageReq.getUserId()
+                , postPageReq.isTopOrNot(), postPageReq.getAccess(), postPageReq.getStampOrPrint(),
+                postPageReq.getPreview(),(depth+1)
         };
+
         // 페이지 생성 구문
         this.jdbcTemplate.update(createPageQuery, createPageParams);
 
@@ -47,8 +57,9 @@ public class PageDao {
         String updatePageQuery = "update Page set preview =?,status =? ,stampOrPrint = ?, bookmark =?,\n" +
                 "                access = ?\n" +
                 "where pageId = ?";
-        // todo : updateBlockQuery 작성해주기
-        String updateBlockQuery = "";
+        // todo :  updateBlockQuery 점검
+        String updateBlockQuery = "update Block set childPageId=?, content = ?,orderNum=?,status=?\n" +
+                "where curPageId = ?";
         Object[] updatePageParams = {patchPageReq.getPreview(), patchPageReq.getStatus(),
                 patchPageReq.getStampOrPrint(), patchPageReq.getBookmark(),
                 patchPageReq.getAccess(), patchPageReq.getPageId()};
@@ -58,15 +69,17 @@ public class PageDao {
                 "where pageId = ?";
 
         List<GetContentsRes> contents = patchPageReq.getContentList();
-        // enhanced for loop
+
+        int index = 1;
         for( GetContentsRes c: contents){
-          Object[]  updateBlockParams = { c.getChildPageId(),c.getContent(),c.getOrderNum(),c.getStatus()};
+          Object[]  updateBlockParams = { c.getChildPageId(),c.getContent(),index++,c.getStatus(),patchPageReq.getPageId()};
             // 총 i 번 업데이트
             this.jdbcTemplate.update(updateBlockQuery, updateBlockParams);
         }
         this.jdbcTemplate.update(updatePageQuery, updatePageParams);
 
-        //todo : 인자 추가
+
+        //응답 객체
         PatchPageRes patchPageRes = this.jdbcTemplate.queryForObject(getPageIdQuery,
                 (rs, num) -> new PatchPageRes(
                         rs.getInt("pageId"),
