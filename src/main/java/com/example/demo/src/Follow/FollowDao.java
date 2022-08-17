@@ -59,32 +59,4 @@ public class FollowDao {
 
         return new DeleteFollowRes(deletedFollowReq.getUserId(),deletedFollowReq.getFollowedId());
     }
-
-//    public PostFollowRes modifyFollow(FollowReq modifyFollowReq){
-//        String modifyFollowQuery = "update Follow set status = 1\n" +
-//                " where Follow.followee = ? and Follow.follower = ?;";
-//        String modifyFollowResQuery = "select updatedAt,status,follower,followee\n" +
-//                "from Follow\n" +
-//                "where follower = ? and followee = ? ";
-//        Object[] modifyFollowParam = new Object[]{modifyFollowReq.getUserId(),modifyFollowReq.getFollowedId()};
-//        this.jdbcTemplate.update(modifyFollowQuery,modifyFollowParam);
-//        return this.jdbcTemplate.queryForObject(modifyFollowResQuery,
-//                (rs,num)-> new PostFollowRes(
-//                        rs.getTimestamp("updatedAt"),
-//                        rs.getInt("status"),
-//                        rs.getInt("follower"),
-//                        rs.getInt("followee")
-//                )
-//                ,modifyFollowParam);
-//    }
-
-//    public boolean checkExist(FollowReq followReq){
-//        Object[] followReqParams = new Object[]{followReq.getUserId(),followReq.getFollowedId()};
-//        String checkExistQuery  ="select exists(\n" +
-//                "    select *\n" +
-//                "    from Follow\n" +
-//                "    where follower = ? and followee = ?\n" +
-//                "           ) as isChk";
-//        return this.jdbcTemplate.queryForObject(checkExistQuery,boolean.class,followReqParams);
-//    }
 }

@@ -90,6 +90,7 @@ public class PageDao {
         // enhanced for loop
         for( GetContentsRes c: contents){
           Object[]  updateBlockParams = { c.getChildPageId(),c.getContent(),c.getOrderNum(),c.getStatus()};
+            // 총 i 번 업데이트
             this.jdbcTemplate.update(updateBlockQuery, updateBlockParams);
         }
 //        for (int i = 0; i < contents.size(); i++) {
