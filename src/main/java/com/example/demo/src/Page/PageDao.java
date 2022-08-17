@@ -87,14 +87,19 @@ public class PageDao {
                 "where pageId = ?";
 
         List<GetContentsRes> contents = patchPageReq.getContentList();
-        for (int i = 0; i < contents.size(); i++) {
-            Object[] updateBlockParams = {
-                    contents.get(i).getChildPageId(), contents.get(i).getContent(),
-                    contents.get(i).getOrderNum(), contents.get(i).getStatus()
-            };
-            // 총 i 번 업데이트
+        // enhanced for loop
+        for( GetContentsRes c: contents){
+          Object[]  updateBlockParams = { c.getChildPageId(),c.getContent(),c.getOrderNum(),c.getStatus()};
             this.jdbcTemplate.update(updateBlockQuery, updateBlockParams);
         }
+//        for (int i = 0; i < contents.size(); i++) {
+//            Object[] updateBlockParams = {
+//                    contents.get(i).getChildPageId(), contents.get(i).getContent(),
+//                    contents.get(i).getOrderNum(), contents.get(i).getStatus()
+//            };
+//            // 총 i 번 업데이트
+//            this.jdbcTemplate.update(updateBlockQuery, updateBlockParams);
+//        }
         this.jdbcTemplate.update(updatePageQuery, updatePageParams);
 
         //todo : 인자 추가
