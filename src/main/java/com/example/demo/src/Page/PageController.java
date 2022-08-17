@@ -2,28 +2,24 @@ package com.example.demo.src.Page;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.MainPage.model.GetFollowingNewRes;
-import com.example.demo.src.Page.model.GetPageRes;
-import com.example.demo.src.Page.model.PostPageReq;
-import com.example.demo.src.Page.model.PostPageRes;
+import com.example.demo.src.Page.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/pages") // controller 에 있는 모든 api 의 uri 앞에 기본적으로 들어감
 public class PageController {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
+
     private final PageProvider pageProvider;
-    @Autowired
     private final PageService pageService;
 
 
+    @Autowired
     public PageController(PageProvider pageProvider, PageService pageService){
         this.pageProvider = pageProvider;
         this.pageService = pageService;
@@ -50,5 +46,25 @@ public class PageController {
         }catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
+    }
+
+    @PatchMapping("save")
+    public BaseResponse<PatchPageRes> updatePage(@RequestBody PatchPageReq patchPageReq){
+        try{
+            PatchPageRes patchPageRes = pageService.updatePage(patchPageReq);
+            return new BaseResponse<>(patchPageRes);
+        }catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+    @GetMapping("")
+    public BaseResponse<GetPageRes> retrievePage(@RequestParam int pageId){
+        try{
+            GetPageRes getPageRes = pageProvider.getPage(pageId);
+            return new BaseResponse<>(getPageRes);
+        }catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+
     }
 }

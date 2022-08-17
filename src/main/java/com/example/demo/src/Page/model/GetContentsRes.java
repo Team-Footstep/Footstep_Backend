@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetContentsReq {
+public class GetContentsRes {
     private int childPageId;
     private String content;
     private int orderNum;

@@ -9,11 +9,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class PatchPageReq {
+    private int pageId; // 수정하고자 하는 페이지 아이디
     private String preview;
-    private int status; // page의 상태
-    private int stampOrNot; // stamp 인지 아닌지
+    private int status; // page 의 상태
+    private int stampOrPrint; // stamp 인지 print 인지
     private int bookmark;
     private int access;
-    private List<GetContentsReq> contentList;
+    private List<GetContentsRes> contentList;
 
 }
