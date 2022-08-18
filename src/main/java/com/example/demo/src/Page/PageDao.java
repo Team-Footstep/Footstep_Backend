@@ -221,47 +221,58 @@ public class PageDao {
 
     }
 
-
+    /*
+     * 최초 작성자, 상위 작성자 트랙킹
+     * 표시되지 않는 경우 예외처리
+     * */
     public GetOriginalFolloweeRes originalFollowee(int blockId){
         int originalFolloweeParams = blockId;
         GetOriginalFolloweeRes getOriginalFolloweeRes = new GetOriginalFolloweeRes(0,0);
 
-        // 1 이면 sap 데이터가 있는 것. 0 이면 없는 것 stamp 당한 적 없는 것
+        // 1 이면 sap 데이터가 있는 것. 0 이면 없는 것 stamp 당한 적 없는 것(작성자 본인의 것만 존재)
         String ifStampAndPrintIsNoneQuery = "select exists(select 1 from Block b, StampAndPrint sap where b.blockId=sap.newBlockId and b.blockId = ?);";
         int ifStampAndPrintIsNone = this.jdbcTemplate.queryForObject(ifStampAndPrintIsNoneQuery,
                 int.class
                 , originalFolloweeParams);
 
+        /*
         String IfOriginalIdIsMeQuery = "select if(b.userId = sap.originalId, 1, 0)\n" +
                 "from Block b, StampAndPrint sap\n" +
                 "where b.blockId = sap.newBlockId\n" +
                 "and sap.status=1\n" +
                 "and b.blockId=?;";
+        */
 
         if (ifStampAndPrintIsNone == 1){
+            /*
             int ifOriginalIdIsMe = this.jdbcTemplate.queryForObject(IfOriginalIdIsMeQuery,
                     int.class
                     , originalFolloweeParams);
 
             if(ifOriginalIdIsMe == 0){
-                String getOriginalFolloweeIdQuery = "select sap.originalId, sap.followeeId\n" +
-                        "from Block b, StampAndPrint sap\n" +
-                        "where b.blockId = sap.newBlockId\n" +
-                        "  and sap.status=1\n" +
-                        "  and b.blockId=?;";
-
-                getOriginalFolloweeRes = this.jdbcTemplate.queryForObject(getOriginalFolloweeIdQuery,
-                        (rs, rowNum) -> new GetOriginalFolloweeRes(
-                                rs.getInt("originalId"),
-                                rs.getInt("followeeId")
-                        ), originalFolloweeParams);
             }
+            */
+
+            String getOriginalFolloweeIdQuery = "select sap.originalId, sap.followeeId\n" +
+                    "from Block b, StampAndPrint sap\n" +
+                    "where b.blockId = sap.newBlockId\n" +
+                    "  and sap.status=1\n" +
+                    "  and b.blockId=?;";
+
+            getOriginalFolloweeRes = this.jdbcTemplate.queryForObject(getOriginalFolloweeIdQuery,
+                    (rs, rowNum) -> new GetOriginalFolloweeRes(
+                            rs.getInt("originalId"),
+                            rs.getInt("followeeId")
+                    ), originalFolloweeParams);
 
         }
 
         return getOriginalFolloweeRes;
     }
 
+    /*
+     * 없는 페이지인 경우 validation
+     * */
     public int checkPageExist(int pageId){
         String checkPageAccessQuery = "select exists(select 1 from Page where pageId = ?)";
         int checkPageAccessParams = pageId;
@@ -270,6 +281,9 @@ public class PageDao {
                 checkPageAccessParams);
     }
 
+    /*
+     * 미공개 페이지인 경우 validation
+     * */
     public int checkPageAccess(int pageId){
         String checkPageAccessQuery = "select exists(select 1 from Page where access=1 and pageId = ?)";
         int checkPageAccessParams = pageId;
