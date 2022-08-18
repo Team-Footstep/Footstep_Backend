@@ -13,4 +13,5 @@ public class GetContentsRes {
     private String content;
     private int orderNum;
     private int status;
+    private int newBlock;  // 1 : 새 블럭, 0 : 기존 블럭
 }

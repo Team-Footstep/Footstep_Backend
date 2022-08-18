@@ -1,8 +1,8 @@
 package com.example.demo.src.Page;
 
 import com.example.demo.config.BaseException;
-import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
 
+import com.example.demo.config.BaseResponseStatus;
 import com.example.demo.src.Page.model.PatchPageReq;
 import com.example.demo.src.Page.model.PatchPageRes;
 import com.example.demo.src.Page.model.PostPageReq;
@@ -26,13 +26,14 @@ public class PageService {
         this.pageDao = pageDao;
     }
 
+
     public PostPageRes createPage(PostPageReq postPageReq) throws BaseException{
         try{
-            return pageDao.createPage(postPageReq);
+                return pageDao.createPage(postPageReq);
         }
         catch (Exception exception){
             exception.printStackTrace();
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
     public PatchPageRes updatePage(PatchPageReq patchPageReq) throws  BaseException{
@@ -41,8 +42,11 @@ public class PageService {
         }
         catch (Exception exception){
             exception.printStackTrace();
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
 
+    public boolean checkExist(int parentPageId) {
+        return pageDao.checkExist(parentPageId);
+    }
 }

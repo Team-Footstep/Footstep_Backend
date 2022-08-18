@@ -42,6 +42,8 @@ public enum BaseResponseStatus {
     //[GET] /search
     GET_SEARCH_EMPTY_WORD(false,2023,"검색어를 입력해주세요"),
 
+    //[PATCH] /save
+    POST_FAIL_PAGE(false,2024,"하위 페이자가 이미 존재합니다"),
 
     /**
      * 3000 : Response 오류

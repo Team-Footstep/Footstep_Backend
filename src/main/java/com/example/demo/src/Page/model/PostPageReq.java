@@ -15,7 +15,7 @@ public class PostPageReq {
     private int parentBlockId; // 부모 블럭 아이디
     private int userId;
     private boolean topOrNot; // top 인지 아닌지
-    private int access; //접근 권한
+    private int status; // page 상태
     private String stampOrPrint; // stamp 인지 아닌지
-    private String preview; // 제목으로 저장할 텍스트
+
 }

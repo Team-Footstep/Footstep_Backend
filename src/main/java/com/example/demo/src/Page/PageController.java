@@ -2,6 +2,7 @@ package com.example.demo.src.Page;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+import com.example.demo.config.BaseResponseStatus;
 import com.example.demo.src.Page.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,8 +35,13 @@ public class PageController {
     public BaseResponse<PostPageRes> createPage(@RequestBody PostPageReq postPageReq)  {
 
         try{
-            PostPageRes postPageRes = pageService.createPage(postPageReq);
-            return new BaseResponse<>(postPageRes);
+            //todo : 하위 페이지 중복되지 않는지 검증
+            if(pageService.checkExist(postPageReq.getParentBlockId()))
+                return new BaseResponse<>(BaseResponseStatus.POST_FAIL_PAGE);
+            else{
+                PostPageRes postPageRes = pageService.createPage(postPageReq);
+                return new BaseResponse<>(postPageRes);
+            }
         }catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
