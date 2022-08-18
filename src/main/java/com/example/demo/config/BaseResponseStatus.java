@@ -69,6 +69,10 @@ public enum BaseResponseStatus {
 
     // 5000 : 필요시 만들어서 쓰세요
     // 6000 : 필요시 만들어서 쓰세요
+
+    // 7000
+
+    PAGES_PAGE_CANNOT_ACCESS(false, 7001, "미공개 페이지입니다."),
     /**
      * 9000 : Comment 오류
      */

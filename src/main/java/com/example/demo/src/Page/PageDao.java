@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -120,5 +121,116 @@ public class PageDao {
     /*
      * 페이지 진입 시 내용 가져오기
      * */
+    public GetPageRes retrievePage(int pageId){
+        //TODO: 상위 블럭이 없는 경우 (최상단 페이지는 어떻게..?)
+        int retrievePageParams = pageId;
+
+        // 페이지 내용 쿼리
+        String retrievePageQuery = "select p.pageId, p.topOrNot, p.preview, b.blockId as parentBlockId, b.content as parentBlockContent, p.access, p.bookmark\n" +
+                "from Page p, Block b\n" +
+                "where p.pageId = b.childPageId\n" +
+                "  and p.pageId=?;\n";
+
+        // 페이지 내 블럭들 쿼리
+        String retrievePageBlocksQuery = "select b.blockId, b.content, b.childPageId, b.status\n" +
+                "from Page p, Block b\n" +
+                "where p.pageId = b.curPageId and b.status=1\n" +
+                "  and p.pageId=?\n" +
+                "order by b.orderNum;";
+
+
+
+        // 블럭이 stamp 당한 횟수
+        String getStampNumQuery = "select count(*)\n" +
+                "from StampAndPrint sap\n" +
+                "where sap.status=1\n" +
+                "  and sap.stampOrPrint = 'S'\n" +
+                "  and sap.blockId=?;";
+
+        // 블럭이 footprint 당한 횟수
+        String getFootprintNumQuery = "select count(*)\n" +
+                "from StampAndPrint sap\n" +
+                "where sap.status=1\n" +
+                "  and sap.stampOrPrint = 'P'\n" +
+                "  and sap.blockId=?;";
+
+
+
+        return this.jdbcTemplate.queryForObject(retrievePageQuery,
+                (rs, rowNum) -> new GetPageRes(
+                        rs.getInt("pageId"),
+                        rs.getInt("topOrNot"),
+                        rs.getString("preview"),
+                        rs.getInt("parentBlockId"),
+                        rs.getString("parentBlockContent"),
+                        rs.getInt("access"),
+                        rs.getInt("bookmark"),
+                        jdbcTemplate.query(retrievePageBlocksQuery,
+                                (rk, rowNum_k) -> new GetBlocksRes(
+                                        rk.getInt("blockId"),
+                                        rk.getString("content"),
+                                        rk.getInt("childPageId"),
+                                        originalFollowee(rk.getInt("blockId")),   // originalId, followeeId가 0일 경우 프론트에서 표시 X
+                                        rk.getInt("status"),
+                                        jdbcTemplate.queryForObject(getStampNumQuery,
+                                                int.class
+                                                , rk.getInt("blockId")),
+                                        jdbcTemplate.queryForObject(getFootprintNumQuery,
+                                                int.class
+                                                , rk.getInt("blockId")))
+                                ,retrievePageParams)
+                ), retrievePageParams);
+    }
+
+
+    public GetOriginalFolloweeRes originalFollowee(int blockId){
+        int originalFolloweeParams = blockId;
+        GetOriginalFolloweeRes getOriginalFolloweeRes = new GetOriginalFolloweeRes(0,0);
+
+        // 1 이면 sap 데이터가 있는 것. 0 이면 없는 것 stamp 당한 적 없는 것
+        String ifStampAndPrintIsNoneQuery = "select exists(select 1 from Block b, StampAndPrint sap where b.blockId=sap.newBlockId and b.blockId = ?);";
+        int ifStampAndPrintIsNone = this.jdbcTemplate.queryForObject(ifStampAndPrintIsNoneQuery,
+                int.class
+                , originalFolloweeParams);
+
+        String IfOriginalIdIsMeQuery = "select if(b.userId = sap.originalId, 1, 0)\n" +
+                "from Block b, StampAndPrint sap\n" +
+                "where b.blockId = sap.newBlockId\n" +
+                "and sap.status=1\n" +
+                "and b.blockId=?;";
+
+        if (ifStampAndPrintIsNone == 1){
+            int ifOriginalIdIsMe = this.jdbcTemplate.queryForObject(IfOriginalIdIsMeQuery,
+                    int.class
+                    , originalFolloweeParams);
+
+            if(ifOriginalIdIsMe == 0){
+                String getOriginalFolloweeIdQuery = "select sap.originalId, sap.followeeId\n" +
+                        "from Block b, StampAndPrint sap\n" +
+                        "where b.blockId = sap.newBlockId\n" +
+                        "  and sap.status=1\n" +
+                        "  and b.blockId=?;";
+
+                getOriginalFolloweeRes = this.jdbcTemplate.queryForObject(getOriginalFolloweeIdQuery,
+                        (rs, rowNum) -> new GetOriginalFolloweeRes(
+                                rs.getInt("originalId"),
+                                rs.getInt("followeeId")
+                        ), originalFolloweeParams);
+            }
+
+        }
+
+        return getOriginalFolloweeRes;
+    }
+
+
+    public int checkPageAccess(int pageId){
+        String checkPageAccessQuery = "select exists(select pageId from Page where access=1 and pageId = ?)";
+        int checkPageAccessParams = pageId;
+        return this.jdbcTemplate.queryForObject(checkPageAccessQuery,
+                int.class,
+                checkPageAccessParams);
+    }
+
 
 }

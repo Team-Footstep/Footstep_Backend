@@ -93,4 +93,14 @@ public class PageController {
      * [GET]
      * 페이지 진입 시 내용 가져오기
      * */
+    @GetMapping("/get/{pageId}")
+    public BaseResponse<GetPageRes> getPage(@PathVariable int pageId)  {
+        //todo validation 처리하기
+        try{
+            GetPageRes getPageRes = pageProvider.retrievePage(pageId);
+            return new BaseResponse<>(getPageRes);
+        }catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
 }
