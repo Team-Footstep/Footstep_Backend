@@ -122,10 +122,23 @@ public class PageDao {
      * 페이지 진입 시 내용 가져오기
      * */
     public GetPageRes retrievePage(int pageId){
-        //TODO: 상위 블럭이 없는 경우 (최상단 페이지는 어떻게..?)
         int retrievePageParams = pageId;
 
-        // 페이지 내용 쿼리
+        //TODO: 상위 블럭이 없는 경우 (최상단 페이지는 어떻게..?)
+
+        // 최상단 페이지인지 판단
+        String isTopPageQuery = "select topOrNot from Page where pageId = ?";
+        int isTopPage = this.jdbcTemplate.queryForObject(isTopPageQuery,
+                int.class
+                , retrievePageParams);
+
+
+        // 페이지 내용 쿼리 - 최상단 페이지인 경우
+        String retrieveTopPageQuery = "select pageId, topOrNot, preview, access, bookmark\n" +
+                "from Page\n" +
+                "where pageId=?;\n";
+
+        // 페이지 내용 쿼리 - 최상단 페이지가 아닌 경우
         String retrievePageQuery = "select p.pageId, p.topOrNot, p.preview, b.blockId as parentBlockId, b.content as parentBlockContent, p.access, p.bookmark\n" +
                 "from Page p, Block b\n" +
                 "where p.pageId = b.childPageId\n" +
@@ -137,8 +150,6 @@ public class PageDao {
                 "where p.pageId = b.curPageId and b.status=1\n" +
                 "  and p.pageId=?\n" +
                 "order by b.orderNum;";
-
-
 
         // 블럭이 stamp 당한 횟수
         String getStampNumQuery = "select count(*)\n" +
@@ -154,32 +165,60 @@ public class PageDao {
                 "  and sap.stampOrPrint = 'P'\n" +
                 "  and sap.blockId=?;";
 
+        if (isTopPage==1){
+            return this.jdbcTemplate.queryForObject(retrieveTopPageQuery,
+                    (rs, rowNum) -> new GetPageRes(
+                            rs.getInt("pageId"),
+                            rs.getInt("topOrNot"),
+                            rs.getString("preview"),
+                            0,
+                            null,
+                            rs.getInt("access"),
+                            rs.getInt("bookmark"),
+                            jdbcTemplate.query(retrievePageBlocksQuery,
+                                    (rk, rowNum_k) -> new GetBlocksRes(
+                                            rk.getInt("blockId"),
+                                            rk.getString("content"),
+                                            rk.getInt("childPageId"),
+                                            originalFollowee(rk.getInt("blockId")),   // originalId, followeeId가 0일 경우 프론트에서 표시 X
+                                            rk.getInt("status"),
+                                            jdbcTemplate.queryForObject(getStampNumQuery,
+                                                    int.class
+                                                    , rk.getInt("blockId")),
+                                            jdbcTemplate.queryForObject(getFootprintNumQuery,
+                                                    int.class
+                                                    , rk.getInt("blockId")))
+                                    ,retrievePageParams)
+                    ), retrievePageParams);
+        }
+        else{
+            return this.jdbcTemplate.queryForObject(retrievePageQuery,
+                    (rs, rowNum) -> new GetPageRes(
+                            rs.getInt("pageId"),
+                            rs.getInt("topOrNot"),
+                            rs.getString("preview"),
+                            rs.getInt("parentBlockId"),
+                            rs.getString("parentBlockContent"),
+                            rs.getInt("access"),
+                            rs.getInt("bookmark"),
+                            jdbcTemplate.query(retrievePageBlocksQuery,
+                                    (rk, rowNum_k) -> new GetBlocksRes(
+                                            rk.getInt("blockId"),
+                                            rk.getString("content"),
+                                            rk.getInt("childPageId"),
+                                            originalFollowee(rk.getInt("blockId")),   // originalId, followeeId가 0일 경우 프론트에서 표시 X
+                                            rk.getInt("status"),
+                                            jdbcTemplate.queryForObject(getStampNumQuery,
+                                                    int.class
+                                                    , rk.getInt("blockId")),
+                                            jdbcTemplate.queryForObject(getFootprintNumQuery,
+                                                    int.class
+                                                    , rk.getInt("blockId")))
+                                    ,retrievePageParams)
+                    ), retrievePageParams);
 
+        }
 
-        return this.jdbcTemplate.queryForObject(retrievePageQuery,
-                (rs, rowNum) -> new GetPageRes(
-                        rs.getInt("pageId"),
-                        rs.getInt("topOrNot"),
-                        rs.getString("preview"),
-                        rs.getInt("parentBlockId"),
-                        rs.getString("parentBlockContent"),
-                        rs.getInt("access"),
-                        rs.getInt("bookmark"),
-                        jdbcTemplate.query(retrievePageBlocksQuery,
-                                (rk, rowNum_k) -> new GetBlocksRes(
-                                        rk.getInt("blockId"),
-                                        rk.getString("content"),
-                                        rk.getInt("childPageId"),
-                                        originalFollowee(rk.getInt("blockId")),   // originalId, followeeId가 0일 경우 프론트에서 표시 X
-                                        rk.getInt("status"),
-                                        jdbcTemplate.queryForObject(getStampNumQuery,
-                                                int.class
-                                                , rk.getInt("blockId")),
-                                        jdbcTemplate.queryForObject(getFootprintNumQuery,
-                                                int.class
-                                                , rk.getInt("blockId")))
-                                ,retrievePageParams)
-                ), retrievePageParams);
     }
 
 
@@ -223,9 +262,16 @@ public class PageDao {
         return getOriginalFolloweeRes;
     }
 
+    public int checkPageExist(int pageId){
+        String checkPageAccessQuery = "select exists(select 1 from Page where pageId = ?)";
+        int checkPageAccessParams = pageId;
+        return this.jdbcTemplate.queryForObject(checkPageAccessQuery,
+                int.class,
+                checkPageAccessParams);
+    }
 
     public int checkPageAccess(int pageId){
-        String checkPageAccessQuery = "select exists(select pageId from Page where access=1 and pageId = ?)";
+        String checkPageAccessQuery = "select exists(select 1 from Page where access=1 and pageId = ?)";
         int checkPageAccessParams = pageId;
         return this.jdbcTemplate.queryForObject(checkPageAccessQuery,
                 int.class,

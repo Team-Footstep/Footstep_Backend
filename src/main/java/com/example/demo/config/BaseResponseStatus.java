@@ -70,9 +70,9 @@ public enum BaseResponseStatus {
     // 5000 : 필요시 만들어서 쓰세요
     // 6000 : 필요시 만들어서 쓰세요
 
-    // 7000
-
-    PAGES_PAGE_CANNOT_ACCESS(false, 7001, "미공개 페이지입니다."),
+    // 7000 - ro-el
+    PAGES_NONE_PAGE_ID(false, 7000, "존재하지 않는 페이지입니다."),
+    PAGES_PAGE_CANNOT_ACCESS(false, 7001, "작성자가 미공개 설정한 페이지입니다."),
     /**
      * 9000 : Comment 오류
      */
