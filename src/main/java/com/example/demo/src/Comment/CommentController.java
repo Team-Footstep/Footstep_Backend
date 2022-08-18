@@ -2,16 +2,9 @@ package com.example.demo.src.Comment;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.Bookmark.model.GetBookmarksRes;
 import com.example.demo.src.Comment.model.*;
-import com.example.demo.src.User.UserProvider;
-import com.example.demo.src.User.UserService;
-import com.example.demo.src.User.model.PostUserReq;
-import com.example.demo.src.User.model.PostUserRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.mail.MessagingException;
 
 import java.util.List;
 

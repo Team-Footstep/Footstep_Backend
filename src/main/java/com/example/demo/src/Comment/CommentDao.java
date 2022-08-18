@@ -1,9 +1,7 @@
 package com.example.demo.src.Comment;
 
-import com.example.demo.src.Bookmark.model.GetBookmarksRes;
 import com.example.demo.src.Comment.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 

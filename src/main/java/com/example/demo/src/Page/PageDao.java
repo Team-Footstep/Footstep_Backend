@@ -1,14 +1,12 @@
 package com.example.demo.src.Page;
 
 
-import com.example.demo.src.MainPage.model.GetTrendingFootprintsRes;
 import com.example.demo.src.Page.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository

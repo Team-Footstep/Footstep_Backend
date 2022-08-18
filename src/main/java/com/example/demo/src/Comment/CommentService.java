@@ -1,7 +1,6 @@
 package com.example.demo.src.Comment;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.config.BaseResponse;
 import com.example.demo.src.Comment.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
