@@ -28,8 +28,10 @@ public class PageController {
     }
 
     /**
-     * [Post]
-     * 하위 페이지 생성
+     * 하위 페이지 생성 api
+     * [Post] /pages/create
+     * @return BaseResponse<PostPageRes>
+     * @author nnlnuu
      * */
     @PostMapping("create")
     public BaseResponse<PostPageRes> createPage(@RequestBody PostPageReq postPageReq)  {
@@ -48,12 +50,13 @@ public class PageController {
     }
 
     /**
-     * [Patch]
-     * 페이지 저장
+     * 페이지 저장 api
+     * [Patch] /pages/save
+     * @return BaseResponse<PatchPageRes>
      * @author nnlnuu
      * */
-    @PatchMapping("save")
-    public BaseResponse<PatchPageRes> updatePage(@RequestBody PatchPageReq patchPageReq){
+    @PutMapping("save")
+    public BaseResponse<PatchPageRes> savePage(@RequestBody PatchPageReq patchPageReq){
         try{
             PatchPageRes patchPageRes = pageService.updatePage(patchPageReq);
             return new BaseResponse<>(patchPageRes);

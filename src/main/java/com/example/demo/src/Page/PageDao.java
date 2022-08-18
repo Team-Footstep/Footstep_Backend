@@ -25,19 +25,14 @@ public class PageDao {
         String createPageQuery = "insert into Page (parentPageId, parentBlockId," +
                 " userId, topOrNot, status, stampOrPrint,depth) VALUES(?,?,?,?,?,?,?)";
 
+        // 깊이는 따로 구해주기
         String getParentPageDepthQuery = "select depth\n" +
                 "from Page\n" +
                 "where pageId = ?"; // 여기에 들어갈 정보 -> depth
-        // 깊이 따로 조회
         @NotNull
         int depth = this.jdbcTemplate.queryForObject(getParentPageDepthQuery,int.class,postPageReq.getParentPageId());
-        String getPageResByPageIdQuery = "select pageId,createdAt,status\n" +
-                "from Page " +
-                "where pageId = ?";
 
-        String getPageIdQuery ="select pageId from Page where parentBlockId = ?";
-
-
+        // page date 생성 인자들
         Object[] createPageParams = new Object[]{postPageReq.getParentPageId(), postPageReq.getParentBlockId(),postPageReq.getUserId()
                 , postPageReq.isTopOrNot(), postPageReq.getStatus(),postPageReq.getStampOrPrint(),(depth+1)
         };
@@ -45,14 +40,24 @@ public class PageDao {
         // 페이지 생성 구문
         this.jdbcTemplate.update(createPageQuery, createPageParams);
 
+        // pageRes 처리를 위한 새로 만들어진 PageId
+        String getPageResByPageIdQuery = "select pageId,createdAt,status\n" +
+                "from Page " +
+                "where pageId = ?";
+        String getPageIdQuery ="select pageId from Page where parentBlockId = ?";
         @NotNull
         int curPageId = this.jdbcTemplate.queryForObject(getPageIdQuery,int.class,postPageReq.getParentBlockId());
 
+        // 페이지가 생성되었을때 block 데이터에서도 childPageId 변경해줘야 함
         String updateParentBlockQuery = "update Block set childPageId = ?\n" +
                 "where blockId  = ?";
+        //현재 생성된 페이지의 Id를 -> parentBlock의 childPageId에 update
         Object[] updateParentBlockParams = new Object[] {
                 curPageId,postPageReq.getParentBlockId() };
+
         this.jdbcTemplate.update(updateParentBlockQuery,updateParentBlockParams);
+
+        //PostPageRes 반환
         return this.jdbcTemplate.queryForObject(getPageResByPageIdQuery,
                 (rs,num) -> new PostPageRes(
                         rs.getInt("pageId"),
@@ -62,13 +67,11 @@ public class PageDao {
     }
 
     public PatchPageRes updatePage(PatchPageReq patchPageReq) {
+
+        //새로 페이지 정보 처리
         String updatePageQuery = "update Page set preview =?,status =? ,stampOrPrint = ?, bookmark =?,\n" +
                 "                access = ?\n" +
                 "where pageId = ?";
-
-
-        String updateBlockQuery = "update Block set childPageId= ?, content = ?,orderNum=?,status=?\n" +
-                "where curPageId = ?";
         Object[] updatePageParams = {patchPageReq.getPreview(), patchPageReq.getStatus(),
                 patchPageReq.getStampOrPrint(), patchPageReq.getBookmark(),
                 patchPageReq.getAccess(), patchPageReq.getPageId()};
@@ -77,17 +80,30 @@ public class PageDao {
                 "from Page\n" +
                 "where pageId = ?";
 
-        List<GetContentsRes> contents = patchPageReq.getContentList();
-
-        int index = 1;
-        for( GetContentsRes c: contents){
-          Object[]  updateBlockParams = { c.getChildPageId(),c.getContent(),index++,c.getStatus(),patchPageReq.getPageId()};
-            // 총 i 번 업데이트
-            this.jdbcTemplate.update(updateBlockQuery, updateBlockParams);
-        }
         this.jdbcTemplate.update(updatePageQuery, updatePageParams);
 
-        //todo : 데이터 잘 저장 되는지 점검
+        // 새로운 or 기존 블록 정보 처리
+        String createBlockQuery = "insert into Block (userId, curPageId, childPageId, content, isNewBlock, orderNum, status) " +
+                "VALUES(?,?,?,?,?,?,?);";
+        String updateBlockQuery = "update Block set childPageId = ?,content=?,isNewBlock=?,orderNum=?,status=?\n" +
+                "where blockId = ?";
+        List<GetContentsRes> contents = patchPageReq.getContentList();
+        for(int i =0;i<contents.size();i++){
+            if(checkNewBlock(contents.get(i).getIsNewBlock()))// new block이면 -> create
+            {
+                GetContentsRes c = contents.get(i);
+                Object[] createBlockParams ={c.getUserId(),c.getCurPageId(),
+                        c.getChildPageId(),c.getContent(),0,i,c.getStatus()
+                };
+                this.jdbcTemplate.update(createBlockQuery,createBlockParams);
+            }else{// 아니면 update
+                GetContentsRes c = contents.get(i);
+                Object[] updateBlockParams ={
+                        c.getChildPageId(),c.getContent(),0,i,c.getStatus(),c.getBlockId()};
+                this.jdbcTemplate.update(updateBlockQuery, updateBlockParams);
+            }
+        }
+
         //응답 객체
         PatchPageRes patchPageRes = this.jdbcTemplate.queryForObject(getPageIdQuery,
                 (rs, num) -> new PatchPageRes(
@@ -105,6 +121,11 @@ public class PageDao {
         if(check>=1) {
             return true;
         }else return false;
+    }
+
+    public boolean checkNewBlock(int newBlock){
+        if(newBlock==1) return true;
+        else return false;
     }
 }
 

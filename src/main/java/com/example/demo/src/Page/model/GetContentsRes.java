@@ -9,9 +9,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetContentsRes {
+    private int userId;
+    private int blockId;
+    private int curPageId;
     private int childPageId;
     private String content;
+    private int isNewBlock; // 1 : 새 블럭, 0 : 기존 블럭
     private int orderNum;
     private int status;
-    private int newBlock;  // 1 : 새 블럭, 0 : 기존 블럭
 }

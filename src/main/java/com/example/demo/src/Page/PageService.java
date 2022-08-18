@@ -26,10 +26,9 @@ public class PageService {
         this.pageDao = pageDao;
     }
 
-
     public PostPageRes createPage(PostPageReq postPageReq) throws BaseException{
         try{
-                return pageDao.createPage(postPageReq);
+            return pageDao.createPage(postPageReq);
         }
         catch (Exception exception){
             exception.printStackTrace();
@@ -38,6 +37,8 @@ public class PageService {
     }
     public PatchPageRes updatePage(PatchPageReq patchPageReq) throws  BaseException{
         try{
+            // 대부분은 수정
+            // 블럭 중 new 블록만 생성
             return pageDao.updatePage(patchPageReq);
         }
         catch (Exception exception){
@@ -49,4 +50,5 @@ public class PageService {
     public boolean checkExist(int parentPageId) {
         return pageDao.checkExist(parentPageId);
     }
+
 }

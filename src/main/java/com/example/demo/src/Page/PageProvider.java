@@ -14,7 +14,6 @@ public class PageProvider {
 
     private final PageDao pageDao;
 
-
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
