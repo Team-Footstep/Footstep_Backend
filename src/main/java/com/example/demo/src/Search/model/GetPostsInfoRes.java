@@ -11,8 +11,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class GetPostsInfoRes {
-
-    //todo : 주석 작성하기
     private GetUserInfoRes userInfo; // 유저 정보
 
     private String preview; // 프리뷰 글

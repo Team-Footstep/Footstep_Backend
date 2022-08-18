@@ -58,7 +58,11 @@ public class PageController {
     }
 
 
-    @PostMapping("create")
+    /*
+     * [POST]
+     * 하위 페이지 생성
+     * */
+    @PostMapping("/create")
     public BaseResponse<PostPageRes> createPage(@RequestBody PostPageReq postPageReq)  {
         //todo validation 처리하기
         try{
@@ -69,7 +73,12 @@ public class PageController {
         }
     }
 
-    @PatchMapping("save")
+
+    /*
+     * [PATCH]
+     * 페이지 저장 (갱신)
+     * */
+    @PatchMapping("/save")
     public BaseResponse<PatchPageRes> updatePage(@RequestBody PatchPageReq patchPageReq){
         try{
             PatchPageRes patchPageRes = pageService.updatePage(patchPageReq);
@@ -78,4 +87,10 @@ public class PageController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
+
+    /*
+     * [GET]
+     * 페이지 진입 시 내용 가져오기
+     * */
 }

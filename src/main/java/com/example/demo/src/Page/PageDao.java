@@ -1,6 +1,7 @@
 package com.example.demo.src.Page;
 
 
+import com.example.demo.src.MainPage.model.GetTrendingFootprintsRes;
 import com.example.demo.src.Page.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -85,6 +86,9 @@ public class PageDao {
         return patchPageRes;
     }
 
+    /*
+     * 공개/미공개 수정
+     * */
     public void updateAccess(PatchAccessReq patchAccessReq){
         int updateAccessPageIdParams = patchAccessReq.getPageId();
         int updateAccess = patchAccessReq.getAccess();
@@ -97,6 +101,9 @@ public class PageDao {
         this.jdbcTemplate.update(updateAccessQuery, updateAccessPageIdParams);
     }
 
+    /*
+     * 페이지 북마크 설정/해제
+     * */
     public void updateBookmark(PatchBookmarkReq patchBookmarkReq){
         int updateBookmarkPageIdParams = patchBookmarkReq.getPageId();
         int updateBookmark = patchBookmarkReq.getBookmark();
@@ -108,7 +115,10 @@ public class PageDao {
 
         this.jdbcTemplate.update(updateBookmarkQuery, updateBookmarkPageIdParams);
     }
+
+
+    /*
+     * 페이지 진입 시 내용 가져오기
+     * */
+
 }
-
-
-
