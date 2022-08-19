@@ -2,7 +2,6 @@ package com.example.demo.src.User;
 
 import com.example.demo.src.User.model.GetAuthReq;
 import com.example.demo.src.User.model.GetAuthRes;
-import com.example.demo.src.User.model.GetTokenReq;
 import com.example.demo.src.User.model.GetTokenRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -33,15 +32,12 @@ public class EmailCertDao {
     }
 
     //토큰 체크
-    public Integer tokenCheck(GetTokenReq getTokenReq) {
-        System.out.println(getTokenReq.getToken()+
-                getTokenReq.getEmail());
+    public int tokenCheck(String email, String token) {
+        System.out.println("토큰 체크를 진행하겠습니다.");
         String selectEmailCertQuery = "SELECT EXISTS(SELECT * FROM User WHERE token=? AND email=? AND status=0 AND expiredAt>now())";
         Object[] selectEmailCertParams =  new Object[]{
-                getTokenReq.getToken(),
-                getTokenReq.getEmail()
+                token, email
         };
-        System.out.println(this.jdbcTemplate.queryForObject(selectEmailCertQuery, Integer.class, selectEmailCertParams));
         return this.jdbcTemplate.queryForObject(selectEmailCertQuery, Integer.class, selectEmailCertParams);
 
 
@@ -52,9 +48,9 @@ public class EmailCertDao {
         String signupConfirmQuery = "UPDATE User SET expired = 0, status = 1 WHERE email=?";
         Object[] signupConfirmParams = new Object[]{
                 email};
+        this.jdbcTemplate.update(signupConfirmQuery, signupConfirmParams);
 
-
-        return new GetTokenRes(this.jdbcTemplate.update(signupConfirmQuery, signupConfirmParams));
+        return new GetTokenRes(email, 1);
 
 
     }
@@ -96,7 +92,9 @@ public class EmailCertDao {
                 email};
 
 
-        return new GetTokenRes(this.jdbcTemplate.update(loginConfirmQuery, loginConfirmParams));
+        this.jdbcTemplate.update(loginConfirmQuery, loginConfirmParams);
+        return new GetTokenRes(email, 1);
+
 
     }
 }

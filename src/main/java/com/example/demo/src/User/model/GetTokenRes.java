@@ -8,5 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class GetTokenRes {
+    private String email;
     private int status;
+
 }
