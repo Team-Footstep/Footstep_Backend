@@ -122,8 +122,6 @@ public class PageDao {
     public GetPageRes retrievePage(int pageId){
         int retrievePageParams = pageId;
 
-        //TODO: 상위 블럭이 없는 경우 (최상단 페이지는 어떻게..?)
-
         // 최상단 페이지인지 판단
         String isTopPageQuery = "select topOrNot from Page where pageId = ?";
         int isTopPage = this.jdbcTemplate.queryForObject(isTopPageQuery,
