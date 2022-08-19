@@ -2,6 +2,7 @@ package com.example.demo.src.Follow;
 
 
 import com.example.demo.src.Follow.model.*;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -32,7 +33,7 @@ public class FollowDao {
         return new GetFollowInfoRes(followeeNum,followerNum);
     }
 
-    public PostFollowRes createFollow(FollowReq createFollowReq){
+    public PostFollowRes createFollow(@NotNull FollowReq createFollowReq){
         String createFollowInfoQuery = "insert into Follow (follower, followee) values (?,?)";
         String getFollowInfoQuery ="select follower,followee,status,createdAt\n" +
                 "from Follow\n" +
@@ -50,7 +51,7 @@ public class FollowDao {
                 )
                 ,getFollowParams);
     }
-    public DeleteFollowRes deleteFollow(FollowReq deletedFollowReq){ // 팔로우 상태 수정해주기
+    public DeleteFollowRes deleteFollow(@NotNull FollowReq deletedFollowReq){ // 팔로우 상태 수정해주기
         String deleteFollowInfoQuery = "delete from Follow\n" +
                 "where follower = ? and followee = ?";
         Object[] deleteFollowParams = new Object[]{deletedFollowReq.getUserId(),deletedFollowReq.getFollowedId()};

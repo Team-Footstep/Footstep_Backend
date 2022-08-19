@@ -9,7 +9,9 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetSearchRes{
+
+public class GetSearchRes {
+
     String userInfoMessage; // 유저 검색 정보 메세지
     List<GetUserInfoRes> usersInfoList; // 유저 검색 정보 리스트
     String postInfoMessage; // 글 검색 정보 메세지

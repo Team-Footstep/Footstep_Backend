@@ -28,7 +28,6 @@ public class SearchProvider {
     }
 
     public GetSearchRes retrieveSearchInfo(String word,int page) throws BaseException {
-        // TODO: 형식적 VALIDATION 처리
         try{
             String userInfoMessage,postInfoMessage;
 
@@ -45,7 +44,6 @@ public class SearchProvider {
             }else{
                 postInfoMessage ="검색된 글 결과를 확인하세요";
             }
-
             return new GetSearchRes(userInfoMessage,userInfoList,postInfoMessage,postInfoList);
         }
         catch (Exception exception) {

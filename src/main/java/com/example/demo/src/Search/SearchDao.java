@@ -32,6 +32,7 @@ public class SearchDao {
                 "WHERE userName LIKE concat('%',?,'%') AND User.status =1 and Page.userId = User.userId\n" +
                 "AND Page.topOrNot = 1\n" +
                 "LIMIT ?"+ ",20 ";
+
         List<GetUserInfoRes> userInfoList = this.jdbcTemplate.query(getUserInfoByWordQuery,
                 (rs,rowNum) -> new GetUserInfoRes(
                         rs.getInt("userId"),

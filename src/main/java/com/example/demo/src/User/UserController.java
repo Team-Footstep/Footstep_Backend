@@ -149,7 +149,6 @@ public class UserController {
 
         //로그인 완료 후 -> 토큰 값 null로 바꿔주기
         userService.setToken(getTokenReq.getEmail());
-        //TODO : 페이지 전환
         return "로그인 완료";
     }
 

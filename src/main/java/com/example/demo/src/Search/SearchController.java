@@ -23,9 +23,11 @@ public class SearchController {
     }
 
     /**
-     * 유저 이름 검색 기능
-     * @param word : 검색 된 이름,page : 페이지 이름
-     * @return 유저 정보 반환
+     * 유저 이름 검색 api
+     * [GET] /search/?word=?&page=?
+     * @param word : 검색 된 이름
+     * @param page : 페이지 이름
+     * @return BaseResponse <GetSearchRes>
      * @author 문현우
      */
     @ResponseBody
