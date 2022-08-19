@@ -66,4 +66,18 @@ public class UserProvider {
         return res;
     }
 
+    public int getFootstep(int userId) throws BaseException {
+        try {
+            return userDao.getFootstep(userId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public int getFollow(int userId) throws BaseException {
+        try {
+            return userDao.getFollow(userId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

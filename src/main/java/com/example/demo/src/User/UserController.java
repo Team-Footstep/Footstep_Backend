@@ -10,6 +10,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.lang.reflect.Member;
 import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
@@ -142,6 +143,10 @@ public class UserController {
 
         System.out.println("로그인이 완료되었습니다.");
 
+        //로그인 완료후 해당 유저의 내 풋스텝/팔로우 가지고 오기
+        userProvider.getFootstep(userId);
+        userProvider.getFollow(userId);
+
         //로그인 완료 후 -> 토큰 값 null로 바꿔주기
         userService.setToken(getTokenReq.getEmail());
         //TODO : 페이지 전환
@@ -234,8 +239,6 @@ public class UserController {
         System.out.println("auth는 " + getAuthReq.getAuth());
         //입력된 auth값과 db의 auth값이 같으면 업데이트
         GetAuthRes getAuthRes = userService.modifyConfirm(userId, getAuthReq);
-
-
 
         return new BaseResponse<>(getAuthRes);
 
