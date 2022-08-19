@@ -87,16 +87,13 @@ public class UserController {
     // Body
     @ResponseBody
     @GetMapping("/signup/confirm") // (POST) 127.0.0.1:8080/users/signup/confirm
-    public BaseResponse <GetTokenRes> signupConfirm(@RequestBody GetTokenReq getTokenReq){
-        System.out.println("클릭한 이메일은 : " + getTokenReq.getEmail());
-        String ctoken = (String) map.get("token");
-        getTokenReq.setToken(ctoken);
-        GetTokenRes getTokenRes =
-                userService.signupConfirm(getTokenReq);
+    public BaseResponse <GetTokenRes> signupConfirm(@RequestParam("email")String email, @RequestParam("token")String token){
+        System.out.println("클릭한 이메일은 : " + email);
+        GetTokenRes getTokenRes = userService.signupConfirm(email, token);
         System.out.println("회원가입이 완료되었습니다.");
 
         //회원 가입 완료 후 -> 토큰 값 null로 바꿔주기
-        userService.setToken(getTokenReq.getEmail());
+        userService.setToken(email);
         return new BaseResponse<>(getTokenRes);
 
     }
@@ -128,13 +125,13 @@ public class UserController {
      */
     @ResponseBody
     @GetMapping("/confirmlogin") // (POST) 127.0.0.1:8080/users/login
-    public String confirmlogin(HttpServletRequest request, @RequestBody GetTokenReq getTokenReq) throws BaseException, MessagingException {
-        System.out.println("클릭한 이메일은 : " + getTokenReq.getEmail());
+    public String confirmlogin(HttpServletRequest request, @RequestParam("email")String email, @RequestParam("token")String token) throws BaseException, MessagingException {
+        System.out.println("클릭한 이메일은 : " + email);
         String ctoken = (String) loginmap.get("token");
-        int userId = userProvider.checkUserId(getTokenReq.getEmail());
+        int userId = userProvider.checkUserId(email);
         System.out.println("해당 이메일의 userId 값은 " + userId);
-        getTokenReq.setToken(ctoken);
-        GetTokenRes getTokenRes = userService.loginConfirm(getTokenReq);
+        token = ctoken;
+        GetTokenRes getTokenRes = userService.loginConfirm(email, token);
         System.out.println(getTokenRes);
 
         //인증이 완료되었으므로, 세션 생성하기
@@ -148,7 +145,8 @@ public class UserController {
         userProvider.getFollow(userId);
 
         //로그인 완료 후 -> 토큰 값 null로 바꿔주기
-        userService.setToken(getTokenReq.getEmail());
+        userService.setToken(email);
+        //TODO : 페이지 전환
         return "로그인 완료";
     }
 

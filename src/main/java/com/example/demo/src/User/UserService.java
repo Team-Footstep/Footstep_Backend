@@ -59,14 +59,14 @@ public class UserService {
         return auth;
     }
 
-    public GetTokenRes signupConfirm(GetTokenReq getTokenReq) {
+    public GetTokenRes signupConfirm(String email, String token) {
         //1. 토큰 체크
-        if (emailCertDao.tokenCheck(getTokenReq) == 1) {
-            GetTokenRes getTokenRes = emailCertDao.signupConfirm(getTokenReq.getEmail());
+        if (emailCertDao.tokenCheck(email, token) == 1) {
+            GetTokenRes getTokenRes = emailCertDao.signupConfirm(email);
             System.out.println("토큰 체크 성공");
             return getTokenRes;
         } else {
-            GetTokenRes getTokenRes = new GetTokenRes(0);
+            GetTokenRes getTokenRes = new GetTokenRes(email, 0);
             return getTokenRes;
         }
 
@@ -119,14 +119,14 @@ public class UserService {
     }
 
 
-    public GetTokenRes loginConfirm(GetTokenReq getTokenReq) {
+    public GetTokenRes loginConfirm(String email, String token) {
         //1. 토큰 체크
-        if (emailCertDao.tokenCheck(getTokenReq) == 1) {
-            GetTokenRes getTokenRes = emailCertDao.loginConfirm(getTokenReq.getEmail());
+        if (emailCertDao.tokenCheck(email, token) == 1) {
+            GetTokenRes getTokenRes = emailCertDao.loginConfirm(email);
             System.out.println("토큰 체크 성공");
             return getTokenRes;
         } else {
-            GetTokenRes getTokenRes = new GetTokenRes(0);
+            GetTokenRes getTokenRes = new GetTokenRes(email, 0);
             return getTokenRes;
         }
     }
