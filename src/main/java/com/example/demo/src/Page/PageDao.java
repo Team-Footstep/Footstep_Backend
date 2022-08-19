@@ -25,6 +25,7 @@ public class PageDao {
         String createPageQuery = "insert into Page (parentPageId, parentBlockId," +
                 " userId, topOrNot, status, stampOrPrint,depth) VALUES(?,?,?,?,?,?,?)";
 
+
         // 깊이는 따로 구해주기
         String getParentPageDepthQuery = "select depth\n" +
                 "from Page\n" +
@@ -126,6 +127,13 @@ public class PageDao {
     public boolean checkNewBlock(int newBlock){
         if(newBlock==1) return true;
         else return false;
+    }
+
+    public boolean checkDepth(int pageId) {
+        String checkPageDepthQuery = "select depth from Page where pageId = ?";
+        int depth = this.jdbcTemplate.queryForObject(checkPageDepthQuery,int.class,pageId);
+        if(depth>=15) return false;
+        else return true;
     }
 }
 

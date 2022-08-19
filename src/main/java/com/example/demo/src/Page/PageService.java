@@ -28,6 +28,9 @@ public class PageService {
 
     public PostPageRes createPage(PostPageReq postPageReq) throws BaseException{
         try{
+            if(checkDepth(postPageReq.getParentPageId())) { // 깊이가 15 이상일땐 페이지 생성 X
+                throw new BaseException(BaseResponseStatus.OVER_PAGE_ERROR);
+            }
             return pageDao.createPage(postPageReq);
         }
         catch (Exception exception){
@@ -49,6 +52,10 @@ public class PageService {
 
     public boolean checkExist(int parentPageId) {
         return pageDao.checkExist(parentPageId);
+    }
+
+    public boolean checkDepth(int pageId){
+        return pageDao.checkDepth(pageId);
     }
 
 }
