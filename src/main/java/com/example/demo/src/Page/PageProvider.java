@@ -15,7 +15,6 @@ public class PageProvider {
 
     private final PageDao pageDao;
 
-
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -64,6 +63,7 @@ public class PageProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
 
 }
 

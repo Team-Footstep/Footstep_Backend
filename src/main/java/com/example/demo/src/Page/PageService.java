@@ -3,7 +3,9 @@ package com.example.demo.src.Page;
 import com.example.demo.config.BaseException;
 import static com.example.demo.config.BaseResponseStatus.*;
 
+import com.example.demo.config.BaseResponseStatus;
 import com.example.demo.src.Page.model.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +24,16 @@ public class PageService {
         this.pageDao = pageDao;
     }
 
-    public PostPageRes createPage(PostPageReq postPageReq) throws BaseException {
-        try {
+
+    public PostPageRes createPage(PostPageReq postPageReq) throws BaseException{
+        try{
+            if(checkDepth(postPageReq.getParentPageId())) { // 깊이가 15 이상일땐 페이지 생성 X
+                throw new BaseException(BaseResponseStatus.OVER_PAGE_ERROR);
+            }
             return pageDao.createPage(postPageReq);
         } catch (Exception exception) {
             exception.printStackTrace();
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
 
@@ -39,19 +45,20 @@ public class PageService {
             pageDao.updateAccess(patchAccessReq);
         } catch (Exception exception) {
             exception.printStackTrace();
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
 
     public PatchPageRes updatePage(PatchPageReq patchPageReq) throws BaseException {
         try {
+
+
             return pageDao.updatePage(patchPageReq);
         } catch (Exception exception) {
             exception.printStackTrace();
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
-
     /*
      * 페이지 북마크 설정/해제
      * */
@@ -60,7 +67,7 @@ public class PageService {
             pageDao.updateBookmark(patchBookmarkReq);
         } catch (Exception exception) {
             exception.printStackTrace();
-            throw new BaseException(DATABASE_ERROR);
+            throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
 
@@ -90,5 +97,13 @@ public class PageService {
             exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }
+    }
+
+    public boolean checkExist(int parentPageId) {
+        return pageDao.checkExist(parentPageId);
+    }
+
+    public boolean checkDepth(int pageId){
+        return pageDao.checkDepth(pageId);
     }
 }

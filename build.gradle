@@ -63,6 +63,9 @@ dependencies {
     //valid
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    //image upload
+    compile 'commons-fileupload:commons-fileupload:1.4'
+    compile 'commons-io:commons-io:2.11.0'
 
 
 

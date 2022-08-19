@@ -2,6 +2,7 @@ package com.example.demo.src.Page;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+import com.example.demo.config.BaseResponseStatus;
 import com.example.demo.src.Page.model.*;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
@@ -18,12 +19,12 @@ public class PageController {
     private final PageProvider pageProvider;
     private final PageService pageService;
 
-
     @Autowired
     public PageController(PageProvider pageProvider, PageService pageService){
         this.pageProvider = pageProvider;
         this.pageService = pageService;
     }
+
 
     /*
     * [PATCH]
@@ -59,28 +60,40 @@ public class PageController {
     }
 
 
-    /*
-     * [POST]
-     * 하위 페이지 생성
+
+
+
+    /**
+     * 하위 페이지 생성 api
+     * [Post] /pages/create
+     * @return BaseResponse<PostPageRes>
+     * @author nnlnuu
      * */
     @PostMapping("/create")
     public BaseResponse<PostPageRes> createPage(@RequestBody PostPageReq postPageReq)  {
-        //todo validation 처리하기
+
         try{
-            PostPageRes postPageRes = pageService.createPage(postPageReq);
-            return new BaseResponse<>(postPageRes);
+            //todo : 하위 페이지 중복되지 않는지 검증
+            if(pageService.checkExist(postPageReq.getParentBlockId()))
+                return new BaseResponse<>(BaseResponseStatus.POST_FAIL_PAGE);
+            else{
+                PostPageRes postPageRes = pageService.createPage(postPageReq);
+                return new BaseResponse<>(postPageRes);
+            }
         }catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }
     }
 
 
-    /*
-     * [PATCH]
-     * 페이지 저장 (갱신)
+    /**
+     * 페이지 저장 api
+     * [Patch] /pages/save
+     * @return BaseResponse<PatchPageRes>
+     * @author nnlnuu
      * */
-    @PatchMapping("/save")
-    public BaseResponse<PatchPageRes> updatePage(@RequestBody PatchPageReq patchPageReq){
+    @PutMapping("save")
+    public BaseResponse<PatchPageRes> savePage(@RequestBody PatchPageReq patchPageReq){
         try{
             PatchPageRes patchPageRes = pageService.updatePage(patchPageReq);
             return new BaseResponse<>(patchPageRes);
@@ -88,7 +101,6 @@ public class PageController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
-
 
     /*
      * [GET]
@@ -117,4 +129,5 @@ public class PageController {
             return new BaseResponse<>(exception.getStatus());
         }
     }
+
 }
