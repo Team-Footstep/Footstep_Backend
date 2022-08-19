@@ -3,6 +3,7 @@ package com.example.demo.src.Page;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.Page.model.*;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,6 +100,19 @@ public class PageController {
         try{
             GetPageRes getPageRes = pageProvider.retrievePage(pageId);
             return new BaseResponse<>(getPageRes);
+        }catch (BaseException exception){
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+    /*
+     * [DELETE]
+     * (하위)페이지 삭제
+     * */
+    @DeleteMapping("/delete/{pageId}")
+    public BaseResponse<Boolean> deletePage(@PathVariable int pageId)  {
+        try{
+            return new BaseResponse<>(pageService.deletePage(pageId));
         }catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
         }

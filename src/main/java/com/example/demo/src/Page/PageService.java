@@ -1,7 +1,7 @@
 package com.example.demo.src.Page;
 
 import com.example.demo.config.BaseException;
-import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
+import static com.example.demo.config.BaseResponseStatus.*;
 
 import com.example.demo.src.Page.model.*;
 import org.slf4j.Logger;
@@ -58,6 +58,34 @@ public class PageService {
     public void updateBookmark(PatchBookmarkReq patchBookmarkReq) throws BaseException {
         try {
             pageDao.updateBookmark(patchBookmarkReq);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    /*
+     * 하위 페이지 삭제
+     * */
+    public Boolean deletePage(int pageId) throws BaseException {
+        if (checkDeleteTopPage(pageId) == 1){ // 최상단 페이지 삭제 불가
+            throw new BaseException(PAGES_CANNOT_DELETE_TOP_PAGE);
+        }
+        try {
+            pageDao.deletePage(pageId);
+            return true;
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    /*
+     * 삭제하려는 페이지가 최상단 페이지인 경우 validation
+     * */
+    public int checkDeleteTopPage(int pageId) throws BaseException {
+        try {
+            return pageDao.checkDeleteTopPage(pageId);
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);

@@ -2,6 +2,7 @@ package com.example.demo.src.Page;
 
 
 import com.example.demo.src.Page.model.*;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -282,6 +283,28 @@ public class PageDao {
      * */
     public int checkPageAccess(int pageId){
         String checkPageAccessQuery = "select exists(select 1 from Page where access=1 and pageId = ?)";
+        int checkPageAccessParams = pageId;
+        return this.jdbcTemplate.queryForObject(checkPageAccessQuery,
+                int.class,
+                checkPageAccessParams);
+    }
+
+
+    /*
+     * 하위 페이지 삭제
+     * */
+    public Boolean deletePage(int pageId){
+        String deletePageQuery = "delete from Page where pageId=?;";
+        int deletePageParams = pageId;
+        this.jdbcTemplate.update(deletePageQuery, deletePageParams);
+        return true;
+    }
+
+    /*
+     * 미공개 페이지인 경우 validation
+     * */
+    public int checkDeleteTopPage(int pageId){
+        String checkPageAccessQuery = "select exists(select 1 from Page where topOrNot=1 and pageId = ?)";
         int checkPageAccessParams = pageId;
         return this.jdbcTemplate.queryForObject(checkPageAccessQuery,
                 int.class,

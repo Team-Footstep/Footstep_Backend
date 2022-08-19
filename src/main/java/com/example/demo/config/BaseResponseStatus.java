@@ -73,6 +73,8 @@ public enum BaseResponseStatus {
     // 7000 - ro-el
     PAGES_NONE_PAGE_ID(false, 7000, "존재하지 않는 페이지입니다."),
     PAGES_PAGE_CANNOT_ACCESS(false, 7001, "작성자가 미공개 설정한 페이지입니다."),
+    PAGES_CANNOT_DELETE_TOP_PAGE(false, 7002, "최상단 페이지는 삭제할 수 없습니다."),
+
     /**
      * 9000 : Comment 오류
      */
