@@ -25,9 +25,12 @@ public class PageController {
     }
 
 
-    /*
-    * [PATCH]
+    /**
+    * [PATCH] /pages/access
     * 페이지 공개/미공개 설정
+    * @param patchAccessReq
+    * @return BaseResponse<Boolean>
+    * @author ro-el
     * */
     @ResponseBody
     @PatchMapping("/access")
@@ -42,9 +45,12 @@ public class PageController {
     }
 
 
-    /*
-     * [PATCH]
+    /**
+     * [PATCH] /pages/bookmark
      * 페이지 북마크 설정/해제
+     * @param patchBookmarkReq
+     * @return BaseResponse<Boolean>
+     * @author ro-el
      * */
     @ResponseBody
     @PatchMapping("/bookmark")
@@ -57,10 +63,6 @@ public class PageController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-
-
-
-
 
     /**
      * 하위 페이지 생성 api
@@ -101,9 +103,12 @@ public class PageController {
         }
     }
 
-    /*
-     * [GET]
+    /**
+     * [GET] /pages/get/{pageId}
      * 페이지 진입 시 내용 가져오기
+     * @param pageId
+     * @return BaseResponse<GetPageRes>
+     * @author ro-el
      * */
     @GetMapping("/get/{pageId}")
     public BaseResponse<GetPageRes> getPage(@PathVariable int pageId)  {

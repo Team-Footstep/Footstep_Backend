@@ -18,6 +18,12 @@ public class FollowDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
+    /**
+     * @apiNote [Get] /follows/get/{userId}
+     * @param userId
+     * @return GetFollowInfoRes
+     * @author nnlnuu
+     */
     public GetFollowInfoRes getFollow(int userId){
         // followee 개수
         String getFolloweeNumByUserId = "select count(*)\n" +
@@ -33,6 +39,12 @@ public class FollowDao {
         return new GetFollowInfoRes(followeeNum,followerNum);
     }
 
+    /**
+     * @apiNote [Post] /follows/follow
+     * @param createFollowReq
+     * @return PostFollowRes
+     * @author nnlnuu
+     */
     public PostFollowRes createFollow(@NotNull FollowReq createFollowReq){
         String createFollowInfoQuery = "insert into Follow (follower, followee) values (?,?)";
         String getFollowInfoQuery ="select follower,followee,status,createdAt\n" +
@@ -51,6 +63,13 @@ public class FollowDao {
                 )
                 ,getFollowParams);
     }
+
+    /**
+     * @apiNote [Delete] /follows/unfollow
+     * @param deletedFollowReq
+     * @return DeleteFollowRes
+     * @author nnlnuu
+     */
     public DeleteFollowRes deleteFollow(@NotNull FollowReq deletedFollowReq){ // 팔로우 상태 수정해주기
         String deleteFollowInfoQuery = "delete from Follow\n" +
                 "where follower = ? and followee = ?";

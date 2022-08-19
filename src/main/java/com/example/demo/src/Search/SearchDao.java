@@ -18,10 +18,10 @@ public class SearchDao {
     }
 
     /**
-     * @apiNote [GET] /search/word
+     * @apiNote [GET] /search/?word=?&page=?
      * @param word: 검색어,page: 페이지 번호
-     * @return 유저 정보
-     * @author 문현우
+     * @return List<GetUserInfoRes>
+     * @author nnlnuu
      */
     public List<GetUserInfoRes> getUserInfoByWord(String word,int page){
         //검색어로 유저 이름 조회하기 -> 클릭했을 경우 원하는 페이지로 바로 넘어갈 수 있도록 PageId 까지 함께 넘김
@@ -45,6 +45,14 @@ public class SearchDao {
         return userInfoList;
     }
 
+    /**
+     * 검색된 글 정보 조회 api
+     * @apiNote [GET] /search/?word=?&page=?
+     * @param word
+     * @param page
+     * @return List<GetPostsInfoRes>
+     * @author nnlnuu
+     */
     public List<GetPostsInfoRes> getPostInfo(String word,int page) {
         int pageNum = (20*(page-1));
         //검색어로 글 정보 조회하는 쿼리

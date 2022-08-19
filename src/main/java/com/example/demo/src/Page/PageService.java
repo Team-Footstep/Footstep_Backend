@@ -23,6 +23,12 @@ public class PageService {
         this.pageDao = pageDao;
     }
 
+    /**
+     * 페이지 생성 api
+     * @param postPageReq
+     * @return PostPageRes
+     * @throws BaseException
+     */
 
     public PostPageRes createPage(PostPageReq postPageReq) throws BaseException{
         try{
@@ -36,8 +42,11 @@ public class PageService {
         }
     }
 
-    /*
+    /**
      * 페이지 공개/미공개 설정
+     * @param patchAccessReq
+     * @author ro-el
+     * @return void
      * */
     public void updateAccess(PatchAccessReq patchAccessReq) throws BaseException {
         try {
@@ -48,18 +57,26 @@ public class PageService {
         }
     }
 
+    /**
+     * 페이지 저장 api
+     * @param patchPageReq
+     * @return PatchPageRes
+     * @throws BaseException
+     * @author nnlnuu
+     */
     public PatchPageRes updatePage(PatchPageReq patchPageReq) throws BaseException {
         try {
-
-
             return pageDao.updatePage(patchPageReq);
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
-    /*
+    /**
      * 페이지 북마크 설정/해제
+     * @param patchBookmarkReq
+     * @return void
+     * @author ro-el
      * */
     public void updateBookmark(PatchBookmarkReq patchBookmarkReq) throws BaseException {
         try {
@@ -73,6 +90,13 @@ public class PageService {
         return pageDao.checkExist(parentPageId);
     }
 
+
+    /**
+     * 깊이 제한 확인 메소드
+     * @param pageId
+     * @return boolean
+     * @author nnlnuu
+     */
     public boolean checkDepth(int pageId){
         return pageDao.checkDepth(pageId);
     }
