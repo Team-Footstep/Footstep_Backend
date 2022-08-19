@@ -15,5 +15,6 @@ public class GetProfileRes {
     private String userName;
     private String job;
     private String introduction;
+    private int stampNum;
     private int footprintNum;
 }

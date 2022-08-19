@@ -71,6 +71,14 @@ public class UserDao {
                 "  and sap.status = 1\n" +
                 "  and u.userId=?;";
 
+        String getStampNumQuery = "select count(distinct stampOrPrintId)\n" +
+                "from User u,  StampAndPrint sap, Block b, Page p\n" +
+                "where u.userId = sap.followeeId and sap.blockId = b.curPageId and p.pageId = b.curPageId\n" +
+                "  and sap.stampOrPrint = 'S' and p.access=1\n" +
+                "  and sap.status = 1\n" +
+                "  and u.userId=?;";
+
+
         return this.jdbcTemplate.queryForObject(getProfileQuery,
                 (rs, rowNum) -> new GetProfileRes(
                         rs.getInt("userId"),jdbcTemplate.queryForObject(getStampTopPageQuery,
@@ -87,6 +95,9 @@ public class UserDao {
                         rs.getString("userName"),
                         rs.getString("job"),
                         rs.getString("introduction"),
+                        jdbcTemplate.queryForObject(getStampNumQuery,
+                                int.class
+                                , getProfileParams),
                         jdbcTemplate.queryForObject(getFootprintNumQuery,
                                 int.class
                                 , getProfileParams)
@@ -97,7 +108,7 @@ public class UserDao {
      * 사용자가 존재하는지 체크
      * */
     public int checkUserExist(int userId){
-        String checkUserExistQuery = "select exists(select userId from User where userId = ?)";
+        String checkUserExistQuery = "select exists(select userId from User where status=1 and userId = ?)";
         int checkUserExistParams = userId;
         return this.jdbcTemplate.queryForObject(checkUserExistQuery,
                 int.class,
