@@ -27,7 +27,7 @@ public class EmailSenderService {
 
         StringBuilder body = new StringBuilder();
         body.append("회원가입을 하시려면 다음 링크를 클릭해주세요. (인증키는 5분후 만료됩니다.) \n");
-        body.append("http://localhost:8080/users/signup/confirm?email=" + email +
+        body.append("http://localhost:3000/users/signup/confirm?email=" + email +
                 "&token=" + token);
         mimeMessageHelper.setText(body.toString()) ;
         javaMailSender.send(mimeMessage);

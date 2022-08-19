@@ -19,7 +19,7 @@ public class UserDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
     public int createUser(PostUserReq postUserReq){
-        String createUserQuery = "insert into User (userName, email) VALUES (?,?)";
+        String createUserQuery = "insert into User (userName, email, job, userImgUrl, introduction) VALUES (?,?, ' ', 'https://placeimg.com/640/480/animals', ' ')";
         Object[] createUserParams = new Object[]{postUserReq.getUserName(), postUserReq.getEmail()};
         this.jdbcTemplate.update(createUserQuery, createUserParams);
         String lastInsertIdQuery = "select last_insert_id()";
@@ -106,6 +106,19 @@ public class UserDao {
         String checkUserQuery = "select userId from User where email = ?";
         String checkUserParams = email;
         return this.jdbcTemplate.queryForObject( checkUserQuery, int.class, checkUserParams);
+    }
+
+
+    public int getFootstep(int userId) {
+        String getFootstepQuery = "UPDATE Page set topOrNot=1, stampOrPrint= 'S', status=1, depth=0  WHERE userId = ?";
+        int getFootstepParams = userId;
+        return this.jdbcTemplate.queryForObject(getFootstepQuery, int.class, getFootstepParams);
+    }
+
+    public int getFollow(int userId) {
+        String getFollowQuery = "UPDATE Page set topOrNot=1, stampOrPrint= 'P', status=1, depth=0  WHERE userId = ?";
+        int getFollowParams = userId;
+        return this.jdbcTemplate.queryForObject(getFollowQuery, int.class, getFollowParams);
     }
 }
 

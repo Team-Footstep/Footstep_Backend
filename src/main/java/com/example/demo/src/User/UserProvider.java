@@ -1,9 +1,7 @@
 package com.example.demo.src.User;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.config.BaseResponse;
 import com.example.demo.src.User.model.GetProfileRes;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,4 +60,18 @@ public class UserProvider {
         return res;
     }
 
+    public int getFootstep(int userId) throws BaseException {
+        try {
+            return userDao.getFootstep(userId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public int getFollow(int userId) throws BaseException {
+        try {
+            return userDao.getFollow(userId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

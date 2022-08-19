@@ -36,7 +36,8 @@ public enum BaseResponseStatus {
     PATCH_SAME_EMAIL(false, 2021, "변경하려는 이메일이 기존 이메일과 같습니다."),
     GET_PATCH_EMAIL(false, 2022, "이메일 검증이 실패하였습니다."),
     NOT_EXIST_EMAIL(false, 2023, "해당하는 이메일이 없습니다."),
-
+    GET_FOOT_EMPTY(false,2024 ,"팔로우하는 풋스텝이 없습니다" ),
+    GET_FOLLOW_EMPTY(false, 2025, "팔로우하는 페이지가 없습니다."),
 
     /**
      * 3000 : Response 오류
@@ -72,6 +73,7 @@ public enum BaseResponseStatus {
     SAME_COMMENT(false, 9002, "댓글 내용이 수정되지 않았습니다."),
     NOT_EXIST_PAGGID_BLOCKID(false, 9003, "페이지 아이디 또는 블록 아이디가 일치하지 않습니다."),
     NOT_EXIST_GET_COMMENT(false, 9004, "조회할 댓글이 없습니다.");
+
 
     private final boolean isSuccess;
     private final int code;
