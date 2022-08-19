@@ -4,7 +4,6 @@ import com.example.demo.config.BaseException;
 import com.example.demo.src.Search.model.GetSearchRes;
 import com.example.demo.src.Search.model.GetPostsInfoRes;
 import com.example.demo.src.Search.model.GetUserInfoRes;
-import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +18,10 @@ public class SearchProvider {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final SearchDao searchDao;
-    private final JwtService jwtService;
 
     @Autowired
-    public SearchProvider(SearchDao searchDao, JwtService jwtService) {
+    public SearchProvider(SearchDao searchDao) {
         this.searchDao = searchDao;
-        this.jwtService = jwtService;
     }
 
     public GetSearchRes retrieveSearchInfo(String word,int page) throws BaseException {

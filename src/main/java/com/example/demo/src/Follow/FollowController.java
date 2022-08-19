@@ -3,7 +3,6 @@ package com.example.demo.src.Follow;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.Follow.model.*;
-import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +18,11 @@ public class FollowController {
 
     private final FollowProvider followProvider;
     private final FollowService followService;
-    private final JwtService jwtService;
 
     @Autowired
-    public FollowController(FollowService followService,FollowProvider followProvider,JwtService jwtService){
+    public FollowController(FollowService followService,FollowProvider followProvider){
         this.followProvider = followProvider;
         this.followService = followService;
-        this.jwtService = jwtService;
     }
 
     /**
