@@ -89,7 +89,8 @@ public class UserController {
     @GetMapping("/signup/confirm") // (POST) 127.0.0.1:8080/users/signup/confirm
     public BaseResponse <GetTokenRes> signupConfirm(@RequestParam("email")String email, @RequestParam("token")String token){
         System.out.println("클릭한 이메일은 : " + email);
-        GetTokenRes getTokenRes = userService.signupConfirm(email, token);
+        int userId = userProvider.checkUserId(email);
+        GetTokenRes getTokenRes = userService.signupConfirm(userId, email, token);
         System.out.println("회원가입이 완료되었습니다.");
 
         //회원 가입 완료 후 -> 토큰 값 null로 바꿔주기
@@ -108,6 +109,7 @@ public class UserController {
 
         userProvider.checkEmail(getLoginReq.getEmail());
         System.out.println("이메일 체크 완료");
+
         //토큰값 생성해서 메일 보내주기
         String ctoken = userService.getToken(getLoginReq.getEmail());
         getLoginReq.setToken(ctoken);
@@ -125,20 +127,17 @@ public class UserController {
      */
     @ResponseBody
     @GetMapping("/confirmlogin") // (POST) 127.0.0.1:8080/users/login
-    public String confirmlogin(HttpServletRequest request, @RequestParam("email")String email, @RequestParam("token")String token) throws BaseException, MessagingException {
+    public BaseResponse <GetTokenRes>  confirmlogin(HttpServletRequest request, @RequestParam("email")String email, @RequestParam("token")String token) throws BaseException, MessagingException {
         System.out.println("클릭한 이메일은 : " + email);
-        String ctoken = (String) loginmap.get("token");
         int userId = userProvider.checkUserId(email);
         System.out.println("해당 이메일의 userId 값은 " + userId);
-        token = ctoken;
-        GetTokenRes getTokenRes = userService.loginConfirm(email, token);
-        System.out.println(getTokenRes);
+        GetTokenRes getTokenRes = userService.loginConfirm(userId, email, token);
 
         //인증이 완료되었으므로, 세션 생성하기
         HttpSession session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_MEMBER, userId);
 
-        System.out.println("로그인이 완료되었습니다.");
+        System.out.println("세션값은 " + session);
 
         //로그인 완료후 해당 유저의 내 풋스텝/팔로우 가지고 오기
         userProvider.getFootstep(userId);
@@ -147,7 +146,7 @@ public class UserController {
         //로그인 완료 후 -> 토큰 값 null로 바꿔주기
         userService.setToken(email);
         //TODO : 페이지 전환
-        return "로그인 완료";
+        return new BaseResponse<>(getTokenRes);
     }
 
     /**

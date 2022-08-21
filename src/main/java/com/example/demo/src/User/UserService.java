@@ -58,18 +58,32 @@ public class UserService {
         emailCertDao.insertExpired(email);
         return auth;
     }
-
-    public GetTokenRes signupConfirm(String email, String token) {
+    //회원가입 토큰체크
+    public GetTokenRes signupConfirm(int userId, String email, String token) {
         //1. 토큰 체크
         if (emailCertDao.tokenCheck(email, token) == 1) {
-            GetTokenRes getTokenRes = emailCertDao.signupConfirm(email);
+            GetTokenRes getTokenRes = emailCertDao.signupConfirm(userId, email);
             System.out.println("토큰 체크 성공");
             return getTokenRes;
         } else {
-            GetTokenRes getTokenRes = new GetTokenRes(email, 0);
+            GetTokenRes getTokenRes = new GetTokenRes(userId, email, 0);
             return getTokenRes;
         }
 
+    }
+    //로그인 토큰 체크
+    public GetTokenRes loginConfirm(int userId, String email, String token) {
+        //1. 토큰 체크
+        if (emailCertDao.loginTokenCheck(email, token) == 1) {
+            GetTokenRes getTokenRes = emailCertDao.loginConfirm(userId, email);
+            System.out.println("토큰 체크 성공");
+            System.out.println("로그인이 완료되었습니다.");
+
+            return getTokenRes;
+        } else {
+            GetTokenRes getTokenRes = new GetTokenRes(userId, email, 0);
+            return getTokenRes;
+        }
     }
 
     public void setToken(String email) {
@@ -119,17 +133,7 @@ public class UserService {
     }
 
 
-    public GetTokenRes loginConfirm(String email, String token) {
-        //1. 토큰 체크
-        if (emailCertDao.tokenCheck(email, token) == 1) {
-            GetTokenRes getTokenRes = emailCertDao.loginConfirm(email);
-            System.out.println("토큰 체크 성공");
-            return getTokenRes;
-        } else {
-            GetTokenRes getTokenRes = new GetTokenRes(email, 0);
-            return getTokenRes;
-        }
-    }
+
 
 
 
