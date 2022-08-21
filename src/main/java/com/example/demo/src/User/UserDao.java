@@ -154,14 +154,14 @@ public class UserDao {
 
     public int getFootstep(int userId) {
         String getFootstepQuery = "UPDATE Page set topOrNot=1, stampOrPrint= 'S', status=1, depth=0  WHERE userId = ?";
-        int getFootstepParams = userId;
-        return this.jdbcTemplate.queryForObject(getFootstepQuery, int.class, getFootstepParams);
+        Object[] getFootstepParams = new Object[]{userId};
+        return this.jdbcTemplate.update(getFootstepQuery,  getFootstepParams);
     }
 
     public int getFollow(int userId) {
         String getFollowQuery = "UPDATE Page set topOrNot=1, stampOrPrint= 'P', status=1, depth=0  WHERE userId = ?";
-        int getFollowParams = userId;
-        return this.jdbcTemplate.queryForObject(getFollowQuery, int.class, getFollowParams);
+        Object[] getFollowParams = new Object[]{userId};
+        return this.jdbcTemplate.update(getFollowQuery,  getFollowParams);
     }
 }
 
