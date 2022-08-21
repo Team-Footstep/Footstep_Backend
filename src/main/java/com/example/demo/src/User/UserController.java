@@ -126,7 +126,7 @@ public class UserController {
      *
      */
     @ResponseBody
-    @GetMapping("/confirmlogin") // (POST) 127.0.0.1:8080/users/login
+    @GetMapping("/confirmlogin") // (POST) 127.0.0.1:8080/users/confirmlogin
     public BaseResponse <GetTokenRes>  confirmlogin(HttpServletRequest request, @RequestParam("email")String email, @RequestParam("token")String token) throws BaseException, MessagingException {
         System.out.println("클릭한 이메일은 : " + email);
         int userId = userProvider.checkUserId(email);

@@ -66,7 +66,7 @@ public class EmailSenderService {
 
         StringBuilder body = new StringBuilder();
         body.append("로그인 하시려면 다음 링크를 클릭해주세요. \n");
-        body.append("http://localhost:3000/users/signup/confirm?email=" + getLoginReq.getEmail() +
+        body.append("http://localhost:3000/users/confirmlogin?email=" + getLoginReq.getEmail() +
                 "&token=" + getLoginReq.getToken());
         mimeMessageHelper.setText(body.toString()) ;
         javaMailSender.send(mimeMessage);
