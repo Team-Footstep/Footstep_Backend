@@ -15,7 +15,7 @@ public class PatchPageReq {
     private int userId;
     private String preview;
     private int status; // page 의 상태
-    private int stampOrPrint; // stamp 인지 print 인지
+    private String stampOrPrint; // stamp 인지 print 인지
     private int bookmark;
     private int access;
     private List<GetContentsRes> contentList;

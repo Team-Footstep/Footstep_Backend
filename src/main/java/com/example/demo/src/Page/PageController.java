@@ -71,7 +71,7 @@ public class PageController {
      * @author nnlnuu
      * */
     @PostMapping("/create")
-    public BaseResponse<PostPageRes> createPage(@RequestBody PostPageReq postPageReq)  {
+    public BaseResponse<PostPageRes> createPage(@RequestBody PostPageReq postPageReq) {
 
         try{
             //todo : 하위 페이지 중복되지 않는지 검증

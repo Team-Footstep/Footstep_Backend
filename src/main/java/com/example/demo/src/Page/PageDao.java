@@ -20,10 +20,8 @@ public class PageDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
-    //page 생성
-
     /**
-     * 페이지 저장 및 수정
+     * [PATCH] 페이지 저장 및 수정
      * @author nnlnuu
      */
     public PatchPageRes updatePage(PatchPageReq patchPageReq) {
@@ -43,8 +41,8 @@ public class PageDao {
         this.jdbcTemplate.update(updatePageQuery, updatePageParams);
 
         // 새로운 or 기존 블록 정보 처리
-        String createBlockQuery = "insert into Block (userId, curPageId, childPageId, content, isNewBlock, orderNum, status) " +
-                "VALUES(?,?,?,?,?,?,?);";
+        String createBlockQuery = "insert into Block (userId, curPageId, content, isNewBlock, orderNum, status) " +
+                "VALUES(?,?,?,?,?,?);";
         String updateBlockQuery = "update Block set childPageId = ?,content=?,isNewBlock=?,orderNum=?,status=?\n" +
                 "where blockId = ?";
         List<GetContentsRes> contents = patchPageReq.getContentList();
@@ -52,8 +50,8 @@ public class PageDao {
             if(checkNewBlock(contents.get(i).getIsNewBlock()))// new block이면 -> create
             {
                 GetContentsRes c = contents.get(i);
-                Object[] createBlockParams ={c.getUserId(),c.getCurPageId(),
-                        c.getChildPageId(),c.getContent(),0,i,c.getStatus()
+                Object[] createBlockParams ={c.getUserId(),c.getCurPageId()
+                       ,c.getContent(),0,i,c.getStatus()
                 };
                 this.jdbcTemplate.update(createBlockQuery,createBlockParams);
             }else{// 아니면 update
@@ -91,10 +89,11 @@ public class PageDao {
         @NotNull
         int depth = this.jdbcTemplate.queryForObject(getParentPageDepthQuery,int.class,postPageReq.getParentPageId());
 
-        // page date 생성 인자들
+        // page data 생성 인자들
         Object[] createPageParams = new Object[]{postPageReq.getParentPageId(), postPageReq.getParentBlockId(),postPageReq.getUserId()
                 , postPageReq.isTopOrNot(), postPageReq.getStatus(),postPageReq.getStampOrPrint(),(depth+1)
         };
+
 
         // 페이지 생성 구문
         this.jdbcTemplate.update(createPageQuery, createPageParams);
@@ -162,7 +161,6 @@ public class PageDao {
     public void updateAccess(PatchAccessReq patchAccessReq){
         int updateAccessPageIdParams = patchAccessReq.getPageId();
         int updateAccess = patchAccessReq.getAccess();
-
 
         String updateAccessQuery = "update Page\n" +
                 "set access=" + Integer.toString(updateAccess) + "\n" +
