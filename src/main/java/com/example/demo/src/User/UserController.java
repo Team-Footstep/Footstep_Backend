@@ -30,7 +30,8 @@ public class UserController {
     Map<String, String> loginmap = new HashMap<String, String>();
 
     Map<String, Integer> emap = new HashMap<String, Integer>();
-
+    HttpSession session;
+    String sessionId;
     public UserController(UserProvider userProvider, UserService userService, EmailSenderService emailSenderService){
         this.userProvider = userProvider;
         this.userService = userService;
@@ -105,7 +106,7 @@ public class UserController {
      */
     @ResponseBody
     @PostMapping("/login") // (POST) 127.0.0.1:8080/users/login
-    public String login(@RequestBody GetLoginReq getLoginReq) throws BaseException, MessagingException {
+    public BaseResponse<GetLoginRes> login(@RequestBody GetLoginReq getLoginReq) throws BaseException, MessagingException {
 
         userProvider.checkEmail(getLoginReq.getEmail());
         System.out.println("이메일 체크 완료");
@@ -114,11 +115,12 @@ public class UserController {
         String ctoken = userService.getToken(getLoginReq.getEmail());
         getLoginReq.setToken(ctoken);
         System.out.println("로그인 토큰은 " + ctoken);
-        emailSenderService.loginMail(getLoginReq);
+        GetLoginRes getLoginRes =  emailSenderService.loginMail(getLoginReq);
+
         //map에 저장해주기
         loginmap.put("email", getLoginReq.getEmail());
         loginmap.put("token", getLoginReq.getToken());
-        return "이메일 입력 완료 "+ getLoginReq.getEmail();
+        return new BaseResponse<>(getLoginRes);
     }
     /**
      * 로그인 검증 API
@@ -134,7 +136,7 @@ public class UserController {
         GetTokenRes getTokenRes = userService.loginConfirm(userId, email, token);
 
         //인증이 완료되었으므로, 세션 생성하기
-        HttpSession session = request.getSession();
+        session = request.getSession();
         session.setAttribute(SessionConst.LOGIN_MEMBER, userId);
 
         System.out.println("세션값은 " + session);
@@ -155,14 +157,19 @@ public class UserController {
      *
      */
     @PostMapping("/logout") // (POST) 127.0.0.1:8080/users/login
-    public String logout(HttpServletRequest request) {
+    public BaseResponse<GetLogoutRes> logout(HttpServletRequest request, @RequestParam("email")String email) throws BaseException {
+        GetLogoutRes getLogoutRes = userProvider.getAuth(email);
 
-        HttpSession session = request.getSession(false);
-        if(session!=null) {
+        session = request.getSession(false);
+        if(session.getAttribute(SessionConst.LOGIN_MEMBER)!=null) {
+            session.removeAttribute(SessionConst.LOGIN_MEMBER);
             session.invalidate();
+            System.out.println("로그아웃 완료");
+            System.out.println(session);
+
         }
 
-        return "로그아웃 완료 되었습니다.";
+        return new BaseResponse<>(getLogoutRes);
     }
 
     /**
@@ -172,16 +179,27 @@ public class UserController {
      */
     @ResponseBody
     @PatchMapping("/modify/{userId}") // (PATCH) 127.0.0.1:8080/users/modify/{userId}
-    public BaseResponse<PatchUserRes> modifyUserInfo(@PathVariable("userId") BigInteger userId, @RequestBody PatchUserReq patchUserReq) throws BaseException, MessagingException {
+    public BaseResponse<PatchUserRes> modifyUserInfo(HttpServletRequest request, @PathVariable("userId") BigInteger userId, @RequestBody PatchUserReq patchUserReq) throws BaseException, MessagingException {
         //userId 가 없을때
         if(userId == null) {
             return new BaseResponse<>(EMPTY_IDX);
         }
-        System.out.println("--정보수정--");
-        PatchUserRes patchUserRes = userService.modifyUserInfo(userId, patchUserReq);
-        //emailSenderService.sendAuthEmail(patchUserReq.getEmail());
-        String result = patchUserReq.getUserName() + " 정보 수정 완료";
-        return new BaseResponse<>(patchUserRes);
+
+        //로그인 여부 확인하기
+        if(session == null || !request.isRequestedSessionIdValid()){
+            System.out.println("로그인 상태가 아닙니다.");
+            return new BaseResponse<>(NOT_LOGIN);
+        }
+        else{
+            System.out.println("--정보수정--");
+            PatchUserRes patchUserRes = userService.modifyUserInfo(userId, patchUserReq);
+            String result = patchUserReq.getUserName() + " 정보 수정 완료";
+            System.out.println(result);
+            return new BaseResponse<>(patchUserRes);
+
+
+        }
+
     }
     /**
      * 이메일 변경 API
@@ -190,7 +208,7 @@ public class UserController {
      */
     @ResponseBody
     @PatchMapping("/modifyEmail/{userId}") // (PATCH) 127.0.0.1:8080/users/modifyEmail/{userId}
-    public BaseResponse<PatchEmailRes> modifyEmail(@PathVariable("userId") int userId,  @RequestBody PatchEmailReq patchEmailReq) throws BaseException, MessagingException {
+    public BaseResponse<PatchEmailRes> modifyEmail(HttpServletRequest request, @PathVariable("userId") int userId,  @RequestBody PatchEmailReq patchEmailReq) throws BaseException, MessagingException {
         //userId 가 없을때
         if(userId == 0) {
             return new BaseResponse<>(EMPTY_IDX);
@@ -203,20 +221,27 @@ public class UserController {
         if(userProvider.checkEmail(patchEmailReq.getEmail())==1){
             return new BaseResponse<>(POST_USERS_EXISTS_EMAIL);
         }
-        PatchEmailRes patchEmailRes = userService.modifyEmail(patchEmailReq.getEmail(), userId);
-        int getAuth = userService.getAuth(patchEmailReq.getEmail());
-        System.out.println("인증번호 값은 " + getAuth);
-        patchEmailReq.setAuth(getAuth);
-        //map에 저장해주기
-        emap.put("userId", userId);
-        emap.put("auth", getAuth);
-        System.out.println(map);
+        if(session == null || !request.isRequestedSessionIdValid()){
+            System.out.println("로그인 상태가 아닙니다.");
+            return new BaseResponse<>(NOT_LOGIN);
+        }
+        else {
+            PatchEmailRes patchEmailRes = userService.modifyEmail(patchEmailReq.getEmail(), userId);
 
-        //이메일 보내주기
-        System.out.println("이메일 보내겠습니다.~");
-        emailSenderService.sendAuthEmail(getAuth, patchEmailReq.getEmail());
+            int getAuth = userService.getAuth(patchEmailReq.getEmail());
+            System.out.println("인증번호 값은 " + getAuth);
+            patchEmailReq.setAuth(getAuth);
+            //map에 저장해주기
+            emap.put("userId", userId);
+            emap.put("auth", getAuth);
+            System.out.println(map);
 
-        return new BaseResponse<>(patchEmailRes);
+            //이메일 보내주기
+            System.out.println("이메일 보내겠습니다.~");
+            emailSenderService.sendAuthEmail(getAuth, patchEmailReq.getEmail());
+
+            return new BaseResponse<>(patchEmailRes);
+        }
     }
 
     /**

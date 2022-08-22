@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetLoginReq {
+public class GetLogoutRes {
     private String email;
-    private String token;
+    private int status;
 }

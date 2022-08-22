@@ -1,7 +1,7 @@
 package com.example.demo.src.User;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.User.model.GetProfileRes;
+import com.example.demo.src.User.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import static com.example.demo.config.BaseResponseStatus.*;
 public class UserProvider {
 
     private final UserDao userDao;
+
 
     final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final EmailCertDao emailCertDao;
@@ -80,4 +81,17 @@ public class UserProvider {
             throw new RuntimeException(e);
         }
     }
+
+    public GetLogoutRes getAuth(String email) throws BaseException {
+        try {
+            if(checkEmail(email) == 1){
+                return userDao.getAuth(email);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return new GetLogoutRes(email, 0);
+    }
+
+
 }
