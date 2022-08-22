@@ -19,12 +19,10 @@ public class SearchProvider {
     final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final SearchDao searchDao;
-    private final JwtService jwtService;
 
     @Autowired
     public SearchProvider(SearchDao searchDao, JwtService jwtService) {
         this.searchDao = searchDao;
-        this.jwtService = jwtService;
     }
 
     /**

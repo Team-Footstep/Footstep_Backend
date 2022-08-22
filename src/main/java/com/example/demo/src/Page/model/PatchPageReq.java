@@ -1,9 +1,11 @@
 package com.example.demo.src.Page.model;
 
-import com.sun.tools.javac.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter

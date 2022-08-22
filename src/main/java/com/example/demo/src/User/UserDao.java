@@ -13,7 +13,6 @@ import java.math.BigInteger;
 public class UserDao {
 
     private JdbcTemplate jdbcTemplate;
-
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -61,7 +60,6 @@ public class UserDao {
                 "  and stampOrPrint = 'P'\n" +
                 "  and topOrNot = 1\n" +
                 "  and userId=?;";
-
 
         // [수정 완료] 미공개 글 - curPageId의 access 가 0이면 미포함
         String getFootprintNumQuery = "select count(distinct stampOrPrintId)\n" +
@@ -123,7 +121,6 @@ public class UserDao {
                 patchUserReq.getUserImgUrl(), patchUserReq.getIntroduction(), userId
         };
         return this.jdbcTemplate.update(modifyUserQuery, modifyUserParams);
-
     }
     //유저 이메일 정보 변경
     public int modifyEmail(String email, int userId) {
