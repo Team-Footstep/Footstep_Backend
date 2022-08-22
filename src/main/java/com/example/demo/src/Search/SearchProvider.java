@@ -24,6 +24,14 @@ public class SearchProvider {
         this.searchDao = searchDao;
     }
 
+    /**
+     * 검색된 유저,글 정보 반환 api
+     * @param word
+     * @param page
+     * @return GetSearchRes
+     * @throws BaseException
+     * @author nnlnuu
+     */
     public GetSearchRes retrieveSearchInfo(String word,int page) throws BaseException {
         try{
             String userInfoMessage,postInfoMessage;

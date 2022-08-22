@@ -62,7 +62,7 @@ public class FollowController {
 
     /**
      * 팔로우 api
-     *[Post] /follows/follow
+     *@apiNote [Post] /follows/follow
      * @return BaseResponse<PostFollowRes>
      * @author nnlnuu
      */

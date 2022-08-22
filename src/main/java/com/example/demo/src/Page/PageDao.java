@@ -22,53 +22,11 @@ public class PageDao {
     }
 
     //page 생성
-    public PostPageRes createPage(PostPageReq postPageReq) {
-        String createPageQuery = "insert into Page (parentPageId, parentBlockId," +
-                " userId, topOrNot, status, stampOrPrint,depth) VALUES(?,?,?,?,?,?,?)";
 
-
-        // 깊이는 따로 구해주기
-        String getParentPageDepthQuery = "select depth\n" +
-                "from Page\n" +
-                "where pageId = ?"; // 여기에 들어갈 정보 -> depth
-        @NotNull
-        int depth = this.jdbcTemplate.queryForObject(getParentPageDepthQuery,int.class,postPageReq.getParentPageId());
-
-        // page date 생성 인자들
-        Object[] createPageParams = new Object[]{postPageReq.getParentPageId(), postPageReq.getParentBlockId(),postPageReq.getUserId()
-                , postPageReq.isTopOrNot(), postPageReq.getStatus(),postPageReq.getStampOrPrint(),(depth+1)
-        };
-
-        // 페이지 생성 구문
-        this.jdbcTemplate.update(createPageQuery, createPageParams);
-
-        // pageRes 처리를 위한 새로 만들어진 PageId
-        String getPageResByPageIdQuery = "select pageId,createdAt,status\n" +
-                "from Page " +
-                "where pageId = ?";
-        String getPageIdQuery ="select pageId from Page where parentBlockId = ?";
-        @NotNull
-        int curPageId = this.jdbcTemplate.queryForObject(getPageIdQuery,int.class,postPageReq.getParentBlockId());
-
-        // 페이지가 생성되었을때 block 데이터에서도 childPageId 변경해줘야 함
-        String updateParentBlockQuery = "update Block set childPageId = ?\n" +
-                "where blockId  = ?";
-        //현재 생성된 페이지의 Id를 -> parentBlock의 childPageId에 update
-        Object[] updateParentBlockParams = new Object[] {
-                curPageId,postPageReq.getParentBlockId() };
-
-        this.jdbcTemplate.update(updateParentBlockQuery,updateParentBlockParams);
-
-        //PostPageRes 반환
-        return this.jdbcTemplate.queryForObject(getPageResByPageIdQuery,
-                (rs,num) -> new PostPageRes(
-                        rs.getInt("pageId"),
-                        rs.getTimestamp("createdAt"),
-                        rs.getInt("status"))
-
-                ,curPageId);
-    }
-
+    /**
+     * 페이지 저장 및 수정
+     * @author nnlnuu
+     */
     public PatchPageRes updatePage(PatchPageReq patchPageReq) {
 
         //새로 페이지 정보 처리
@@ -118,6 +76,57 @@ public class PageDao {
         return patchPageRes;
     }
 
+    /**
+     * 하위 페이지 생성
+     * @author nnlnuu
+     */
+    public PostPageRes createPage(PostPageReq postPageReq) {
+        String createPageQuery = "insert into Page (parentPageId, parentBlockId," +
+                " userId, topOrNot, status, stampOrPrint,depth) VALUES(?,?,?,?,?,?,?)";
+
+
+        // 깊이는 따로 구해주기
+        String getParentPageDepthQuery = "select depth\n" +
+                "from Page\n" +
+                "where pageId = ?"; // 여기에 들어갈 정보 -> depth
+        @NotNull
+        int depth = this.jdbcTemplate.queryForObject(getParentPageDepthQuery,int.class,postPageReq.getParentPageId());
+
+        // page date 생성 인자들
+        Object[] createPageParams = new Object[]{postPageReq.getParentPageId(), postPageReq.getParentBlockId(),postPageReq.getUserId()
+                , postPageReq.isTopOrNot(), postPageReq.getStatus(),postPageReq.getStampOrPrint(),(depth+1)
+        };
+
+        // 페이지 생성 구문
+        this.jdbcTemplate.update(createPageQuery, createPageParams);
+
+        // pageRes 처리를 위한 새로 만들어진 PageId
+        String getPageResByPageIdQuery = "select pageId,createdAt,status\n" +
+                "from Page " +
+                "where pageId = ?";
+        String getPageIdQuery ="select pageId from Page where parentBlockId = ?";
+        @NotNull
+        int curPageId = this.jdbcTemplate.queryForObject(getPageIdQuery,int.class,postPageReq.getParentBlockId());
+
+        // 페이지가 생성되었을때 block 데이터에서도 childPageId 변경해줘야 함
+        String updateParentBlockQuery = "update Block set childPageId = ?\n" +
+                "where blockId  = ?";
+        //현재 생성된 페이지의 Id를 -> parentBlock의 childPageId에 update
+        Object[] updateParentBlockParams = new Object[] {
+                curPageId,postPageReq.getParentBlockId() };
+
+        this.jdbcTemplate.update(updateParentBlockQuery,updateParentBlockParams);
+
+        //PostPageRes 반환
+        return this.jdbcTemplate.queryForObject(getPageResByPageIdQuery,
+                (rs,num) -> new PostPageRes(
+                        rs.getInt("pageId"),
+                        rs.getTimestamp("createdAt"),
+                        rs.getInt("status"))
+
+                ,curPageId);
+    }
+
     public boolean checkExist(int parentBlockId) {
         String checkParentBlockIdQuery = "select count(*) from Page where parentBlockId = ?";
         int check = this.jdbcTemplate.queryForObject(checkParentBlockIdQuery,int.class,parentBlockId);
@@ -126,11 +135,19 @@ public class PageDao {
         }else return false;
     }
 
+    /**
+     * 새로 생성된 블록인지 확인 validation
+     * @author nnlnuu
+     */
     public boolean checkNewBlock(int newBlock){
         if(newBlock==1) return true;
         else return false;
     }
 
+    /**
+     * 페이지 깊이 확인 validation
+     * @author nnlnuu
+     */
     public boolean checkDepth(int pageId) {
         String checkPageDepthQuery = "select depth from Page where pageId = ?";
         int depth = this.jdbcTemplate.queryForObject(checkPageDepthQuery,int.class,pageId);
@@ -139,8 +156,9 @@ public class PageDao {
     }
 
 
-    /*
+    /**
      * 공개/미공개 수정
+     * @author ro-el
      * */
     public void updateAccess(PatchAccessReq patchAccessReq){
         int updateAccessPageIdParams = patchAccessReq.getPageId();
@@ -154,8 +172,9 @@ public class PageDao {
         this.jdbcTemplate.update(updateAccessQuery, updateAccessPageIdParams);
     }
 
-    /*
+    /**
      * 페이지 북마크 설정/해제
+     * @author ro-el
      * */
     public void updateBookmark(PatchBookmarkReq patchBookmarkReq){
         int updateBookmarkPageIdParams = patchBookmarkReq.getPageId();
@@ -170,8 +189,9 @@ public class PageDao {
     }
 
 
-    /*
+    /**
      * 페이지 진입 시 내용 가져오기
+     * @author ro-el
      * */
     public GetPageRes retrievePage(int pageId){
         int retrievePageParams = pageId;
@@ -271,9 +291,10 @@ public class PageDao {
 
     }
 
-    /*
+    /**
      * 최초 작성자, 상위 작성자 트랙킹
      * 표시되지 않는 경우 예외처리
+     * @author ro-el
      * */
     public GetOriginalFolloweeRes originalFollowee(int blockId){
         int originalFolloweeParams = blockId;
@@ -320,8 +341,9 @@ public class PageDao {
         return getOriginalFolloweeRes;
     }
 
-    /*
+    /**
      * 없는 페이지인 경우 validation
+     * @author ro-el
      * */
     public int checkPageExist(int pageId){
         String checkPageAccessQuery = "select exists(select 1 from Page where pageId = ?)";
@@ -331,8 +353,9 @@ public class PageDao {
                 checkPageAccessParams);
     }
 
-    /*
+    /**
      * 미공개 페이지인 경우 validation
+     * @author ro-el
      * */
     public int checkPageAccess(int pageId){
         String checkPageAccessQuery = "select exists(select 1 from Page where access=1 and pageId = ?)";

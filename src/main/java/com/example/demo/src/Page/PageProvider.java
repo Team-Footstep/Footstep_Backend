@@ -22,8 +22,9 @@ public class PageProvider {
         this.pageDao = pageDao;
     }
 
-    /*
+    /**
      * 페이지 진입 시 내용 가져오기
+     * @author ro-el
      * */
     public GetPageRes retrievePage(int pageId) throws BaseException {
         if(checkPageExist(pageId) == 0){
@@ -40,8 +41,9 @@ public class PageProvider {
         }
     }
 
-    /*
+    /**
      * 없는 페이지인 경우 validation
+     * @author ro-el
      * */
     public int checkPageExist(int pageId) throws BaseException{
         try{
@@ -52,8 +54,9 @@ public class PageProvider {
         }
     }
 
-    /*
+    /**
      * 미공개 페이지인 경우 validation
+     * @author ro-el
      * */
     public int checkPageAccess(int pageId) throws BaseException{
         try{

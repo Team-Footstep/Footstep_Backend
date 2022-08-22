@@ -17,4 +17,5 @@ public class GetProfileRes {
     private String introduction;
     private int stampNum;
     private int footprintNum;
+
 }
