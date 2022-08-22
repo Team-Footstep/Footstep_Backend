@@ -296,7 +296,7 @@ public class PageDao {
      * */
     public GetOriginalFolloweeRes originalFollowee(int blockId){
         int originalFolloweeParams = blockId;
-        GetOriginalFolloweeRes getOriginalFolloweeRes = new GetOriginalFolloweeRes(0,0);
+        GetOriginalFolloweeRes getOriginalFolloweeRes = new GetOriginalFolloweeRes(0, null, 0, null);
 
         // 1 이면 sap 데이터가 있는 것. 0 이면 없는 것 stamp 당한 적 없는 것(작성자 본인의 것만 존재)
         String ifStampAndPrintIsNoneQuery = "select exists(select 1 from Block b, StampAndPrint sap where b.blockId=sap.newBlockId and b.blockId = ?);";
@@ -328,10 +328,22 @@ public class PageDao {
                     "  and sap.status=1\n" +
                     "  and b.blockId=?;";
 
+
+            String getUserImgUrlQuery = "select userImgUrl\n" +
+                    "from User u\n" +
+                    "where status=1\n" +
+                    "  and userId=?;";
+
             getOriginalFolloweeRes = this.jdbcTemplate.queryForObject(getOriginalFolloweeIdQuery,
                     (rs, rowNum) -> new GetOriginalFolloweeRes(
                             rs.getInt("originalId"),
-                            rs.getInt("followeeId")
+                            this.jdbcTemplate.queryForObject(getUserImgUrlQuery,
+                                    String.class
+                                    , rs.getInt("originalId")),
+                            rs.getInt("followeeId"),
+                            this.jdbcTemplate.queryForObject(getUserImgUrlQuery,
+                                    String.class
+                                    , rs.getInt("followeeId"))
                     ), originalFolloweeParams);
 
         }

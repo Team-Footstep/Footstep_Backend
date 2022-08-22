@@ -11,5 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GetOriginalFolloweeRes {
     private int originalId;
+    private String originalImgUrl;
     private int followeeId;
+    private String followeeImgUrl;
 }
