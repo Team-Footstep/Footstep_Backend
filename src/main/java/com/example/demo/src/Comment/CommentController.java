@@ -31,7 +31,7 @@ public class CommentController {
     @ResponseBody
     @PostMapping("/{pageId}/{blockId}") // (POST) 127.0.0.1:8080/comment/{pageId}/{blockId}
     public BaseResponse<PostCommentRes> createCommment(@PathVariable int pageId, @PathVariable int blockId, @RequestBody PostCommentReq postCommentReq) throws BaseException {
-        //댓글 내용이 비어있을떄 처리해주기 -> 왜 안되지.. ㅜㅜ
+
         if (postCommentReq.getContent() == null) {
             return new BaseResponse<>(NOT_EXIST_COMMENT);
         }

@@ -163,6 +163,17 @@ public class UserDao {
         Object[] getFollowParams = new Object[]{userId};
         return this.jdbcTemplate.update(getFollowQuery,  getFollowParams);
     }
+
+    public GetLogoutRes getAuth(String email) {
+        System.out.println("로그아웃할 이메일은" + email);
+        String logoutConfirmQuery = "UPDATE User SET status = 0 where email = ?";
+        Object[] logoutConfirmParams = new Object[]{
+                email};
+
+
+        this.jdbcTemplate.update(logoutConfirmQuery, logoutConfirmParams);
+        return new GetLogoutRes(email, 0);
+    }
 }
 
 

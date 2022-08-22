@@ -1,6 +1,7 @@
 package com.example.demo.src.User;
 
 import com.example.demo.src.User.model.GetLoginReq;
+import com.example.demo.src.User.model.GetLoginRes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -56,7 +57,7 @@ public class EmailSenderService {
 
         return email;
     }
-    public void loginMail(GetLoginReq getLoginReq) throws MessagingException {
+    public GetLoginRes loginMail(GetLoginReq getLoginReq) throws MessagingException {
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
@@ -71,6 +72,7 @@ public class EmailSenderService {
         mimeMessageHelper.setText(body.toString()) ;
         javaMailSender.send(mimeMessage);
         System.out.println("이메일 보내는거 완료");
+        return new GetLoginRes(getLoginReq.getEmail(), getLoginReq.getToken());
 
     }
 }

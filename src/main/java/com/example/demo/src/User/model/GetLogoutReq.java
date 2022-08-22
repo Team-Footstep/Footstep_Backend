@@ -7,7 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetLoginReq {
+public class GetLogoutReq {
     private String email;
-    private String token;
 }
