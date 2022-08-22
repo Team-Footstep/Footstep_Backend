@@ -274,7 +274,6 @@ public class UserController {
     public BaseResponse<GetProfileRes> getProfile(@PathVariable int userId) {
         try{
             GetProfileRes getProfileRes = userProvider.retrieveProfile(userId);
-
             return new BaseResponse<>(getProfileRes);
         } catch(BaseException exception){
             exception.printStackTrace();
