@@ -249,7 +249,6 @@ public class UserController {
      * [GET] /users/modifyEmail/confirm/userId
      * 이메일 수정 후 이메일 인증 api
      * @return BaseResponse<PostUserRes>
-
      */
     @ResponseBody
     @GetMapping("/modifyEmail/confirm/{userId}") // (POST) 127.0.0.1:8080/users/modify/confirm/userId
