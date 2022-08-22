@@ -15,6 +15,6 @@ public class GetContentsRes {
     private int childPageId;
     private String content;
     private int isNewBlock; // 1 : 새 블럭, 0 : 기존 블럭
-    private int orderNum;
+    //private int orderNum;
     private int status;
 }

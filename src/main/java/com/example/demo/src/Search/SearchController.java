@@ -31,8 +31,7 @@ public class SearchController {
     @GetMapping("")
     public BaseResponse <GetSearchRes> getSearchRes (@RequestParam("word")String word,@RequestParam("page")int page){
         try{
-            //PROCEED : VALIDATION 처리중(이름 길이)
-            if(word.length()==0){ //이름 길이
+            if(word.length()==0){
                 return new BaseResponse<>(BaseResponseStatus.GET_SEARCH_EMPTY_WORD);
             }
             GetSearchRes getSearchInfoRes = searchProvider.retrieveSearchInfo(word,page);
