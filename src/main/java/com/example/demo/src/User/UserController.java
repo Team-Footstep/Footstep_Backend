@@ -5,13 +5,17 @@ import com.example.demo.config.BaseResponse;
 import com.example.demo.src.User.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Member;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -99,78 +103,6 @@ public class UserController {
         return new BaseResponse<>(getTokenRes);
 
     }
-    /**
-     * 로그인 API
-     * [POST] /users/login
-     *
-     */
-    @ResponseBody
-    @PostMapping("/login") // (POST) 127.0.0.1:8080/users/login
-    public BaseResponse<GetLoginRes> login(@RequestBody GetLoginReq getLoginReq) throws BaseException, MessagingException {
-
-        userProvider.checkEmail(getLoginReq.getEmail());
-        System.out.println("이메일 체크 완료");
-
-        //토큰값 생성해서 메일 보내주기
-        String ctoken = userService.getToken(getLoginReq.getEmail());
-        getLoginReq.setToken(ctoken);
-        System.out.println("로그인 토큰은 " + ctoken);
-        GetLoginRes getLoginRes =  emailSenderService.loginMail(getLoginReq);
-
-        //map에 저장해주기
-        loginmap.put("email", getLoginReq.getEmail());
-        loginmap.put("token", getLoginReq.getToken());
-        return new BaseResponse<>(getLoginRes);
-    }
-    /**
-     * 로그인 검증 API
-     * [GET] /users/confirmlogin
-     *
-     */
-    @ResponseBody
-    @GetMapping("/confirmlogin") // (POST) 127.0.0.1:8080/users/confirmlogin
-    public BaseResponse <GetTokenRes>  confirmlogin(HttpServletRequest request, @RequestParam("email")String email, @RequestParam("token")String token) throws BaseException, MessagingException {
-        System.out.println("클릭한 이메일은 : " + email);
-        int userId = userProvider.checkUserId(email);
-        System.out.println("해당 이메일의 userId 값은 " + userId);
-        GetTokenRes getTokenRes = userService.loginConfirm(userId, email, token);
-
-        //인증이 완료되었으므로, 세션 생성하기
-        session = request.getSession();
-        session.setAttribute(SessionConst.LOGIN_MEMBER, userId);
-
-        System.out.println("세션값은 " + session);
-
-        //로그인 완료후 해당 유저의 내 풋스텝/팔로우 가지고 오기
-        userProvider.getFootstep(userId);
-        userProvider.getFollow(userId);
-
-        //로그인 완료 후 -> 토큰 값 null로 바꿔주기
-        userService.setToken(email);
-        //TODO : 페이지 전환
-        return new BaseResponse<>(getTokenRes);
-    }
-
-    /**
-     * 로그 아웃 API
-     * [POST] /users/logout
-     *
-     */
-    @PostMapping("/logout") // (POST) 127.0.0.1:8080/users/login
-    public BaseResponse<GetLogoutRes> logout(HttpServletRequest request, @RequestParam("email")String email) throws BaseException {
-        GetLogoutRes getLogoutRes = userProvider.getAuth(email);
-
-        session = request.getSession(false);
-        if(session.getAttribute(SessionConst.LOGIN_MEMBER)!=null) {
-            session.removeAttribute(SessionConst.LOGIN_MEMBER);
-            session.invalidate();
-            System.out.println("로그아웃 완료");
-            System.out.println(session);
-
-        }
-
-        return new BaseResponse<>(getLogoutRes);
-    }
 
     /**
      * 유저정보변경 (이메일 제외) API
@@ -179,7 +111,7 @@ public class UserController {
      */
     @ResponseBody
     @PatchMapping("/modify/{userId}") // (PATCH) 127.0.0.1:8080/users/modify/{userId}
-    public BaseResponse<PatchUserRes> modifyUserInfo(HttpServletRequest request, @PathVariable("userId") BigInteger userId, @RequestBody PatchUserReq patchUserReq) throws BaseException, MessagingException {
+    public BaseResponse<PatchUserRes> modifyUserInfo(HttpServletRequest request, MultipartFile[] upload, @PathVariable("userId") BigInteger userId, @RequestBody PatchUserReq patchUserReq) throws BaseException, MessagingException {
         //userId 가 없을때
         if(userId == null) {
             return new BaseResponse<>(EMPTY_IDX);
@@ -192,6 +124,34 @@ public class UserController {
         }
         else{
             System.out.println("--정보수정--");
+            //프로필 사진 업로드
+            //사진 경로 설정
+            String saveDir = request.getSession().getServletContext().getRealPath("/resources/upload/file");
+            File dir = new File(saveDir);
+            if(!dir.exists()){
+                dir.mkdirs();
+            }
+            for(MultipartFile f : upload) {
+                if (!f.isEmpty()) {
+                    // 기존 파일 이름을 받고 확장자 저장
+                    String orifileName = f.getOriginalFilename();
+                    String ext = orifileName.substring(orifileName.lastIndexOf("."));
+
+                    // 이름 값 변경을 위한 설정
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmssSSS");
+                    int rand = (int) (Math.random() * 1000);
+
+                    // 파일 이름 변경
+                    String reName = sdf.format(System.currentTimeMillis()) + "_" + rand + ext;
+
+                    // 파일 저장
+                    try {
+                        f.transferTo(new File(saveDir + "/" + reName));
+                    } catch (IllegalStateException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
             PatchUserRes patchUserRes = userService.modifyUserInfo(userId, patchUserReq);
             String result = patchUserReq.getUserName() + " 정보 수정 완료";
             System.out.println(result);

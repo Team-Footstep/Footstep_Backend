@@ -16,12 +16,10 @@ public class UserProvider {
 
 
     final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private final EmailCertDao emailCertDao;
 
     @Autowired
-    public UserProvider(UserDao userDao, EmailCertDao emailCertDao) {
+    public UserProvider(UserDao userDao) {
         this.userDao = userDao;
-        this.emailCertDao = emailCertDao;
     }
 
     /*
@@ -65,32 +63,6 @@ public class UserProvider {
     public int checkUserId(String email) {
         int res = userDao.checkUserID(email);
         return res;
-    }
-
-    public int getFootstep(int userId) throws BaseException {
-        try {
-            return userDao.getFootstep(userId);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-    public int getFollow(int userId) throws BaseException {
-        try {
-            return userDao.getFollow(userId);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public GetLogoutRes getAuth(String email) throws BaseException {
-        try {
-            if(checkEmail(email) == 1){
-                return userDao.getAuth(email);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return new GetLogoutRes(email, 0);
     }
 
 

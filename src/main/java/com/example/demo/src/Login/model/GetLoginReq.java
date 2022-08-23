@@ -1,4 +1,4 @@
-package com.example.demo.src.User.model;
+package com.example.demo.src.Login.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GetLogoutReq {
+public class GetLoginReq {
     private String email;
+    private String token;
 }
