@@ -71,20 +71,6 @@ public class UserService {
         }
 
     }
-    //로그인 토큰 체크
-    public GetTokenRes loginConfirm(int userId, String email, String token) {
-        //1. 토큰 체크
-        if (emailCertDao.loginTokenCheck(email, token) == 1) {
-            GetTokenRes getTokenRes = emailCertDao.loginConfirm(userId, email);
-            System.out.println("토큰 체크 성공");
-            System.out.println("로그인이 완료되었습니다.");
-
-            return getTokenRes;
-        } else {
-            GetTokenRes getTokenRes = new GetTokenRes(userId, email, 0);
-            return getTokenRes;
-        }
-    }
 
     public void setToken(String email) {
         //회원가입 성공시에 토큰 null 로 바꿔주기
