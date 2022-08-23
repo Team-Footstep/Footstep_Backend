@@ -84,14 +84,14 @@ public class CommentController {
      */
     // Body
     @ResponseBody
-    @GetMapping("/{pageId}/{blockId}") // (POST) 127.0.0.1:8080/comment/delete/{pageId}/{blockId}/{commentId}
+    @GetMapping("/{pageId}/{blockId}") //
     public BaseResponse<List<GetCommentRes>> getComment(@PathVariable int pageId, @PathVariable int blockId) throws BaseException {
         //해당 PageId/blockId에 댓글이 존재하는지
         if(commentService.checkCommentInPageBlock(pageId, blockId) == 0){
             return new BaseResponse<>(NOT_EXIST_PAGGID_BLOCKID);
         }
         //댓글 내용이 null 이라면
-        if(commentService.commentContent(pageId, blockId)==1){
+        if(commentService.commentContent(pageId, blockId)==0){
             return new BaseResponse<>(NOT_EXIST_GET_COMMENT);
         }
         try{
@@ -100,6 +100,7 @@ public class CommentController {
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));
         }
+
 
     }
 }

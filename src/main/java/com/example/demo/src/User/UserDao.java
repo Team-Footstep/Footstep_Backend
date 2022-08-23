@@ -152,28 +152,6 @@ public class UserDao {
     }
 
 
-    public int getFootstep(int userId) {
-        String getFootstepQuery = "UPDATE Page set topOrNot=1, stampOrPrint= 'S', status=1, depth=0  WHERE userId = ?";
-        Object[] getFootstepParams = new Object[]{userId};
-        return this.jdbcTemplate.update(getFootstepQuery,  getFootstepParams);
-    }
-
-    public int getFollow(int userId) {
-        String getFollowQuery = "UPDATE Page set topOrNot=1, stampOrPrint= 'P', status=1, depth=0  WHERE userId = ?";
-        Object[] getFollowParams = new Object[]{userId};
-        return this.jdbcTemplate.update(getFollowQuery,  getFollowParams);
-    }
-
-    public GetLogoutRes getAuth(String email) {
-        System.out.println("로그아웃할 이메일은" + email);
-        String logoutConfirmQuery = "UPDATE User SET status = 0 where email = ?";
-        Object[] logoutConfirmParams = new Object[]{
-                email};
-
-
-        this.jdbcTemplate.update(logoutConfirmQuery, logoutConfirmParams);
-        return new GetLogoutRes(email, 0);
-    }
 }
 
 
