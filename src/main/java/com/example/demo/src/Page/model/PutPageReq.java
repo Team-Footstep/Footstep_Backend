@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PatchPageReq {
+public class PutPageReq {
     private int pageId; // 수정하고자 하는 페이지 아이디
     private int userId;
     private String preview;

@@ -130,7 +130,7 @@ insert into StampAndPrint (blockId, originalId, followerId, followeeId, newBlock
 
 
         /** 하위 페이지 탐색 및 복제 */
-        duplicateDFS(postStampReq.getBlockId(), newBlockId);
+//        duplicateDFS(postStampReq.getBlockId(), newBlockId);
 
         return true;
     }
@@ -198,7 +198,6 @@ insert into StampAndPrint (blockId, originalId, followerId, followeeId, newBlock
 
 
             /**  페이지 내 블럭 복제 */
-
             String getNewPageIdQuery = "select pageId\n" +
                     "from Page\n" +
                     "where parentBlockId = ?;";
@@ -207,14 +206,19 @@ insert into StampAndPrint (blockId, originalId, followerId, followeeId, newBlock
             String getContentQuery = "select content \n" +
                     "from Block \n" +
                     "where blockId = ?;";
+            String getOrderNumQuery = "select orderNum \n"+
+                    "from Block \n"+
+                    "where blockId = ?;";
+
             String content = this.jdbcTemplate.queryForObject(getContentQuery, String.class, blockId);
+            int orderNum = this.jdbcTemplate.queryForObject(getOrderNumQuery,int.class,blockId);
+
 
             String duplicateBlocksQuery = "insert into Block (userId, curPageId, content, orderNum) values (?, ?, ?, ?);";
             Object[] duplicateBlocksParams = new Object[]{getParentDataRes.getUserId(), newPageId, content, orderNum};
             this.jdbcTemplate.update(duplicateBlocksQuery, duplicateBlocksParams);
 
         }
-
 
         // 하위 페이지가 없을 때, 메소드 종료
     }
@@ -227,7 +231,7 @@ insert into StampAndPrint (blockId, originalId, followerId, followeeId, newBlock
     public Boolean updateToPrint(int blockId){
         String updateToPrintQuery = "";
         int updateToPrintParams = blockId;
-        this.jdbcTemplate.update(deletePageQuery, deletePageParams);
+        this.jdbcTemplate.update(updateToPrintQuery, updateToPrintParams);
 
         return true;
     }

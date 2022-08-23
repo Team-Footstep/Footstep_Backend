@@ -2,7 +2,6 @@ package com.example.demo.src.Page;
 
 
 import com.example.demo.src.Page.model.*;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -25,7 +24,7 @@ public class PageDao {
      * [PATCH] 페이지 저장 및 수정
      * @author nnlnuu
      */
-    public PatchPageRes updatePage(PatchPageReq patchPageReq) {
+    public PutPageRes updatePage(PutPageReq patchPageReq) {
 
         //새로 페이지 정보 처리
         String updatePageQuery = "update Page set preview =?,status =? ,stampOrPrint = ?, bookmark =?,\n" +
@@ -42,9 +41,9 @@ public class PageDao {
         this.jdbcTemplate.update(updatePageQuery, updatePageParams);
 
         // 새로운 or 기존 블록 정보 처리
-        String createBlockQuery = "insert into Block (userId, curPageId, content, isNewBlock, orderNum, status) " +
-                "VALUES(?,?,?,?,?,?);";
-        String updateBlockQuery = "update Block set childPageId = ?,content=?,isNewBlock=?,orderNum=?,status=?\n" +
+        String createBlockQuery = "insert into Block (userId, curPageId, content, orderNum, status) " +
+                "VALUES(?,?,?,?,?);";
+        String updateBlockQuery = "update Block set childPageId = ?,content=?,orderNum=?,status=?\n" +
                 "where blockId = ?";
         List<GetContentsRes> contents = patchPageReq.getContentList();
         for(int i =0;i<contents.size();i++){
@@ -52,20 +51,20 @@ public class PageDao {
             {
                 GetContentsRes c = contents.get(i);
                 Object[] createBlockParams ={c.getUserId(),c.getCurPageId()
-                       ,c.getContent(),0,i,c.getStatus()
+                       ,c.getContent(),i,c.getStatus()
                 };
                 this.jdbcTemplate.update(createBlockQuery,createBlockParams);
             }else{// 아니면 update
                 GetContentsRes c = contents.get(i);
                 Object[] updateBlockParams ={
-                        c.getChildPageId(),c.getContent(),0,i,c.getStatus(),c.getBlockId()};
+                        c.getChildPageId(),c.getContent(),i,c.getStatus(),c.getBlockId()};
                 this.jdbcTemplate.update(updateBlockQuery, updateBlockParams);
             }
         }
 
         //응답 객체
-        PatchPageRes patchPageRes = this.jdbcTemplate.queryForObject(getPageIdQuery,
-                (rs, num) -> new PatchPageRes(
+        PutPageRes patchPageRes = this.jdbcTemplate.queryForObject(getPageIdQuery,
+                (rs, num) -> new PutPageRes(
                         rs.getInt("pageId"),
                         rs.getTimestamp("updatedAt"),
                         "페이지가 업데이트 되었습니다."
@@ -150,8 +149,8 @@ public class PageDao {
     public boolean checkDepth(int pageId) {
         String checkPageDepthQuery = "select depth from Page where pageId = ?";
         int depth = this.jdbcTemplate.queryForObject(checkPageDepthQuery,int.class,pageId);
-        if(depth>=15) return false;
-        else return true;
+        if(depth>=15) return true;
+        else return false;
     }
 
 

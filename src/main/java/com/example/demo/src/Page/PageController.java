@@ -4,7 +4,6 @@ import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.config.BaseResponseStatus;
 import com.example.demo.src.Page.model.*;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +77,9 @@ public class PageController {
             //todo : 하위 페이지 중복되지 않는지 검증
             if(pageService.checkExist(postPageReq.getParentBlockId()))
                 return new BaseResponse<>(BaseResponseStatus.POST_FAIL_PAGE);
+            else if(pageService.checkDepth(postPageReq.getParentPageId())) { // 깊이가 15 이상일땐 페이지 생성 X
+                throw new BaseException(BaseResponseStatus.OVER_PAGE_ERROR);
+            }
             else{
                 PostPageRes postPageRes = pageService.createPage(postPageReq);
                 return new BaseResponse<>(postPageRes);
@@ -95,9 +97,9 @@ public class PageController {
      * @author nnlnuu
      * */
     @PutMapping("save")
-    public BaseResponse<PatchPageRes> savePage(@RequestBody PatchPageReq patchPageReq){
+    public BaseResponse<PutPageRes> savePage(@RequestBody PutPageReq patchPageReq){
         try{
-            PatchPageRes patchPageRes = pageService.updatePage(patchPageReq);
+            PutPageRes patchPageRes = pageService.updatePage(patchPageReq);
             return new BaseResponse<>(patchPageRes);
         }catch (BaseException exception){
             return new BaseResponse<>(exception.getStatus());
@@ -122,7 +124,7 @@ public class PageController {
         }
     }
 
-    /*
+    /**
      * [DELETE]
      * (하위)페이지 삭제
      * */
