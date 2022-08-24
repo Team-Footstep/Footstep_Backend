@@ -96,6 +96,7 @@ public class CommentController {
         }
         try{
             List<GetCommentRes> getCommentRes = commentProvider.getComment(pageId, blockId);
+
             return new BaseResponse<>(getCommentRes);
         } catch(BaseException exception){
             return new BaseResponse<>((exception.getStatus()));

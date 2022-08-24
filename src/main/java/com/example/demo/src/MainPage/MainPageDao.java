@@ -36,16 +36,21 @@ public class MainPageDao {
                 "limit 12;";
 
         String getStampNumQuery = "select count(*)\n" +
-                "from StampAndPrint sap\n" +
-                "where sap.status=1\n" +
-                "  and sap.stampOrPrint = 'S'\n" +
-                "  and sap.blockId=?;";
+                "from StampAndPrint\n" +
+                "where status=1\n" +
+                "  and stampOrPrint = 'S'\n" +
+                "  and blockId=?;";
 
         String getFootprintNumQuery = "select count(*)\n" +
-                "from StampAndPrint sap\n" +
-                "where sap.status=1\n" +
-                "  and sap.stampOrPrint = 'P'\n" +
-                "  and sap.blockId=?;";
+                "from StampAndPrint\n" +
+                "where status=1\n" +
+                "  and stampOrPrint = 'P'\n" +
+                "  and blockId=?;";
+
+        String getCommentNumQuery = "select count(*)\n" +
+                "from Comment\n" +
+                "where status=1\n" +
+                "  and blockId=?;";
 
         return this.jdbcTemplate.query(getTrendingFootprintsQuery,
                 (rs, rowNum) -> new GetTrendingFootprintsRes(
@@ -57,6 +62,9 @@ public class MainPageDao {
                                 int.class
                                 , rs.getInt("blockId")),
                         jdbcTemplate.queryForObject(getFootprintNumQuery,
+                                int.class
+                                , rs.getInt("blockId")),
+                        jdbcTemplate.queryForObject(getCommentNumQuery,
                                 int.class
                                 , rs.getInt("blockId"))
                 ));
