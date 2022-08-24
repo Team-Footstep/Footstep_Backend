@@ -37,13 +37,13 @@ public class StampPrintController {
      * [PATCH]
      * stamp to print
      * */
-    @PostMapping("/print/{blockId}")
-    public BaseResponse<Boolean> updateToPrint(@PathVariable int blockId)  {
-        try{
-            return new BaseResponse<>(stampPrintService.updateToPrint(blockId));
-        }catch (BaseException exception){
-            return new BaseResponse<>(exception.getStatus());
-        }
-    }
+//    @PostMapping("/print/{blockId}")
+//    public BaseResponse<Boolean> updateToPrint(@PathVariable int blockId)  {
+//        try{
+//            return new BaseResponse<>(stampPrintService.updateToPrint(blockId));
+//        }catch (BaseException exception){
+//            return new BaseResponse<>(exception.getStatus());
+//        }
+//    }
 
 }
