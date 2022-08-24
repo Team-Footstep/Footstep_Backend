@@ -14,4 +14,5 @@ public class GetTrendingFootprintsRes {
     private String content;
     private int stampNum;
     private int footprintNum;// 해당 블럭의 전체 Footprint 횟수
+    private int commentNum;
 }
