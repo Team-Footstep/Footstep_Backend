@@ -77,10 +77,6 @@ public class LoginController {
         System.out.println("세션값은 " + session);
 
 
-        //로그인 완료후 해당 유저의 내 풋스텝/팔로우 가지고 오기
-        loginProvider.getFootstep(userId);
-        loginProvider.getFollow(userId);
-
         //로그인 완료 후 -> 토큰 값 null로 바꿔주기
         loginService.setToken(email);
         //TODO : 페이지 전환

@@ -92,14 +92,19 @@ public class UserController {
     // Body
     @ResponseBody
     @GetMapping("/signup/confirm") // (POST) 127.0.0.1:8080/users/signup/confirm
-    public BaseResponse <GetTokenRes> signupConfirm(@RequestParam("email")String email, @RequestParam("token")String token){
+    public BaseResponse <GetTokenRes> signupConfirm(@RequestParam("email")String email, @RequestParam("token")String token) throws BaseException {
         System.out.println("클릭한 이메일은 : " + email);
         int userId = userProvider.checkUserId(email);
         GetTokenRes getTokenRes = userService.signupConfirm(userId, email, token);
         System.out.println("회원가입이 완료되었습니다.");
-
-        //회원 가입 완료 후 -> 토큰 값 null로 바꿔주기
+        System.out.println("userId는 " + userId);
+        //회원 가입 완료 후 -> 토큰 값 null 로 바꿔주기
         userService.setToken(email);
+
+        //로그인 완료후 해당 유저의 내 풋스텝/팔로우 생성
+        userProvider.createFootstep(userId);
+        userProvider.createFollow(userId);
+
         return new BaseResponse<>(getTokenRes);
 
     }
@@ -111,7 +116,7 @@ public class UserController {
      */
     @ResponseBody
     @PatchMapping("/modify/{userId}") // (PATCH) 127.0.0.1:8080/users/modify/{userId}
-    public BaseResponse<PatchUserRes> modifyUserInfo(HttpServletRequest request, MultipartFile[] upload, @PathVariable("userId") BigInteger userId, @RequestBody PatchUserReq patchUserReq) throws BaseException, MessagingException {
+    public BaseResponse<PatchUserRes> modifyUserInfo(HttpServletRequest request, @RequestParam("profileImgUrl")MultipartFile multipartFile, @PathVariable("userId") BigInteger userId, @RequestBody PatchUserReq patchUserReq) throws BaseException, MessagingException {
         //userId 가 없을때
         if(userId == null) {
             return new BaseResponse<>(EMPTY_IDX);
@@ -124,35 +129,9 @@ public class UserController {
         }
         else{
             System.out.println("--정보수정--");
-            //프로필 사진 업로드
-            //사진 경로 설정
-            String saveDir = request.getSession().getServletContext().getRealPath("/resources/upload/file");
-            File dir = new File(saveDir);
-            if(!dir.exists()){
-                dir.mkdirs();
-            }
-            for(MultipartFile f : upload) {
-                if (!f.isEmpty()) {
-                    // 기존 파일 이름을 받고 확장자 저장
-                    String orifileName = f.getOriginalFilename();
-                    String ext = orifileName.substring(orifileName.lastIndexOf("."));
 
-                    // 이름 값 변경을 위한 설정
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmssSSS");
-                    int rand = (int) (Math.random() * 1000);
-
-                    // 파일 이름 변경
-                    String reName = sdf.format(System.currentTimeMillis()) + "_" + rand + ext;
-
-                    // 파일 저장
-                    try {
-                        f.transferTo(new File(saveDir + "/" + reName));
-                    } catch (IllegalStateException | IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
             PatchUserRes patchUserRes = userService.modifyUserInfo(userId, patchUserReq);
+
             String result = patchUserReq.getUserName() + " 정보 수정 완료";
             System.out.println(result);
             return new BaseResponse<>(patchUserRes);
