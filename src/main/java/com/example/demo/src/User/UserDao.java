@@ -79,11 +79,12 @@ public class UserDao {
 
         return this.jdbcTemplate.queryForObject(getProfileQuery,
                 (rs, rowNum) -> new GetProfileRes(
-                        rs.getInt("userId"),jdbcTemplate.queryForObject(getStampTopPageQuery,
-                        (rk, rowNum_k) -> new GetStampTopPageRes(
-                                rk.getInt("topStampPageId"),
-                                rk.getInt("topStampPageAccess")
-                        ), getProfileParams),
+                        rs.getInt("userId"),
+                        jdbcTemplate.queryForObject(getStampTopPageQuery,
+                                (rk, rowNum_k) -> new GetStampTopPageRes(
+                                        rk.getInt("topStampPageId"),
+                                        rk.getInt("topStampPageAccess")
+                                ), getProfileParams),
                         jdbcTemplate.queryForObject(getPrintTopPageQuery,
                                 (rk, rowNum_k) -> new GetPrintTopPageRes(
                                         rk.getInt("topPrintPageId"),
@@ -148,6 +149,19 @@ public class UserDao {
         return this.jdbcTemplate.queryForObject( checkUserQuery, int.class, checkUserParams);
     }
 
+    public int createFootstep(int userId) {
+        String createFootstepQuery = "insert into Page (userId, topOrNot, stampOrPrint, depth) value(?, 1, 'P', 0);";
+        int createFootstepParams = userId;
+        this.jdbcTemplate.update(createFootstepQuery, createFootstepParams);
+        return 1;
+    }
+
+    public int createFollow(int userId) {
+        String createFollowQuery = "insert into Page (userId, topOrNot, stampOrPrint, depth) value(?, 1, 'S', 0);";
+        int createFollowParams = userId;
+        this.jdbcTemplate.update(createFollowQuery, createFollowParams);
+        return 1;
+    }
 
 }
 

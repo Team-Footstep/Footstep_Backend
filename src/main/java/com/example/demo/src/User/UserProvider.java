@@ -64,6 +64,24 @@ public class UserProvider {
         int res = userDao.checkUserID(email);
         return res;
     }
+    public int createFootstep(int userId) throws BaseException {
+        try {
+            System.out.println("풋스텝 페이지 생성");
 
+            return userDao.createFootstep(userId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int createFollow(int userId) throws BaseException {
+        try {
+            System.out.println("팔로우 페이지 생성");
+
+            return userDao.createFollow(userId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

@@ -41,21 +41,7 @@ public class LoginProvider {
         return res;
     }
 
-    public int getFootstep(int userId) throws BaseException {
-        try {
-            return loginDao.getFootstep(userId);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
-    public int getFollow(int userId) throws BaseException {
-        try {
-            return loginDao.getFollow(userId);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public GetLogoutRes getAuth(String email) throws BaseException {
         try {

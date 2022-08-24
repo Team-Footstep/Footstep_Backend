@@ -74,7 +74,14 @@ public class UserService {
 
     public void setToken(String email) {
         //회원가입 성공시에 토큰 null 로 바꿔주기
-        userDao.setToken(email);
+
+        try{
+            //회원가입 성공시에 토큰 null 로 바꿔주기
+            userDao.setToken(email);
+        }
+        catch(Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     public PatchUserRes modifyUserInfo(BigInteger userId, PatchUserReq patchUserReq) throws BaseException {
@@ -114,8 +121,14 @@ public class UserService {
     }
 
     public void setAuth(String email) {
-        //회원가입 성공시에 토큰 null 로 바꿔주기
-        userDao.setAuth(email);
+
+        try{
+            //회원가입 성공시에 토큰 null 로 바꿔주기
+            userDao.setAuth(email);
+        }
+        catch(Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
 
