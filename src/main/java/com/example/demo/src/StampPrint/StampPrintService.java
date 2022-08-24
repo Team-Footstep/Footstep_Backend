@@ -29,7 +29,7 @@ public class StampPrintService {
         }
     }
 
-    public Boolean updateToPrint(int blockId) throws BaseException {
+    /*public Boolean updateToPrint(int blockId) throws BaseException {
         try {
             stampPrintDao.updateToPrint(blockId);
             return true;
@@ -37,5 +37,5 @@ public class StampPrintService {
             exception.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }
-    }
+    }*/
 }
