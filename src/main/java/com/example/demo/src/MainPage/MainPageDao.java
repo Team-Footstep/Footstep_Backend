@@ -47,6 +47,12 @@ public class MainPageDao {
                 "  and sap.stampOrPrint = 'P'\n" +
                 "  and sap.blockId=?;";
 
+        //TODO: 댓글 개수 - 블럭에 달린 댓글 개수 맞는지?
+        String getCommentNumQuery = "select count(*)\n" +
+                "from Comment c\n" +
+                "where c.status=1\n" +
+                "  and c.blockId=?;";
+
         return this.jdbcTemplate.query(getTrendingFootprintsQuery,
                 (rs, rowNum) -> new GetTrendingFootprintsRes(
                         rs.getInt("userId"),
@@ -57,6 +63,9 @@ public class MainPageDao {
                                 int.class
                                 , rs.getInt("blockId")),
                         jdbcTemplate.queryForObject(getFootprintNumQuery,
+                                int.class
+                                , rs.getInt("blockId")),
+                        jdbcTemplate.queryForObject(getCommentNumQuery,
                                 int.class
                                 , rs.getInt("blockId"))
                 ));
