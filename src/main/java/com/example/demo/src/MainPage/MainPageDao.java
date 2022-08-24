@@ -36,22 +36,22 @@ public class MainPageDao {
                 "limit 12;";
 
         String getStampNumQuery = "select count(*)\n" +
-                "from StampAndPrint sap\n" +
-                "where sap.status=1\n" +
-                "  and sap.stampOrPrint = 'S'\n" +
-                "  and sap.blockId=?;";
+                "from StampAndPrint\n" +
+                "where status=1\n" +
+                "  and stampOrPrint = 'S'\n" +
+                "  and blockId=?;";
 
         String getFootprintNumQuery = "select count(*)\n" +
-                "from StampAndPrint sap\n" +
-                "where sap.status=1\n" +
-                "  and sap.stampOrPrint = 'P'\n" +
-                "  and sap.blockId=?;";
+                "from StampAndPrint \n" +
+                "where status=1\n" +
+                "  and stampOrPrint = 'P'\n" +
+                "  and blockId=?;";
 
         //TODO: 댓글 개수 - 블럭에 달린 댓글 개수 맞는지?
         String getCommentNumQuery = "select count(*)\n" +
-                "from Comment c\n" +
-                "where c.status=1\n" +
-                "  and c.blockId=?;";
+                "from Comment\n" +
+                "where status=1\n" +
+                "  and blockId=?;";
 
         return this.jdbcTemplate.query(getTrendingFootprintsQuery,
                 (rs, rowNum) -> new GetTrendingFootprintsRes(
