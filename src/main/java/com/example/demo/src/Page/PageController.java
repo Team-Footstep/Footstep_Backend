@@ -92,7 +92,7 @@ public class PageController {
 
     /**
      * 페이지 저장 api
-     * [Patch] /pages/save
+     * [PUT] /pages/save
      * @return BaseResponse<PatchPageRes>
      * @author nnlnuu
      * */
