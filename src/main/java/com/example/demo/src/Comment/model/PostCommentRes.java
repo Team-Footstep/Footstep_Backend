@@ -18,5 +18,4 @@ public class PostCommentRes {
     private int status;
     private LocalDateTime timestamp;
 
-
 }

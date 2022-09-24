@@ -83,7 +83,7 @@ public class MainPageDao {
         String getFollowingNewQuery = "select p.userId, p.pageId, p.parentBlockId, p.preview, p.createdAt\n" +
                 "from Follow f, Page p\n" +
                 "where f.follower = ? and f.status=1\n" +
-                "  and f.followee = p.userId and p.status=1 and p.access=1 and p.topOrNot=0\n" +
+                "  and f.followee = p.userId and p.status=1 and p.access=1 and p.topOrNot=0 \n" +
                 "  and p.stampOrPrint = 'P'\n" +
                 "order by p.createdAt desc\n" +
                 "limit 5;";
