@@ -27,11 +27,11 @@ public class PageDao {
     public PutPageRes updatePage(PutPageReq patchPageReq) {
 
         //새로 페이지 정보 처리 -> 일단은 stampOrPrint 뺀 쿼리
-        String updatePageQuery = "update Page set preview =?,status =?,/**stampOrprint=?, */ bookmark =?,\n" +
+        String updatePageQuery = "update Page set preview =?,status =?,stampOrprint=?, bookmark =?,\n" +
                 "                access = ?\n" +
                 "where pageId = ?";
         Object[] updatePageParams = {patchPageReq.getPreview(), patchPageReq.getStatus(),
-               /** patchPageReq.getStampOrPrint(),*/ patchPageReq.getBookmark(),
+                patchPageReq.getStampOrPrint(), patchPageReq.getBookmark(),
                 patchPageReq.getAccess(), patchPageReq.getPageId()};
 
         String getPageIdQuery = "select *\n" +
