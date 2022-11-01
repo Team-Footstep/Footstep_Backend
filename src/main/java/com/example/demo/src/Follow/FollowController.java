@@ -50,7 +50,7 @@ public class FollowController {
      */
     @ResponseBody
     @DeleteMapping("/unfollow")
-    public BaseResponse<DeleteFollowRes> deleteFollow(@RequestBody FollowReq deleteFollowReq)throws BaseException{
+    public BaseResponse<DeleteFollowRes> deleteFollow(@RequestBody DeleteFollowReq deleteFollowReq)throws BaseException{
         try{
             DeleteFollowRes deleteFollowRes = followService.deleteFollow(deleteFollowReq);
             return new BaseResponse<>(deleteFollowRes);

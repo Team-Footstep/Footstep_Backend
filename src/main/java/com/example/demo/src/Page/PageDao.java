@@ -79,19 +79,21 @@ public class PageDao {
      */
     public PostPageRes createPage(PostPageReq postPageReq) {
         String createPageQuery = "insert into Page (parentPageId, parentBlockId," +
-                " userId, topOrNot, status, stampOrPrint,depth) VALUES(?,?,?,?,?,?,?)";
+                " userId, stampOrPrint,depth,topOrNot) VALUES(?,?,?,?,?,?)";
 
 
         // 깊이는 따로 구해주기
         String getParentPageDepthQuery = "select depth\n" +
                 "from Page\n" +
                 "where pageId = ?"; // 여기에 들어갈 정보 -> depth
+        //String getStampOrNotQuery =
+
         @NotNull
         int depth = this.jdbcTemplate.queryForObject(getParentPageDepthQuery,int.class,postPageReq.getParentPageId());
 
         // page data 생성 인자들
-        Object[] createPageParams = new Object[]{postPageReq.getParentPageId(), postPageReq.getParentBlockId(),postPageReq.getUserId()
-                , postPageReq.isTopOrNot(), postPageReq.getStatus(),postPageReq.getStampOrPrint(),(depth+1)
+        Object[] createPageParams = new Object[]{postPageReq.getParentPageId(), postPageReq.getParentBlockId(),postPageReq.getStampOrPrint()
+                ,postPageReq.getUserId() ,(depth+1),0
         };
 
 
@@ -121,7 +123,6 @@ public class PageDao {
                         rs.getInt("pageId"),
                         rs.getTimestamp("createdAt"),
                         rs.getInt("status"))
-
                 ,curPageId);
     }
 

@@ -2,6 +2,7 @@ package com.example.demo.src.Follow;
 
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.Follow.model.DeleteFollowReq;
 import com.example.demo.src.Follow.model.DeleteFollowRes;
 import com.example.demo.src.Follow.model.FollowReq;
 import com.example.demo.src.Follow.model.PostFollowRes;
@@ -34,7 +35,7 @@ public class FollowService {
         }
     }
 
-    public DeleteFollowRes deleteFollow(FollowReq deletedFollowReq) throws BaseException {
+    public DeleteFollowRes deleteFollow(DeleteFollowReq deletedFollowReq) throws BaseException {
         try {
             return followDao.deleteFollow(deletedFollowReq);
         }catch(Exception exception){

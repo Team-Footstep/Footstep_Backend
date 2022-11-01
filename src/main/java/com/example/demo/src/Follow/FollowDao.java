@@ -70,13 +70,16 @@ public class FollowDao {
      * @return DeleteFollowRes
      * @author nnlnuu
      */
-    public DeleteFollowRes deleteFollow(@NotNull FollowReq deletedFollowReq){ // 팔로우 상태 수정해주기
+    public DeleteFollowRes deleteFollow(@NotNull DeleteFollowReq deletedFollowReq){ // 팔로우 상태 수정해주기
         String deleteFollowInfoQuery = "delete from Follow\n" +
                 "where follower = ? and followee = ?";
-        Object[] deleteFollowParams = new Object[]{deletedFollowReq.getUserId(),deletedFollowReq.getFollowedId()};
+        int unfollowedId = deletedFollowReq.getUnfollowedId();
+        int unfollowId = deletedFollowReq.getUnfollowId();
+        System.out.println("print unfollow,unfollowedId"+unfollowId+" "+unfollowedId);
+        Object[] deleteFollowParams = new Object[]{deletedFollowReq.getUnfollowId(),deletedFollowReq.getUnfollowedId()};
 
         this.jdbcTemplate.update(deleteFollowInfoQuery,deleteFollowParams);
 
-        return new DeleteFollowRes(deletedFollowReq.getUserId(),deletedFollowReq.getFollowedId());
+        return new DeleteFollowRes(unfollowId,unfollowedId);
     }
 }

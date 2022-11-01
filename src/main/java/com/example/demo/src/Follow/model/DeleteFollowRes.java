@@ -10,6 +10,6 @@ import java.sql.Timestamp;
 @Setter
 @AllArgsConstructor
 public class DeleteFollowRes {
-    private int unfollowId;
-    private int unfollowedId;
+    private int unfollowId; // 언팔로우 한 ID
+    private int unfollowedId; // 언팔로우 당한 ID
 }
